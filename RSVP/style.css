@@ -1,0 +1,283 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@500;700&family=Poppins:wght@300;400;500&display=swap');
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #d6e6f2 0%, #f7d9c4 100%);
+    color: #4f5d75;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 50px;
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(79, 93, 117, 0.15);
+}
+
+h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 3rem;
+    color: #587291;
+    margin-bottom: 12px;
+}
+
+h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 2rem;
+    color: #d18f73;
+    margin-bottom: 20px;
+}
+
+.couple-name {
+    font-family: "Great Vibes", cursive;
+    font-size: 3.5rem;
+    font-weight: normal;
+    color: #d18f73;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+    .couple-name {
+        font-size: 3rem;
+    }
+}
+
+.date {
+    color: #6b7c93;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+}
+
+#countdown {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+#countdown div {
+    width: 120px;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 25px 15px;
+    box-shadow: 0 10px 25px rgba(88, 114, 145, 0.12);
+    transition: transform 0.3s ease;
+}
+
+#countdown div:hover {
+    transform: translateY(-5px);
+}
+
+#countdown span {
+    display: block;
+    font-size: 2.7rem;
+    font-weight: 700;
+    color: #587291;
+}
+
+#countdown small {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #d18f73;
+}
+
+#message {
+    margin-top: 40px;
+    font-size: 1.5rem;
+    font-family: "Playfair Display", serif;
+    color: #587291;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 35px 20px;
+    }
+
+    h1 {
+        font-size: 2.3rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    #countdown {
+        gap: 15px;
+    }
+
+    #countdown div {
+        width: 100px;
+        padding: 20px 10px;
+    }
+
+    #countdown span {
+        font-size: 2.2rem;
+    }
+}
+
+
+.intro {
+    max-width: 650px;
+    margin: 0 auto 40px;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #5f6f81;
+}
+
+
+/* ---------- Wedding Venues ---------- */
+
+.venues {
+    margin-top: 70px;
+}
+
+.venues h2 {
+    margin-bottom: 35px;
+}
+
+.venue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.venue-card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(88, 114, 145, .12);
+    transition: .3s;
+}
+
+.venue-card:hover {
+    transform: translateY(-6px);
+}
+
+.venue-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+.venue-content {
+    padding: 24px;
+}
+
+.venue-content h3 {
+    color: #587291;
+    margin-bottom: 15px;
+    font-family: "Playfair Display", serif;
+}
+
+.venue-name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #d18f73;
+    margin-bottom: 10px;
+}
+
+.venue-content p {
+    color: #5f6f81;
+    line-height: 1.7;
+}
+
+.venue-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 22px;
+    background: #587291;
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    transition: .3s;
+}
+
+.venue-button:hover {
+    background: #d18f73;
+}
+
+
+.dress-code {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.dress-code h2 {
+    margin-bottom: 30px;
+}
+
+.dress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+.dress-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 18px;
+    padding: 30px 25px;
+    box-shadow: 0 10px 25px rgba(88, 114, 145, 0.12);
+    transition: transform 0.3s ease;
+}
+
+.dress-card:hover {
+    transform: translateY(-5px);
+}
+
+.dress-card h3 {
+    color: #587291;
+    margin-bottom: 15px;
+    font-family: "Playfair Display", serif;
+}
+
+.dress-card p {
+    color: #5f6f81;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.dress-card span {
+    display: inline-block;
+    margin-top: 8px;
+    color: #d18f73;
+    font-style: italic;
+}
+
+
+.dress-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 15px;
+}
+
+
+
+
+
