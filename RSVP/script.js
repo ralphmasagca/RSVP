@@ -1,4 +1,4 @@
-const weddingDate = new Date("April 17, 2028 14:00:00").getTime();
+const weddingDate = new Date("April 17, 2028 00:00:00").getTime();
 
 function updateCountdown() {
     const now = new Date().getTime();
@@ -25,3 +25,20 @@ function updateCountdown() {
 
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
+const revealElements = document.querySelectorAll('.reveal');
+
+const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+            observer.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.15
+});
+
+revealElements.forEach((element) => {
+    revealObserver.observe(element);
+});
