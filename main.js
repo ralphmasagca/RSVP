@@ -15,7 +15,7 @@ function playRevealChime() { const c = getAudioCtx();[523.25, 659.25, 783.99, 10
 
 (function () { const c = document.getElementById('particles'); for (let i = 0; i < 30; i++) { const p = document.createElement('div'); p.classList.add('particle'); p.style.left = Math.random() * 100 + '%'; const s = (Math.random() * 4 + 2) + 'px'; p.style.width = s; p.style.height = s; p.style.animationDuration = (Math.random() * 8 + 6) + 's'; p.style.animationDelay = (Math.random() * 10) + 's'; c.appendChild(p); } })();
 
-function openEnvelope() { const w = document.getElementById('envelopeWrapper'), ep = document.getElementById('envelopePage'), lp = document.getElementById('landingPage'); if (w.classList.contains('opening')) return; w.classList.add('opening'); playSealBreak(); setTimeout(() => playFlapOpen(), 200); setTimeout(() => playPaperSlide(), 500); setTimeout(() => ep.classList.add('hidden'), 1000); setTimeout(() => playRevealChime(), 1200); setTimeout(() => { lp.classList.add('visible'); ep.style.display = 'none'; document.body.style.overflow = 'auto'; createPetals(); startCountdown(); observeAnimations(); initPersonalizedRSVP(); setTimeout(() => playYTMusic(), 1500); }, 1600); }
+// function openEnvelope() { const w = document.getElementById('envelopeWrapper'), ep = document.getElementById('envelopePage'), lp = document.getElementById('landingPage'); if (w.classList.contains('opening')) return; w.classList.add('opening'); playSealBreak(); setTimeout(() => playFlapOpen(), 200); setTimeout(() => playPaperSlide(), 500); setTimeout(() => ep.classList.add('hidden'), 1000); setTimeout(() => playRevealChime(), 1200); setTimeout(() => { lp.classList.add('visible'); ep.style.display = 'none'; document.body.style.overflow = 'auto'; createPetals(); startCountdown(); observeAnimations(); initPersonalizedRSVP(); setTimeout(() => playYTMusic(), 1500); }, 1600); }
 
 function toggleMobileNav() { const h = document.getElementById('hamburger'), mn = document.getElementById('mobileNav'), o = document.getElementById('mobileNavOverlay'); if (mn.classList.contains('active')) { closeMobileNav(); } else { h.classList.add('active'); mn.classList.add('active'); o.classList.add('active'); document.body.classList.add('nav-open'); } }
 function closeMobileNav() { document.getElementById('hamburger').classList.remove('active'); document.getElementById('mobileNav').classList.remove('active'); document.getElementById('mobileNavOverlay').classList.remove('active'); document.body.classList.remove('nav-open'); }
@@ -40,13 +40,13 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjwf00e1l_e6
 // ⚠️ SECRET KEY — Must match your generate-links.html
 const SECRET_KEY = 'RS2028WEDDING';
 
-// State
 let maxExtraGuests = 0;
 let currentGuestCount = 0;
 let inviteCode = '';
 let prefilledName = '';
+let isValidInvite = false;
 
-// ===== DECRYPTION FUNCTIONS =====
+// ===== HASH & DECRYPTION =====
 
 function generateHash(data, key) {
     let hash = 0;
@@ -66,17 +66,12 @@ function generateHash(data, key) {
 
 function decryptInviteData(encodedData, verificationHash) {
     try {
-        // Verify hash first
         const expectedHash = generateHash(encodedData, SECRET_KEY);
         if (expectedHash !== verificationHash) {
-            console.warn('RSVP: Invalid verification hash — link may have been tampered with');
             return null;
         }
-
-        // Decode Base64
         const jsonStr = decodeURIComponent(escape(atob(encodedData)));
         const data = JSON.parse(jsonStr);
-
         return {
             guest: data.g || '',
             extra: parseInt(data.e) || 0,
@@ -84,50 +79,86 @@ function decryptInviteData(encodedData, verificationHash) {
             timestamp: data.t || 0
         };
     } catch (error) {
-        console.error('RSVP: Failed to decrypt invite data', error);
         return null;
     }
 }
 
-// ===== INIT =====
+// ===== VALIDATE INVITE ON PAGE LOAD =====
 
-function initPersonalizedRSVP() {
+function validateInvite() {
     const params = new URLSearchParams(window.location.search);
-
     const encodedData = params.get('d');
     const verificationHash = params.get('v');
 
-    if (encodedData && verificationHash) {
-        // Encrypted link
-        const inviteData = decryptInviteData(encodedData, verificationHash);
-
-        if (inviteData) {
-            prefilledName = inviteData.guest;
-            maxExtraGuests = inviteData.extra;
-            inviteCode = inviteData.code;
-        } else {
-            // Tampered link — use defaults (no extra guests)
-            prefilledName = '';
-            maxExtraGuests = 0;
-            inviteCode = '';
-        }
-    } else {
-        // Fallback: no parameters = generic link, no extra guests
-        prefilledName = '';
-        maxExtraGuests = 0;
-        inviteCode = '';
+    // No parameters at all — block access
+    if (!encodedData || !verificationHash) {
+        showInvalidInvitePage();
+        return false;
     }
 
-    // Pre-fill name
+    // Try to decrypt
+    const inviteData = decryptInviteData(encodedData, verificationHash);
+
+    // Invalid or tampered link — block access
+    if (!inviteData || !inviteData.guest) {
+        showInvalidInvitePage();
+        return false;
+    }
+
+    // Valid invite
+    prefilledName = inviteData.guest;
+    maxExtraGuests = inviteData.extra;
+    inviteCode = inviteData.code;
+    isValidInvite = true;
+
+    return true;
+}
+
+function showInvalidInvitePage() {
+    isValidInvite = false;
+
+    // Hide envelope page
+    const envelopePage = document.getElementById('envelopePage');
+    if (envelopePage) envelopePage.style.display = 'none';
+
+    // Hide landing page
+    const landingPage = document.getElementById('landingPage');
+    if (landingPage) landingPage.style.display = 'none';
+
+    // Show invalid page
+    const invalidPage = document.getElementById('invalidInvitePage');
+    if (invalidPage) {
+        invalidPage.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// ===== INIT RSVP =====
+
+function initPersonalizedRSVP() {
+    if (!isValidInvite) return;
+
+    const nameInput = document.getElementById('fullName');
+
+    // Pre-fill and lock name
     if (prefilledName) {
-        const nameInput = document.getElementById('fullName');
         nameInput.value = prefilledName;
         nameInput.setAttribute('readonly', 'true');
+        nameInput.setAttribute('tabindex', '-1');
         nameInput.style.color = '#6B9AC4';
         nameInput.style.fontWeight = '500';
+        nameInput.style.pointerEvents = 'none';
+        nameInput.style.userSelect = 'none';
+
+        // Prevent any modification attempts
+        nameInput.addEventListener('keydown', function(e) { e.preventDefault(); });
+        nameInput.addEventListener('paste', function(e) { e.preventDefault(); });
+        nameInput.addEventListener('cut', function(e) { e.preventDefault(); });
+        nameInput.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
         document.getElementById('rsvpGreeting').style.display = 'block';
         document.getElementById('greetingName').textContent = prefilledName;
+        document.getElementById('nameLockBadge').style.display = 'inline-flex';
     }
 
     // Show guest allowance
@@ -139,6 +170,41 @@ function initPersonalizedRSVP() {
     }
 
     updateGuestCounter();
+}
+
+// ===== OVERRIDE ENVELOPE OPEN =====
+// Replace your existing openEnvelope function with this:
+
+function openEnvelope() {
+    // Validate invite first
+    if (!isValidInvite) {
+        showInvalidInvitePage();
+        return;
+    }
+
+    const w = document.getElementById('envelopeWrapper');
+    const ep = document.getElementById('envelopePage');
+    const lp = document.getElementById('landingPage');
+
+    if (w.classList.contains('opening')) return;
+    w.classList.add('opening');
+
+    playSealBreak();
+    setTimeout(function() { playFlapOpen(); }, 200);
+    setTimeout(function() { playPaperSlide(); }, 500);
+    setTimeout(function() { ep.classList.add('hidden'); }, 1000);
+    setTimeout(function() { playRevealChime(); }, 1200);
+
+    setTimeout(function() {
+        lp.classList.add('visible');
+        ep.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        createPetals();
+        startCountdown();
+        observeAnimations();
+        initPersonalizedRSVP();
+        setTimeout(function() { playYTMusic(); }, 1500);
+    }, 1600);
 }
 
 // ===== GUEST MANAGEMENT =====
@@ -260,11 +326,14 @@ function updateAddButton() {
 async function submitRSVP(e) {
     e.preventDefault();
 
+    if (!isValidInvite) return;
+
     const btn = document.getElementById('submitBtn');
     const btnText = document.getElementById('btnText');
     const btnLoading = document.getElementById('btnLoading');
 
-    const fullName = document.getElementById('fullName').value.trim();
+    // Always use the pre-filled name (prevents DevTools tampering)
+    const fullName = prefilledName || document.getElementById('fullName').value.trim();
     const contactNumber = document.getElementById('contactNumber').value.trim();
     const attendanceEl = document.querySelector('input[name="attendance"]:checked');
     const message = document.getElementById('message').value.trim();
@@ -276,7 +345,6 @@ async function submitRSVP(e) {
 
     const attendance = attendanceEl.value;
 
-    // Gather additional guests
     const additionalGuests = [];
     const guestNames = document.querySelectorAll('.extra-guest-name');
     const guestContacts = document.querySelectorAll('.extra-guest-contact');
@@ -300,7 +368,6 @@ async function submitRSVP(e) {
         return;
     }
 
-    // Security: cap additional guests at max allowed
     const cappedGuests = additionalGuests.slice(0, maxExtraGuests);
     const totalGuests = 1 + cappedGuests.length;
 
@@ -334,6 +401,7 @@ async function submitRSVP(e) {
         updateGuestCounter();
         updateAddButton();
 
+        // Re-fill locked name
         if (prefilledName) {
             document.getElementById('fullName').value = prefilledName;
         }
@@ -348,6 +416,20 @@ async function submitRSVP(e) {
         btnLoading.style.display = 'none';
     }
 }
+
+// ===== VALIDATE ON PAGE LOAD =====
+// This runs immediately — before the envelope even shows
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Validate the invite link first
+    const valid = validateInvite();
+
+    if (valid) {
+        // Only initialize particles if valid invite
+        createParticles();
+    }
+});
+
 
 function closeModal() { document.getElementById('thankYouModal').classList.remove('active'); }
 document.getElementById('thankYouModal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
