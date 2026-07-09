@@ -435,6 +435,180 @@ body {
     }
 }
 
+/* ===== ALREADY USED PAGE ===== */
+.already-used-page {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 30%, #3d566e 60%, #2c3e50 100%);
+    z-index: 9999;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.already-used-content {
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(167,199,231,0.1);
+    border-radius: 16px;
+    padding: 50px 40px;
+    backdrop-filter: blur(10px);
+    animation: invalidFadeIn 0.8s ease forwards;
+    position: relative;
+}
+
+.already-used-content::before {
+    content: '';
+    position: absolute;
+    top: 12px; left: 12px; right: 12px; bottom: 12px;
+    border: 1px solid rgba(167,199,231,0.05);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.already-used-icon {
+    margin-bottom: 25px;
+    animation: usedCheckmark 0.8s ease 0.3s both;
+}
+
+@keyframes usedCheckmark {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.already-used-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.already-used-divider {
+    width: 50px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #A7C7E7, transparent);
+    margin: 20px auto;
+}
+
+.already-used-message {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.already-used-info {
+    background: rgba(167,199,231,0.06);
+    border: 1px solid rgba(167,199,231,0.1);
+    border-radius: 10px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+}
+
+.used-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.used-info-row:first-child {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.used-info-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+}
+
+.used-info-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #A7C7E7;
+    font-style: italic;
+}
+
+.already-used-help {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+/* Loading overlay for validation check */
+.rsvp-checking-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 30%, #3d566e 60%, #2c3e50 100%);
+    z-index: 10000;
+    transition: opacity 0.5s ease;
+}
+
+.rsvp-checking-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.checking-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(167,199,231,0.15);
+    border-top-color: #A7C7E7;
+    border-radius: 50%;
+    animation: checkSpin 0.8s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes checkSpin {
+    to { transform: rotate(360deg); }
+}
+
+.checking-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(167,199,231,0.5);
+}
+
+.checking-subtext {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.3);
+    font-style: italic;
+    margin-top: 8px;
+}
+
+@media (max-width: 480px) {
+    .already-used-content {
+        padding: 40px 25px;
+    }
+    .already-used-title {
+        font-size: 1.3rem;
+    }
+    .used-info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+}
+
 /* ===== ENVELOPE PAGE ===== */
 .envelope-page {
     position: fixed;

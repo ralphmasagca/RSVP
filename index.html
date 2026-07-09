@@ -12,6 +12,13 @@
 </head>
 
 <body>
+    <!-- ===== LOADING / CHECKING OVERLAY ===== -->
+    <div class="rsvp-checking-overlay" id="checkingOverlay">
+        <div class="checking-spinner"></div>
+        <p class="checking-text">Verifying Invitation</p>
+        <p class="checking-subtext">Please wait a moment...</p>
+    </div>
+    
     <div class="yt-player-wrap">
         <div id="ytPlayer"></div>
     </div>
@@ -57,6 +64,43 @@
                     <span>Contact the couple if you need a new invite link</span>
                 </div>
             </div>
+            <div class="invalid-invite-couple">
+                <p class="couple-script">Ralph & Shaira</p>
+                <p class="couple-date">February 2, 2028</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ALREADY USED INVITE PAGE ===== -->
+    <div class="already-used-page" id="alreadyUsedPage" style="display:none;">
+        <div class="invalid-invite-particles" id="usedParticles"></div>
+        <div class="already-used-content">
+            <div class="already-used-icon">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#A7C7E7" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <h1 class="already-used-title">RSVP Already Submitted</h1>
+            <div class="already-used-divider"></div>
+            <p class="already-used-message">
+                This invitation link has already been used to submit an RSVP.
+                Each invite link can only be used once.
+            </p>
+            <div class="already-used-info" id="alreadyUsedInfo">
+                <div class="used-info-row">
+                    <span class="used-info-label">Submitted by</span>
+                    <span class="used-info-value" id="usedByName">—</span>
+                </div>
+                <div class="used-info-row">
+                    <span class="used-info-label">Submitted on</span>
+                    <span class="used-info-value" id="usedAtTime">—</span>
+                </div>
+            </div>
+            <p class="already-used-help">
+                If you believe this is an error or need to update your RSVP,<br>
+                please contact the couple directly.
+            </p>
             <div class="invalid-invite-couple">
                 <p class="couple-script">Ralph & Shaira</p>
                 <p class="couple-date">February 2, 2028</p>
@@ -149,7 +193,7 @@
                 <p class="wedding-invite-text">We're Getting Married</p>
                 <h1 class="couple-names">Ralph <span class="ampersand">&</span> Shaira</h1>
                 <div class="divider"></div>
-                <p class="wedding-date">Monday, February 2, 2028</p>
+                <p class="wedding-date">Wednesday, February 2, 2028</p>
                 <p class="wedding-venue">Parish of The Immaculate Heart of Mary — Antipolo, Rizal</p>
             </div>
             <div class="scroll-indicator">

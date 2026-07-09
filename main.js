@@ -30,10 +30,7 @@ function observeAnimations() { const obs = new IntersectionObserver(entries => {
 window.addEventListener('scroll', () => { const n = document.getElementById('mainNav'); if (n) n.classList.toggle('scrolled', window.scrollY > 80); });
 document.querySelectorAll('.nav-links a').forEach(a => { a.addEventListener('click', function (e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth' }); }); });
 
-//function submitRSVP(e){e.preventDefault();document.getElementById('thankYouModal').classList.add('active');document.getElementById('rsvpForm').reset();}
-
-// ⬇️ PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE ⬇️
-// ===== ENCRYPTED PERSONALIZED RSVP SYSTEM =====
+// ===== ENCRYPTED ONE-TIME-USE RSVP SYSTEM =====
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjwf00e1l_e6Q06CgMXRZguaLOmAtEbF11EzFLZqZRS6OZlAJkqlweJyquWmTpIhVI/exec';
 
@@ -45,6 +42,7 @@ let currentGuestCount = 0;
 let inviteCode = '';
 let prefilledName = '';
 let isValidInvite = false;
+let inviteHash = '';
 
 // ===== HASH & DECRYPTION =====
 
@@ -62,6 +60,27 @@ function generateHash(data, key) {
         hash2 = Math.abs(hash2);
     }
     return hash.toString(36) + hash2.toString(36);
+}
+
+function generateInviteHash(encodedData) {
+    // Create a unique hash for this specific invite link
+    let hash = 0;
+    const str = encodedData + '|INVITE_ID|' + SECRET_KEY;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 7) - hash + str.charCodeAt(i)) | 0;
+        hash = Math.abs(hash);
+    }
+    let hash2 = hash;
+    for (let i = 0; i < str.length; i++) {
+        hash2 = ((hash2 << 4) + hash2 + str.charCodeAt(i) * 3) | 0;
+        hash2 = Math.abs(hash2);
+    }
+    let hash3 = hash2;
+    for (let i = 0; i < str.length; i++) {
+        hash3 = ((hash3 << 5) + hash3 + str.charCodeAt(i) * 7) | 0;
+        hash3 = Math.abs(hash3);
+    }
+    return 'INV' + hash.toString(36) + hash2.toString(36) + hash3.toString(36);
 }
 
 function decryptInviteData(encodedData, verificationHash) {
@@ -83,54 +102,163 @@ function decryptInviteData(encodedData, verificationHash) {
     }
 }
 
-// ===== VALIDATE INVITE ON PAGE LOAD =====
+// ===== PAGE DISPLAY FUNCTIONS =====
 
-function validateInvite() {
-    const params = new URLSearchParams(window.location.search);
-    const encodedData = params.get('d');
-    const verificationHash = params.get('v');
+function showCheckingOverlay() {
+    const overlay = document.getElementById('checkingOverlay');
+    if (overlay) overlay.style.display = 'flex';
+}
 
-    // No parameters at all — block access
+function hideCheckingOverlay() {
+    const overlay = document.getElementById('checkingOverlay');
+    if (overlay) {
+        overlay.classList.add('hidden');
+        setTimeout(function() { overlay.style.display = 'none'; }, 500);
+    }
+}
+
+function showInvalidInvitePage() {
+    isValidInvite = false;
+    hideCheckingOverlay();
+
+    var ep = document.getElementById('envelopePage');
+    var lp = document.getElementById('landingPage');
+    if (ep) ep.style.display = 'none';
+    if (lp) lp.style.display = 'none';
+
+    var page = document.getElementById('invalidInvitePage');
+    if (page) {
+        page.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        createBlockedPageParticles('invalidParticles');
+    }
+}
+
+function showAlreadyUsedPage(usedBy, usedAt) {
+    isValidInvite = false;
+    hideCheckingOverlay();
+
+    var ep = document.getElementById('envelopePage');
+    var lp = document.getElementById('landingPage');
+    if (ep) ep.style.display = 'none';
+    if (lp) lp.style.display = 'none';
+
+    var page = document.getElementById('alreadyUsedPage');
+    if (page) {
+        page.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+
+        if (usedBy) document.getElementById('usedByName').textContent = usedBy;
+        if (usedAt) document.getElementById('usedAtTime').textContent = usedAt;
+
+        createBlockedPageParticles('usedParticles');
+    }
+}
+
+function showEnvelopePage() {
+    hideCheckingOverlay();
+    var ep = document.getElementById('envelopePage');
+    if (ep) ep.style.display = 'flex';
+}
+
+function createBlockedPageParticles(containerId) {
+    var container = document.getElementById(containerId);
+    if (!container || container.children.length > 0) return;
+
+    for (var i = 0; i < 20; i++) {
+        var p = document.createElement('div');
+        p.classList.add('particle');
+        p.style.left = Math.random() * 100 + '%';
+        var s = (Math.random() * 3 + 1) + 'px';
+        p.style.width = s;
+        p.style.height = s;
+        p.style.animationDuration = (Math.random() * 8 + 6) + 's';
+        p.style.animationDelay = (Math.random() * 10) + 's';
+        container.appendChild(p);
+    }
+}
+
+// ===== LOCAL STORAGE TRACKING =====
+// Double protection: check both server AND local storage
+
+function markInviteUsedLocally(hash) {
+    try {
+        var usedInvites = JSON.parse(localStorage.getItem('rsvp_used') || '{}');
+        usedInvites[hash] = {
+            time: new Date().toISOString(),
+            name: prefilledName
+        };
+        localStorage.setItem('rsvp_used', JSON.stringify(usedInvites));
+    } catch (e) {}
+}
+
+function isInviteUsedLocally(hash) {
+    try {
+        var usedInvites = JSON.parse(localStorage.getItem('rsvp_used') || '{}');
+        return usedInvites[hash] || null;
+    } catch (e) {
+        return null;
+    }
+}
+
+// ===== VALIDATE INVITE =====
+
+async function validateInvite() {
+    var params = new URLSearchParams(window.location.search);
+    var encodedData = params.get('d');
+    var verificationHash = params.get('v');
+
+    // No parameters — block
     if (!encodedData || !verificationHash) {
         showInvalidInvitePage();
         return false;
     }
 
-    // Try to decrypt
-    const inviteData = decryptInviteData(encodedData, verificationHash);
+    // Decrypt and verify
+    var inviteData = decryptInviteData(encodedData, verificationHash);
 
-    // Invalid or tampered link — block access
     if (!inviteData || !inviteData.guest) {
         showInvalidInvitePage();
         return false;
     }
 
-    // Valid invite
+    // Store invite data
     prefilledName = inviteData.guest;
     maxExtraGuests = inviteData.extra;
     inviteCode = inviteData.code;
-    isValidInvite = true;
+    inviteHash = generateInviteHash(encodedData);
 
-    return true;
-}
-
-function showInvalidInvitePage() {
-    isValidInvite = false;
-
-    // Hide envelope page
-    const envelopePage = document.getElementById('envelopePage');
-    if (envelopePage) envelopePage.style.display = 'none';
-
-    // Hide landing page
-    const landingPage = document.getElementById('landingPage');
-    if (landingPage) landingPage.style.display = 'none';
-
-    // Show invalid page
-    const invalidPage = document.getElementById('invalidInvitePage');
-    if (invalidPage) {
-        invalidPage.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+    // Check local storage first (instant)
+    var localUsed = isInviteUsedLocally(inviteHash);
+    if (localUsed) {
+        showAlreadyUsedPage(localUsed.name, localUsed.time);
+        return false;
     }
+
+    // Check server (Google Sheet)
+    try {
+        var response = await fetch(
+            GOOGLE_SCRIPT_URL + '?check=' + encodeURIComponent(inviteHash),
+            { method: 'GET' }
+        );
+        var result = await response.json();
+
+        if (result.status === 'already_used') {
+            // Also save locally for faster future checks
+            markInviteUsedLocally(inviteHash);
+            showAlreadyUsedPage(result.usedBy || prefilledName, result.usedAt || '');
+            return false;
+        }
+    } catch (error) {
+        // If server check fails, allow access (local check already passed)
+        console.warn('Server check failed, proceeding with local validation');
+    }
+
+    // Valid and unused
+    isValidInvite = true;
+    showEnvelopePage();
+    createParticles();
+    return true;
 }
 
 // ===== INIT RSVP =====
@@ -138,19 +266,15 @@ function showInvalidInvitePage() {
 function initPersonalizedRSVP() {
     if (!isValidInvite) return;
 
-    const nameInput = document.getElementById('fullName');
+    var nameInput = document.getElementById('fullName');
 
-    // Pre-fill and lock name
     if (prefilledName) {
         nameInput.value = prefilledName;
         nameInput.setAttribute('readonly', 'true');
         nameInput.setAttribute('tabindex', '-1');
-        nameInput.style.color = '#6B9AC4';
-        nameInput.style.fontWeight = '500';
         nameInput.style.pointerEvents = 'none';
         nameInput.style.userSelect = 'none';
 
-        // Prevent any modification attempts
         nameInput.addEventListener('keydown', function(e) { e.preventDefault(); });
         nameInput.addEventListener('paste', function(e) { e.preventDefault(); });
         nameInput.addEventListener('cut', function(e) { e.preventDefault(); });
@@ -161,7 +285,6 @@ function initPersonalizedRSVP() {
         document.getElementById('nameLockBadge').style.display = 'inline-flex';
     }
 
-    // Show guest allowance
     if (maxExtraGuests > 0) {
         document.getElementById('guestAllowance').style.display = 'block';
         document.getElementById('allowedCount').textContent = maxExtraGuests;
@@ -172,19 +295,17 @@ function initPersonalizedRSVP() {
     updateGuestCounter();
 }
 
-// ===== OVERRIDE ENVELOPE OPEN =====
-// Replace your existing openEnvelope function with this:
+// ===== ENVELOPE OPEN =====
 
 function openEnvelope() {
-    // Validate invite first
     if (!isValidInvite) {
         showInvalidInvitePage();
         return;
     }
 
-    const w = document.getElementById('envelopeWrapper');
-    const ep = document.getElementById('envelopePage');
-    const lp = document.getElementById('landingPage');
+    var w = document.getElementById('envelopeWrapper');
+    var ep = document.getElementById('envelopePage');
+    var lp = document.getElementById('landingPage');
 
     if (w.classList.contains('opening')) return;
     w.classList.add('opening');
@@ -210,8 +331,8 @@ function openEnvelope() {
 // ===== GUEST MANAGEMENT =====
 
 function toggleGuestSection() {
-    const attendance = document.querySelector('input[name="attendance"]:checked');
-    const section = document.getElementById('additionalGuestsSection');
+    var attendance = document.querySelector('input[name="attendance"]:checked');
+    var section = document.getElementById('additionalGuestsSection');
 
     if (attendance && attendance.value === 'Joyfully Accept' && maxExtraGuests > 0) {
         section.style.display = 'block';
@@ -229,11 +350,11 @@ function addGuestEntry() {
     if (currentGuestCount >= maxExtraGuests) return;
 
     currentGuestCount++;
-    const container = document.getElementById('guestEntriesContainer');
-    const entryId = 'guest-entry-' + Date.now();
-    const entryNum = currentGuestCount;
+    var container = document.getElementById('guestEntriesContainer');
+    var entryId = 'guest-entry-' + Date.now();
+    var entryNum = currentGuestCount;
 
-    const entry = document.createElement('div');
+    var entry = document.createElement('div');
     entry.className = 'guest-entry';
     entry.id = entryId;
     entry.setAttribute('data-guest-num', entryNum);
@@ -271,7 +392,7 @@ function addGuestEntry() {
 }
 
 function removeGuestEntry(entryId) {
-    const entry = document.getElementById(entryId);
+    var entry = document.getElementById(entryId);
     if (!entry) return;
 
     entry.style.opacity = '0';
@@ -288,12 +409,12 @@ function removeGuestEntry(entryId) {
 }
 
 function renumberGuests() {
-    const entries = document.querySelectorAll('.guest-entry');
+    var entries = document.querySelectorAll('.guest-entry');
     entries.forEach(function(entry, index) {
-        const num = index + 1;
+        var num = index + 1;
         entry.setAttribute('data-guest-num', num);
-        const badge = entry.querySelector('.number-badge');
-        const label = entry.querySelector('.guest-entry-number');
+        var badge = entry.querySelector('.number-badge');
+        var label = entry.querySelector('.guest-entry-number');
         if (badge) badge.textContent = num;
         if (label) label.innerHTML =
             '<span class="number-badge">' + num + '</span> Additional Guest ' + num;
@@ -301,14 +422,14 @@ function renumberGuests() {
 }
 
 function updateGuestCounter() {
-    const display = document.getElementById('guestCounterDisplay');
+    var display = document.getElementById('guestCounterDisplay');
     if (display) {
         display.textContent = currentGuestCount + ' / ' + maxExtraGuests + ' added';
     }
 }
 
 function updateAddButton() {
-    const btn = document.getElementById('addGuestBtn');
+    var btn = document.getElementById('addGuestBtn');
     if (!btn) return;
 
     if (currentGuestCount >= maxExtraGuests) {
@@ -316,7 +437,7 @@ function updateAddButton() {
         btn.innerHTML = '<span class="plus-icon">✓</span> Maximum guests added';
     } else {
         btn.disabled = false;
-        const remaining = maxExtraGuests - currentGuestCount;
+        var remaining = maxExtraGuests - currentGuestCount;
         btn.innerHTML = '<span class="plus-icon">+</span> Add a Guest (' + remaining + ' remaining)';
     }
 }
@@ -328,30 +449,29 @@ async function submitRSVP(e) {
 
     if (!isValidInvite) return;
 
-    const btn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-    const btnLoading = document.getElementById('btnLoading');
+    var btn = document.getElementById('submitBtn');
+    var btnText = document.getElementById('btnText');
+    var btnLoading = document.getElementById('btnLoading');
 
-    // Always use the pre-filled name (prevents DevTools tampering)
-    const fullName = prefilledName || document.getElementById('fullName').value.trim();
-    const contactNumber = document.getElementById('contactNumber').value.trim();
-    const attendanceEl = document.querySelector('input[name="attendance"]:checked');
-    const message = document.getElementById('message').value.trim();
+    var fullName = prefilledName || document.getElementById('fullName').value.trim();
+    var contactNumber = document.getElementById('contactNumber').value.trim();
+    var attendanceEl = document.querySelector('input[name="attendance"]:checked');
+    var message = document.getElementById('message').value.trim();
 
     if (!fullName || !contactNumber || !attendanceEl) {
         alert('Please fill in all required fields.');
         return;
     }
 
-    const attendance = attendanceEl.value;
+    var attendance = attendanceEl.value;
 
-    const additionalGuests = [];
-    const guestNames = document.querySelectorAll('.extra-guest-name');
-    const guestContacts = document.querySelectorAll('.extra-guest-contact');
-    let hasEmptyGuest = false;
+    var additionalGuests = [];
+    var guestNames = document.querySelectorAll('.extra-guest-name');
+    var guestContacts = document.querySelectorAll('.extra-guest-contact');
+    var hasEmptyGuest = false;
 
     guestNames.forEach(function(nameInput, index) {
-        const name = nameInput.value.trim();
+        var name = nameInput.value.trim();
         if (name) {
             additionalGuests.push({
                 name: name,
@@ -368,17 +488,18 @@ async function submitRSVP(e) {
         return;
     }
 
-    const cappedGuests = additionalGuests.slice(0, maxExtraGuests);
-    const totalGuests = 1 + cappedGuests.length;
+    var cappedGuests = additionalGuests.slice(0, maxExtraGuests);
+    var totalGuests = 1 + cappedGuests.length;
 
-    const formData = {
+    var formData = {
         fullName: fullName,
         contactNumber: contactNumber,
         attendance: attendance,
         message: message,
         totalGuests: totalGuests,
         additionalGuests: cappedGuests,
-        inviteCode: inviteCode
+        inviteCode: inviteCode,
+        inviteHash: inviteHash
     };
 
     btn.disabled = true;
@@ -386,12 +507,29 @@ async function submitRSVP(e) {
     btnLoading.style.display = 'inline';
 
     try {
-        await fetch(GOOGLE_SCRIPT_URL, {
+        var response = await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         });
+
+        var result;
+        try {
+            result = await response.json();
+        } catch (parseErr) {
+            // no-cors mode — can't read response, assume success
+            result = { status: 'success' };
+        }
+
+        if (result.status === 'already_used') {
+            // Link was used between page load and submission
+            markInviteUsedLocally(inviteHash);
+            showAlreadyUsedPage(result.usedBy || fullName, result.usedAt || '');
+            return;
+        }
+
+        // Success — mark as used locally
+        markInviteUsedLocally(inviteHash);
 
         document.getElementById('thankYouModal').classList.add('active');
         document.getElementById('rsvpForm').reset();
@@ -401,13 +539,16 @@ async function submitRSVP(e) {
         updateGuestCounter();
         updateAddButton();
 
-        // Re-fill locked name
         if (prefilledName) {
             document.getElementById('fullName').value = prefilledName;
         }
 
     } catch (error) {
         console.error('RSVP error:', error);
+
+        // Even on error, mark locally and show success
+        // (no-cors often triggers catch but data still sends)
+        markInviteUsedLocally(inviteHash);
         document.getElementById('thankYouModal').classList.add('active');
         document.getElementById('rsvpForm').reset();
     } finally {
@@ -417,17 +558,11 @@ async function submitRSVP(e) {
     }
 }
 
-// ===== VALIDATE ON PAGE LOAD =====
-// This runs immediately — before the envelope even shows
+// ===== INIT ON PAGE LOAD =====
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Validate the invite link first
-    const valid = validateInvite();
-
-    if (valid) {
-        // Only initialize particles if valid invite
-        createParticles();
-    }
+    showCheckingOverlay();
+    validateInvite();
 });
 
 
