@@ -33,8 +33,6 @@ document.querySelectorAll('.nav-links a').forEach(a => { a.addEventListener('cli
 // ===== ENCRYPTED ONE-TIME-USE RSVP SYSTEM =====
 
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjwf00e1l_e6Q06CgMXRZguaLOmAtEbF11EzFLZqZRS6OZlAJkqlweJyquWmTpIhVI/exec';
-
-// ⚠️ SECRET KEY — Must match your generate-links.html
 const SECRET_KEY = 'RS2028WEDDING';
 
 let maxExtraGuests = 0;
@@ -63,7 +61,6 @@ function generateHash(data, key) {
 }
 
 function generateInviteHash(encodedData) {
-    // Create a unique hash for this specific invite link
     let hash = 0;
     const str = encodedData + '|INVITE_ID|' + SECRET_KEY;
     for (let i = 0; i < str.length; i++) {
@@ -105,12 +102,12 @@ function decryptInviteData(encodedData, verificationHash) {
 // ===== PAGE DISPLAY FUNCTIONS =====
 
 function showCheckingOverlay() {
-    const overlay = document.getElementById('checkingOverlay');
+    var overlay = document.getElementById('checkingOverlay');
     if (overlay) overlay.style.display = 'flex';
 }
 
 function hideCheckingOverlay() {
-    const overlay = document.getElementById('checkingOverlay');
+    var overlay = document.getElementById('checkingOverlay');
     if (overlay) {
         overlay.classList.add('hidden');
         setTimeout(function() { overlay.style.display = 'none'; }, 500);
@@ -178,27 +175,33 @@ function createBlockedPageParticles(containerId) {
     }
 }
 
-// ===== LOCAL STORAGE TRACKING =====
-// Double protection: check both server AND local storage
+// ===== SERVER CHECK =====
 
-function markInviteUsedLocally(hash) {
-    try {
-        var usedInvites = JSON.parse(localStorage.getItem('rsvp_used') || '{}');
-        usedInvites[hash] = {
-            time: new Date().toISOString(),
-            name: prefilledName
-        };
-        localStorage.setItem('rsvp_used', JSON.stringify(usedInvites));
-    } catch (e) {}
-}
+function checkServerStatus(hash) {
+    return new Promise(function(resolve) {
+        var checkUrl = GOOGLE_SCRIPT_URL + '?check=' + encodeURIComponent(hash);
+        var timeout = setTimeout(function() {
+            resolve({ status: 'not_used' });
+        }, 10000);
 
-function isInviteUsedLocally(hash) {
-    try {
-        var usedInvites = JSON.parse(localStorage.getItem('rsvp_used') || '{}');
-        return usedInvites[hash] || null;
-    } catch (e) {
-        return null;
-    }
+        fetch(checkUrl, { method: 'GET', redirect: 'follow' })
+            .then(function(response) {
+                clearTimeout(timeout);
+                return response.text();
+            })
+            .then(function(text) {
+                try {
+                    var data = JSON.parse(text);
+                    resolve(data);
+                } catch (e) {
+                    resolve({ status: 'not_used' });
+                }
+            })
+            .catch(function() {
+                clearTimeout(timeout);
+                resolve({ status: 'not_used' });
+            });
+    });
 }
 
 // ===== VALIDATE INVITE =====
@@ -228,33 +231,24 @@ async function validateInvite() {
     inviteCode = inviteData.code;
     inviteHash = generateInviteHash(encodedData);
 
-    // Check local storage first (instant)
-    var localUsed = isInviteUsedLocally(inviteHash);
-    if (localUsed) {
-        showAlreadyUsedPage(localUsed.name, localUsed.time);
-        return false;
-    }
-
-    // Check server (Google Sheet)
+    // Check Google Sheet only
     try {
-        var response = await fetch(
-            GOOGLE_SCRIPT_URL + '?check=' + encodeURIComponent(inviteHash),
-            { method: 'GET' }
-        );
-        var result = await response.json();
+        var result = await checkServerStatus(inviteHash);
 
         if (result.status === 'already_used') {
-            // Also save locally for faster future checks
-            markInviteUsedLocally(inviteHash);
-            showAlreadyUsedPage(result.usedBy || prefilledName, result.usedAt || '');
+            showAlreadyUsedPage(
+                result.usedBy || prefilledName,
+                result.usedAt || ''
+            );
             return false;
         }
     } catch (error) {
-        // If server check fails, allow access (local check already passed)
-        console.warn('Server check failed, proceeding with local validation');
+        console.warn('Server check error:', error);
+        // If server is unreachable, allow access
+        // They will be checked again on submit
     }
 
-    // Valid and unused
+    // Valid and not yet used
     isValidInvite = true;
     showEnvelopePage();
     createParticles();
@@ -442,6 +436,37 @@ function updateAddButton() {
     }
 }
 
+// ===== DISABLE FORM AFTER SUBMIT =====
+
+function disableFormAfterSubmit() {
+    var form = document.getElementById('rsvpForm');
+    var inputs = form.querySelectorAll('input, textarea, button');
+    inputs.forEach(function(input) {
+        input.disabled = true;
+        input.style.opacity = '0.5';
+    });
+
+    var addBtn = document.getElementById('addGuestBtn');
+    if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.style.opacity = '0.5';
+    }
+
+    var removeButtons = document.querySelectorAll('.remove-guest-btn');
+    removeButtons.forEach(function(btn) {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+    });
+
+    var submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+        submitBtn.textContent = '✓ RSVP Submitted';
+        submitBtn.style.background = '#8E8E8E';
+        submitBtn.style.cursor = 'not-allowed';
+        submitBtn.style.opacity = '1';
+    }
+}
+
 // ===== SUBMIT =====
 
 async function submitRSVP(e) {
@@ -507,31 +532,29 @@ async function submitRSVP(e) {
     btnLoading.style.display = 'inline';
 
     try {
-        var response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData)
-        });
+        // Check server one more time before submitting
+        var preCheck = await checkServerStatus(inviteHash);
 
-        var result;
-        try {
-            result = await response.json();
-        } catch (parseErr) {
-            // no-cors mode — can't read response, assume success
-            result = { status: 'success' };
-        }
-
-        if (result.status === 'already_used') {
-            // Link was used between page load and submission
-            markInviteUsedLocally(inviteHash);
-            showAlreadyUsedPage(result.usedBy || fullName, result.usedAt || '');
+        if (preCheck.status === 'already_used') {
+            showAlreadyUsedPage(
+                preCheck.usedBy || fullName,
+                preCheck.usedAt || ''
+            );
             return;
         }
 
-        // Success — mark as used locally
-        markInviteUsedLocally(inviteHash);
+        // Submit via no-cors
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(formData)
+        });
 
+        // Show success
         document.getElementById('thankYouModal').classList.add('active');
+
+        // Reset form display but keep data
         document.getElementById('rsvpForm').reset();
         document.getElementById('guestEntriesContainer').innerHTML = '';
         currentGuestCount = 0;
@@ -543,14 +566,18 @@ async function submitRSVP(e) {
             document.getElementById('fullName').value = prefilledName;
         }
 
-    } catch (error) {
-        console.error('RSVP error:', error);
+        // Lock form permanently
+        disableFormAfterSubmit();
+        isValidInvite = false;
 
-        // Even on error, mark locally and show success
-        // (no-cors often triggers catch but data still sends)
-        markInviteUsedLocally(inviteHash);
+    } catch (error) {
+        console.error('RSVP submit error:', error);
+
+        // no-cors usually sends even on catch
         document.getElementById('thankYouModal').classList.add('active');
         document.getElementById('rsvpForm').reset();
+        disableFormAfterSubmit();
+        isValidInvite = false;
     } finally {
         btn.disabled = false;
         btnText.style.display = 'inline';

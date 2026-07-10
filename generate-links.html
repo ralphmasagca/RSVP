@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding RSVP — Link Generator</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif; background: #f5f7fa;
+            min-height: 100vh; padding: 40px 20px;
+        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 {
+            font-size: 1.8rem; color: #2c3e50; margin-bottom: 5px;
+        }
+        .subtitle { color: #7E9BB5; margin-bottom: 30px; font-size: 0.9rem; }
+
+        .card {
+            background: #fff; border-radius: 12px; padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06); margin-bottom: 25px;
+            border: 1px solid rgba(107,154,196,0.1);
+        }
+        .card h2 { font-size: 1.1rem; color: #6B9AC4; margin-bottom: 20px; }
+
+        .form-row {
+            display: grid; grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px; margin-bottom: 15px;
+        }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group label {
+            font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
+            color: #8E8E8E; margin-bottom: 6px; font-weight: 600;
+        }
+        .form-group input, .form-group select {
+            padding: 10px 14px; border: 1px solid #d5dce5; border-radius: 8px;
+            font-size: 0.9rem; color: #2c3e50; outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus { border-color: #6B9AC4; }
+
+        .btn {
+            padding: 12px 30px; border: none; border-radius: 8px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            letter-spacing: 1px; text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #6B9AC4, #5a89b3);
+            color: #fff;
+        }
+        .btn-primary:hover { box-shadow: 0 4px 15px rgba(107,154,196,0.4); transform: translateY(-1px); }
+
+        .btn-secondary {
+            background: #fff; color: #6B9AC4;
+            border: 1px solid #6B9AC4;
+        }
+        .btn-secondary:hover { background: #6B9AC4; color: #fff; }
+
+        .btn-danger {
+            background: #fff; color: #c86464; border: 1px solid #c86464;
+            font-size: 0.7rem; padding: 8px 16px;
+        }
+        .btn-danger:hover { background: #c86464; color: #fff; }
+
+        .buttons { display: flex; gap: 10px; margin-top: 10px; }
+
+        .output-box {
+            background: #f5f7fa; border: 1px solid #d5dce5; border-radius: 8px;
+            padding: 15px; margin-top: 15px; word-break: break-all;
+            font-family: 'Courier New', monospace; font-size: 0.8rem; color: #2c3e50;
+            position: relative; min-height: 50px;
+        }
+        .output-box .copy-btn {
+            position: absolute; top: 8px; right: 8px; padding: 4px 12px;
+            background: #6B9AC4; color: #fff; border: none; border-radius: 4px;
+            font-size: 0.65rem; cursor: pointer; letter-spacing: 1px;
+        }
+        .output-box .copy-btn:hover { background: #5a89b3; }
+        .copied-msg {
+            color: #4CAF50; font-size: 0.75rem; margin-top: 8px; display: none;
+        }
+
+        /* Bulk table */
+        .bulk-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .bulk-table th {
+            background: #f5f7fa; padding: 10px; text-align: left;
+            font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase;
+            color: #8E8E8E; border-bottom: 2px solid #d5dce5;
+        }
+        .bulk-table td {
+            padding: 10px; border-bottom: 1px solid #eee;
+            font-size: 0.85rem; color: #2c3e50;
+        }
+        .bulk-table .link-cell {
+            font-family: 'Courier New', monospace; font-size: 0.7rem;
+            word-break: break-all; max-width: 300px;
+        }
+        .bulk-table .copy-cell-btn {
+            padding: 4px 10px; background: #6B9AC4; color: #fff;
+            border: none; border-radius: 4px; font-size: 0.6rem;
+            cursor: pointer; white-space: nowrap;
+        }
+        .bulk-table .copy-cell-btn:hover { background: #5a89b3; }
+        .bulk-table .copy-cell-btn.copied { background: #4CAF50; }
+
+        .bulk-input {
+            width: 100%; min-height: 120px; padding: 12px; border: 1px solid #d5dce5;
+            border-radius: 8px; font-family: 'Courier New', monospace; font-size: 0.85rem;
+            resize: vertical; outline: none; color: #2c3e50;
+        }
+        .bulk-input:focus { border-color: #6B9AC4; }
+        .bulk-hint {
+            font-size: 0.7rem; color: #8E8E8E; margin-top: 5px; margin-bottom: 15px;
+        }
+
+        .secret-key-display {
+            background: #fff3cd; padding: 12px 18px; border-radius: 8px;
+            border: 1px solid #ffc107; margin-bottom: 20px; font-size: 0.85rem;
+        }
+        .secret-key-display code {
+            background: rgba(0,0,0,0.05); padding: 2px 8px; border-radius: 4px;
+            font-weight: bold; color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💌 Wedding RSVP Link Generator</h1>
+        <p class="subtitle">Generate encrypted invite links for your guests</p>
+
+        <div class="secret-key-display">
+            ⚠️ Your secret key: <code id="displayKey">RS2028WEDDING</code>
+            — Keep this private! Must match the key in your main.js
+        </div>
+
+        <!-- Single Link Generator -->
+        <div class="card">
+            <h2>🔗 Generate Single Link</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Guest Name</label>
+                    <input type="text" id="singleName" placeholder="e.g. Maria Santos">
+                </div>
+                <div class="form-group">
+                    <label>Extra Guests Allowed</label>
+                    <select id="singleExtra">
+                        <option value="0">0 — Solo only</option>
+                        <option value="1">1 — Plus one</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Invite Code (Optional)</label>
+                    <input type="text" id="singleCode" placeholder="e.g. FAM001">
+                </div>
+            </div>
+            <div class="form-row" style="grid-template-columns: 1fr;">
+                <div class="form-group">
+                    <label>Your Website URL</label>
+                    <input type="text" id="baseUrl" placeholder="https://yoursite.com" value="">
+                </div>
+            </div>
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="generateSingleLink()">Generate Link</button>
+            </div>
+            <div class="output-box" id="singleOutput" style="display:none;">
+                <button class="copy-btn" onclick="copySingleLink()">COPY</button>
+                <span id="singleLinkText"></span>
+            </div>
+            <p class="copied-msg" id="singleCopiedMsg">✓ Link copied to clipboard!</p>
+        </div>
+
+        <!-- Bulk Generator -->
+        <div class="card">
+            <h2>📋 Bulk Generate Links</h2>
+            <p class="bulk-hint">
+                Enter one guest per line in format: <strong>Name, Extra Guests, Code</strong><br>
+                Example:<br>
+                Maria Santos, 2, VIP001<br>
+                Carlos Cruz, 5, FAM002<br>
+                Angela Reyes, 1<br>
+                Paolo Cruz, 0
+            </p>
+            <textarea class="bulk-input" id="bulkInput" placeholder="Maria Santos, 2, VIP001
+Carlos Cruz, 5, FAM002
+Angela Reyes, 1
+Paolo Cruz, 0"></textarea>
+            <div class="buttons" style="margin-top: 15px;">
+                <button class="btn btn-primary" onclick="generateBulkLinks()">Generate All Links</button>
+                <button class="btn btn-secondary" onclick="exportCSV()">Export as CSV</button>
+                <button class="btn btn-danger" onclick="clearBulk()">Clear All</button>
+            </div>
+            <div id="bulkOutput"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== SECRET KEY — MUST MATCH YOUR main.js =====
+        const SECRET_KEY = 'RS2028WEDDING';
+
+        // Auto-detect base URL
+        (function() {
+            const saved = localStorage.getItem('rsvp_base_url');
+            if (saved) document.getElementById('baseUrl').value = saved;
+        })();
+
+        // Simple hash function (HMAC-like)
+        function generateHash(data, key) {
+            let hash = 0;
+            const str = data + '|' + key;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash + char) | 0;
+                hash = Math.abs(hash);
+            }
+            // Create longer hash by multiple passes
+            let hash2 = hash;
+            for (let i = 0; i < str.length; i++) {
+                hash2 = ((hash2 << 3) + hash2 + str.charCodeAt(i)) | 0;
+                hash2 = Math.abs(hash2);
+            }
+            return hash.toString(36) + hash2.toString(36);
+        }
+
+        // Encode data
+        function encodeInviteData(name, extra, code) {
+            const data = {
+                g: name,
+                e: parseInt(extra) || 0,
+                c: code || '',
+                t: Date.now() // Timestamp for uniqueness
+            };
+            const jsonStr = JSON.stringify(data);
+            const encoded = btoa(unescape(encodeURIComponent(jsonStr)));
+            const hash = generateHash(encoded, SECRET_KEY);
+            return { d: encoded, v: hash };
+        }
+
+        // Build full URL
+        function buildLink(name, extra, code) {
+            const baseUrl = document.getElementById('baseUrl').value.trim();
+            if (!baseUrl) {
+                alert('Please enter your website URL');
+                return null;
+            }
+            localStorage.setItem('rsvp_base_url', baseUrl);
+
+            const { d, v } = encodeInviteData(name, extra, code);
+            const separator = baseUrl.includes('?') ? '&' : '?';
+            return baseUrl + separator + 'd=' + encodeURIComponent(d) + '&v=' + encodeURIComponent(v);
+        }
+
+        // Single link
+        function generateSingleLink() {
+            const name = document.getElementById('singleName').value.trim();
+            const extra = document.getElementById('singleExtra').value;
+            const code = document.getElementById('singleCode').value.trim();
+
+            if (!name) { alert('Please enter a guest name'); return; }
+
+            const link = buildLink(name, extra, code);
+            if (!link) return;
+
+            document.getElementById('singleLinkText').textContent = link;
+            document.getElementById('singleOutput').style.display = 'block';
+        }
+
+        function copySingleLink() {
+            const link = document.getElementById('singleLinkText').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                const msg = document.getElementById('singleCopiedMsg');
+                msg.style.display = 'block';
+                setTimeout(() => msg.style.display = 'none', 2000);
+            });
+        }
+
+        // Bulk links
+        function generateBulkLinks() {
+            const input = document.getElementById('bulkInput').value.trim();
+            if (!input) { alert('Please enter guest data'); return; }
+
+            const lines = input.split('\n').filter(l => l.trim());
+            let html = '<table class="bulk-table"><thead><tr><th>Guest</th><th>Extra</th><th>Code</th><th>Link</th><th></th></tr></thead><tbody>';
+
+            lines.forEach((line, index) => {
+                const parts = line.split(',').map(p => p.trim());
+                const name = parts[0] || '';
+                const extra = parts[1] || '0';
+                const code = parts[2] || '';
+
+                if (!name) return;
+
+                const link = buildLink(name, extra, code);
+                if (!link) return;
+
+                html += `<tr>
+                    <td>${name}</td>
+                    <td>${extra}</td>
+                    <td>${code || '—'}</td>
+                    <td class="link-cell" id="bulk-link-${index}">${link}</td>
+                    <td><button class="copy-cell-btn" onclick="copyBulkLink(${index}, this)">Copy</button></td>
+                </tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('bulkOutput').innerHTML = html;
+        }
+
+        function copyBulkLink(index, btn) {
+            const link = document.getElementById('bulk-link-' + index).textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                btn.textContent = '✓ Copied';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = 'Copy';
+                    btn.classList.remove('copied');
+                }, 1500);
+            });
+        }
+
+        function exportCSV() {
+            const rows = document.querySelectorAll('.bulk-table tbody tr');
+            if (!rows.length) { alert('Generate links first'); return; }
+
+            let csv = 'Guest Name,Extra Guests,Invite Code,Link\n';
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                csv += `"${cells[0].textContent}",${cells[1].textContent},"${cells[2].textContent}","${cells[3].textContent}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wedding-rsvp-links.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function clearBulk() {
+            document.getElementById('bulkInput').value = '';
+            document.getElementById('bulkOutput').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
