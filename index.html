@@ -71,43 +71,6 @@
         </div>
     </div>
 
-    <!-- ===== ALREADY USED INVITE PAGE ===== -->
-    <div class="already-used-page" id="alreadyUsedPage" style="display:none;">
-        <div class="invalid-invite-particles" id="usedParticles"></div>
-        <div class="already-used-content">
-            <div class="already-used-icon">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#A7C7E7" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
-                    <polyline points="22 4 12 14.01 9 11.01"/>
-                </svg>
-            </div>
-            <h1 class="already-used-title">RSVP Already Submitted</h1>
-            <div class="already-used-divider"></div>
-            <p class="already-used-message">
-                This invitation link has already been used to submit an RSVP.
-                Each invite link can only be used once.
-            </p>
-            <div class="already-used-info" id="alreadyUsedInfo">
-                <div class="used-info-row">
-                    <span class="used-info-label">Submitted by</span>
-                    <span class="used-info-value" id="usedByName">—</span>
-                </div>
-                <div class="used-info-row">
-                    <span class="used-info-label">Submitted on</span>
-                    <span class="used-info-value" id="usedAtTime">—</span>
-                </div>
-            </div>
-            <p class="already-used-help">
-                If you believe this is an error or need to update your RSVP,<br>
-                please contact the couple directly.
-            </p>
-            <div class="invalid-invite-couple">
-                <p class="couple-script">Ralph & Shaira</p>
-                <p class="couple-date">February 2, 2028</p>
-            </div>
-        </div>
-    </div>
-
     <div class="envelope-page" id="envelopePage">
         <div class="particles" id="particles"></div>
         <p class="envelope-title">You're Invited</p>
@@ -183,23 +146,79 @@
             </div>
         </div>
 
+        <!-- HERO -->
         <section class="hero" id="hero">
             <div class="hero-bg-pattern"></div>
             <div class="floral-corner top-left"></div>
             <div class="floral-corner top-right"></div>
             <div class="floral-corner bottom-left"></div>
             <div class="floral-corner bottom-right"></div>
-            <div class="hero-content">
+
+            <!-- Envelope Reveal Overlay -->
+            <div class="hero-envelope-reveal" id="heroEnvelopeReveal">
+                <!-- Gold edge trim -->
+                <div class="hero-envelope-edge top"></div>
+                <div class="hero-envelope-edge bottom"></div>
+                <div class="hero-envelope-edge left"></div>
+                <div class="hero-envelope-edge right"></div>
+
+                <!-- Seal -->
+                <div class="hero-envelope-seal">
+                    <div class="hero-envelope-seal-circle">
+                        <div class="hero-envelope-seal-text">
+                            <span class="seal-h">♥</span>
+                            R & S
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seal burst particles -->
+                <div class="hero-seal-particles">
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                    <div class="hero-seal-particle"></div>
+                </div>
+
+                <!-- Top flap -->
+                <div class="hero-envelope-flap">
+                    <div class="paper-line"></div>
+                    <div class="paper-line"></div>
+                    <div class="paper-line"></div>
+                </div>
+
+                <!-- Bottom panel -->
+                <div class="hero-envelope-bottom">
+                    <div class="paper-line"></div>
+                    <div class="paper-line"></div>
+                    <div class="paper-line"></div>
+                </div>
+
+                <!-- Side panels -->
+                <div class="hero-envelope-left"></div>
+                <div class="hero-envelope-right"></div>
+            </div>
+
+            <!-- Hero Content (hidden until envelope opens) -->
+            <div class="hero-content" id="heroContent">
                 <p class="wedding-invite-text">We're Getting Married</p>
                 <h1 class="couple-names">Ralph <span class="ampersand">&</span> Shaira</h1>
                 <div class="divider"></div>
                 <p class="wedding-date">Wednesday, February 2, 2028</p>
-                <p class="wedding-venue">Parish of The Immaculate Heart of Mary — Antipolo, Rizal</p>
+                <p class="wedding-venue">The Grand Ballroom, Rosewood Hotel — New York</p>
             </div>
+
             <div class="scroll-indicator">
-                <div class="mouse">
-                    <div class="wheel"></div>
-                </div><span>Scroll Down</span>
+                <div class="mouse"><div class="wheel"></div></div>
+                <span>Scroll Down</span>
             </div>
         </section>
 
@@ -369,353 +388,409 @@
             </div>
         </section>
 
+        <!-- DRESS CODE -->
         <section class="dresscode-section" id="dresscode">
             <h2 class="section-title">Dress Code</h2>
             <p class="section-subtitle">What to Wear</p>
-            <p class="dresscode-description" data-animate>We'd love for our guests to complement the elegance of our
-                celebration.</p>
-            <div class="dresscode-grid">
-                <div class="dresscode-card" data-animate>
-                    <!-- For the Gentlemen: 🤵 -->
-                    <div class="dresscode-card-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2a4 4 0 014 4v1a4 4 0 11-8 0V6a4 4 0 014-4z"/><path d="M5.5 21l1.5-8.5L9 14l3 1.5L15 14l2 -1.5L18.5 21"/><path d="M12 15.5V21"/><line x1="11" y1="18" x2="13" y2="18"/>
+            <p class="dresscode-description" data-animate>
+                We'd love for our guests to complement the elegance of our celebration.
+                Please wear the color assigned to your role in the entourage.
+            </p>
+
+            <div class="dresscode-card-single" data-animate>
+                <!-- Illustrations -->
+                <div class="dresscode-illustrations">
+
+                    <!-- Male Figure - Formal Suit -->
+                    <div class="dresscode-figure">
+                        <svg width="130" height="280" viewBox="0 0 130 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Hair (back) -->
+                            <path d="M45 42c0-18 8-30 20-30s20 12 20 30v10H45V42z" fill="#3d566e"/>
+
+                            <!-- Face -->
+                            <ellipse cx="65" cy="48" rx="16" ry="19" fill="#e8d5c4"/>
+
+                            <!-- Hair (front swept) -->
+                            <path d="M49 40c2-8 8-14 16-14s14 6 16 14c-4-2-8-3-16-3s-12 1-16 3z" fill="#3d566e"/>
+                            <path d="M50 38c8-4 20-4 30 0-2 4-8 6-14 6-8 0-14-2-16-6z" fill="#2c3e50"/>
+
+                            <!-- Ears -->
+                            <ellipse cx="49" cy="50" rx="2.5" ry="4" fill="#e0c8b8"/>
+                            <ellipse cx="81" cy="50" rx="2.5" ry="4" fill="#e0c8b8"/>
+
+                            <!-- Neck -->
+                            <path d="M58 63h14v10c0 3-3 5-7 5s-7-2-7-5V63z" fill="#e8d5c4"/>
+
+                            <!-- Shirt collar area -->
+                            <path d="M42 78l23-5 23 5v8H42v-8z" fill="#f5f7fa"/>
+
+                            <!-- Suit jacket - open style -->
+                            <path d="M35 82l30-4 30 4 6 90H29l6-90z" fill="#6B9AC4"/>
+
+                            <!-- Jacket shadow/depth -->
+                            <path d="M35 82l30-4v90l-30-1 6-89z" fill="#5a89b3" opacity="0.3"/>
+
+                            <!-- Lapels -->
+                            <path d="M43 82l22 8-6 45-14-2z" fill="#4a6d8c"/>
+                            <path d="M87 82l-22 8 6 45 14-2z" fill="#4a6d8c"/>
+
+                            <!-- Inner shirt (V shape) -->
+                            <path d="M55 82h20l-4 40h-12z" fill="#f5f7fa"/>
+
+                            <!-- Tie -->
+                            <path d="M62 85h6l1 5-4 3-4-3z" fill="#7E9BB5"/>
+                            <path d="M60 93h10l-3 32-2 3-2-3z" fill="#7E9BB5"/>
+                            <path d="M63 96h4v25h-4z" fill="#6B8AA5" opacity="0.5"/>
+
+                            <!-- Pocket square -->
+                            <path d="M40 105h10v2l-2 6-4-1-4 2z" fill="#A7C7E7"/>
+                            <path d="M42 107l3-1 3 2-2 3z" fill="#fff" opacity="0.6"/>
+
+                            <!-- Buttons -->
+                            <circle cx="65" cy="130" r="2" fill="#3d566e"/>
+                            <circle cx="65" cy="150" r="2" fill="#3d566e"/>
+
+                            <!-- Arms -->
+                            <path d="M35 82l-10 78 10 4 12-80z" fill="#6B9AC4"/>
+                            <path d="M95 82l10 78-10 4-12-80z" fill="#6B9AC4"/>
+                            <path d="M35 82l-6 45 4 2 6-45z" fill="#5a89b3" opacity="0.3"/>
+
+                            <!-- Sleeve cuffs (shirt) -->
+                            <path d="M25 160h12v4H25z" fill="#f5f7fa"/>
+                            <path d="M93 160h12v4H93z" fill="#f5f7fa"/>
+
+                            <!-- Hands (in pockets style) -->
+                            <ellipse cx="31" cy="167" rx="6" ry="5" fill="#e8d5c4"/>
+                            <ellipse cx="99" cy="167" rx="6" ry="5" fill="#e8d5c4"/>
+
+                            <!-- Belt line -->
+                            <rect x="32" y="170" width="66" height="4" fill="#2c3e50"/>
+                            <rect x="62" y="170" width="6" height="4" fill="#8E8E8E"/>
+
+                            <!-- Pants -->
+                            <path d="M32 174h32v96H36l-4-96z" fill="#4a6d8c"/>
+                            <path d="M66 174h32l-4 96H66z" fill="#4a6d8c"/>
+
+                            <!-- Pants crease -->
+                            <line x1="48" y1="180" x2="46" y2="265" stroke="#3d566e" stroke-width="1" opacity="0.4"/>
+                            <line x1="82" y1="180" x2="84" y2="265" stroke="#3d566e" stroke-width="1" opacity="0.4"/>
+
+                            <!-- Shoes -->
+                            <ellipse cx="44" cy="272" rx="14" ry="5" fill="#2c3e50"/>
+                            <ellipse cx="86" cy="272" rx="14" ry="5" fill="#2c3e50"/>
+                            <path d="M32 270h24l-2 5H34z" fill="#1a252f"/>
+                            <path d="M74 270h24l-2 5H76z" fill="#1a252f"/>
                         </svg>
+                        <span class="dresscode-figure-label">For Him</span>
                     </div>
-                    <h3>For the Gentlemen</h3>
-                    <p>Formal suit or barong tagalog in neutral or earth tones.</p>
-                    <div class="color-palette">
-                        <div class="color-swatch" style="background:#C8C8C8;"><span class="tooltip">Light Gray — Parent</span></div>
-                        <div class="color-swatch" style="background:#A7C7E7;"><span class="tooltip">Soft Blue — Flower Boys</span></div>
-                        <div class="color-swatch" style="background:#6B9AC4;"><span class="tooltip">Dusty Blue — Groomsmen</span></div>
-                        <div class="color-swatch" style="background:#8E8E8E;"><span class="tooltip">Gray — Principal Sponsor</span></div>
-                        <div class="color-swatch" style="background:#7E9BB5;"><span class="tooltip">Smoky Blue — Secondary Sponsor</span></div>
+
+                    <!-- Center Divider -->
+                    <div class="dresscode-center-divider">
+                        <div class="dresscode-center-line"></div>
+                        <div class="dresscode-center-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B9AC4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                            </svg>
+                        </div>
+                        <div class="dresscode-center-line"></div>
+                    </div>
+
+                    <!-- Female Figure - Elegant Dress -->
+                    <div class="dresscode-figure">
+                        <svg width="130" height="280" viewBox="0 0 130 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Hair (back long) -->
+                            <path d="M35 40c0-20 12-32 30-32s30 12 30 32v70c0 4-4 6-10 6H45c-6 0-10-2-10-6V40z" fill="#3d566e"/>
+
+                            <!-- Face -->
+                            <ellipse cx="65" cy="50" rx="16" ry="20" fill="#e8d5c4"/>
+
+                            <!-- Hair (front, side parted) -->
+                            <path d="M40 42c0-16 10-28 25-28s25 12 25 28c-4-4-10-6-16-6-4 0-6 2-9 4-3-2-5-4-9-4-6 0-12 2-16 6z" fill="#3d566e"/>
+                            <path d="M42 42c4-6 12-10 23-10s19 4 23 10c-8-2-14-4-23-4s-15 2-23 4z" fill="#2c3e50"/>
+
+                            <!-- Long hair strands beside face -->
+                            <path d="M35 55c-2 15-2 30 2 45l6-2c-4-14-4-28-2-42z" fill="#3d566e"/>
+                            <path d="M95 55c2 15 2 30-2 45l-6-2c4-14 4-28 2-42z" fill="#3d566e"/>
+
+                            <!-- Ears (small, hidden by hair) -->
+                            <ellipse cx="50" cy="52" rx="2" ry="3" fill="#e0c8b8" opacity="0.6"/>
+
+                            <!-- Earrings -->
+                            <circle cx="50" cy="58" r="1.5" fill="#A7C7E7"/>
+                            <circle cx="80" cy="58" r="1.5" fill="#A7C7E7"/>
+
+                            <!-- Neck -->
+                            <path d="M58 65h14v12c0 3-3 5-7 5s-7-2-7-5V65z" fill="#e8d5c4"/>
+
+                            <!-- Necklace -->
+                            <path d="M50 82q15 8 30 0" stroke="#A7C7E7" stroke-width="0.8" fill="none"/>
+                            <circle cx="65" cy="87" r="2" fill="#A7C7E7"/>
+
+                            <!-- Dress bodice (v-neck) -->
+                            <path d="M42 82l23-3 23 3v8l-8 25H50l-8-25z" fill="#6B9AC4"/>
+
+                            <!-- V-neck detail -->
+                            <path d="M50 82l15 22 15-22-8 30H58z" fill="#5a89b3"/>
+                            <path d="M55 82q10 15 20 0" fill="#4a6d8c"/>
+
+                            <!-- Small dot pattern on bodice -->
+                            <circle cx="55" cy="95" r="0.8" fill="#A7C7E7" opacity="0.6"/>
+                            <circle cx="65" cy="100" r="0.8" fill="#A7C7E7" opacity="0.6"/>
+                            <circle cx="75" cy="95" r="0.8" fill="#A7C7E7" opacity="0.6"/>
+                            <circle cx="60" cy="105" r="0.8" fill="#A7C7E7" opacity="0.6"/>
+                            <circle cx="70" cy="105" r="0.8" fill="#A7C7E7" opacity="0.6"/>
+
+                            <!-- Sleeves (short cap) -->
+                            <path d="M42 82q-8 4-10 15l14 4z" fill="#6B9AC4"/>
+                            <path d="M88 82q8 4 10 15l-14 4z" fill="#6B9AC4"/>
+
+                            <!-- Arms -->
+                            <path d="M32 100l-4 60h8l6-55z" fill="#e8d5c4"/>
+                            <path d="M98 100l4 60h-8l-6-55z" fill="#e8d5c4"/>
+
+                            <!-- Hands -->
+                            <ellipse cx="30" cy="165" rx="5" ry="6" fill="#e8d5c4"/>
+                            <ellipse cx="100" cy="165" rx="5" ry="6" fill="#e8d5c4"/>
+
+                            <!-- Waist definition -->
+                            <path d="M45 115h40l-2 8H47z" fill="#5a89b3"/>
+
+                            <!-- Full A-line skirt -->
+                            <path d="M47 122l38 1q8 80 15 145H32q7-65 15-146z" fill="#6B9AC4"/>
+
+                            <!-- Skirt fold lines -->
+                            <path d="M50 130q-6 60-14 130" stroke="#5a89b3" stroke-width="1" fill="none" opacity="0.5"/>
+                            <path d="M58 128q-2 60-6 135" stroke="#5a89b3" stroke-width="0.8" fill="none" opacity="0.4"/>
+                            <path d="M65 128v140" stroke="#5a89b3" stroke-width="0.8" fill="none" opacity="0.3"/>
+                            <path d="M72 128q2 60 6 135" stroke="#5a89b3" stroke-width="0.8" fill="none" opacity="0.4"/>
+                            <path d="M80 130q6 60 14 130" stroke="#5a89b3" stroke-width="1" fill="none" opacity="0.5"/>
+
+                            <!-- Skirt highlights -->
+                            <path d="M55 130q-3 60-10 130" stroke="#A7C7E7" stroke-width="0.5" fill="none" opacity="0.6"/>
+                            <path d="M75 130q3 60 10 130" stroke="#A7C7E7" stroke-width="0.5" fill="none" opacity="0.6"/>
+
+                            <!-- Hem line -->
+                            <path d="M32 268q33 4 66 0" stroke="#4a6d8c" stroke-width="1.5" fill="none"/>
+
+                            <!-- Shoes/heels peek -->
+                            <ellipse cx="52" cy="272" rx="6" ry="3" fill="#7E9BB5"/>
+                            <ellipse cx="78" cy="272" rx="6" ry="3" fill="#7E9BB5"/>
+                            <path d="M48 270h8v4l-2 2h-4z" fill="#5a89b3"/>
+                            <path d="M74 270h8v4l-2 2h-4z" fill="#5a89b3"/>
+                        </svg>
+                        <span class="dresscode-figure-label">For Her</span>
                     </div>
                 </div>
-                <div class="dresscode-card" data-animate>
-                    <!-- For the Ladies: 👗 -->
-                    <div class="dresscode-card-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 2h6l-1 7h-4L9 2z"/><path d="M8 9c-2 2-4 5-4 8h16c0-3-2-6-4-8"/><path d="M4 17l2 5h12l2-5"/><path d="M12 9v4"/>
-                        </svg>
-                    </div>
-                    <h3>For the Ladies</h3>
-                    <p>Floor-length or cocktail dress. Please wear the color assigned to your role in the entourage.</p>
-                    <div class="color-palette">
-                        <div class="color-swatch" style="background:#C8C8C8;"><span class="tooltip">Light Gray — Parent</span></div>
-                        <div class="color-swatch" style="background:#A7C7E7;"><span class="tooltip">Soft Blue — Flower Ladies</span></div>
-                        <div class="color-swatch" style="background:#6B9AC4;"><span class="tooltip">Dusty Blue — Bridesmaids</span></div>
-                        <div class="color-swatch" style="background:#8E8E8E;"><span class="tooltip">Gray — Principal Sponsor</span></div>
-                        <div class="color-swatch" style="background:#7E9BB5;"><span class="tooltip">Smoky Blue — Secondary Sponsor</span></div>
+
+                <!-- Attire Description -->
+                <div class="dresscode-attire-info">
+                    <div class="dresscode-attire-row">
+                        <div class="dresscode-attire-item">
+                            <span class="attire-label">Him</span>
+                            <span class="attire-desc">Formal suit or barong tagalog</span>
+                        </div>
+                        <div class="dresscode-attire-divider"></div>
+                        <div class="dresscode-attire-item">
+                            <span class="attire-label">Her</span>
+                            <span class="attire-desc">Floor-length or cocktail dress</span>
+                        </div>
                     </div>
                 </div>
-                <div class="dresscode-card" data-animate>
-                    <!-- Kindly Avoid: 🚫 -->
-                    <div class="dresscode-card-icon">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-                        </svg>
-                    </div>
-                    <h3>Kindly Avoid</h3>
-                    <p>Please refrain from wearing all-white, neon colors, or overly casual outfits.</p>
-                    <div class="color-palette">
-                        <div class="color-swatch" style="background:#ffffff;border:2px solid #ddd !important;"><span
-                                class="tooltip">White</span></div>
-                        <div class="color-swatch" style="background:#ff1493;"><span class="tooltip">Hot Pink</span>
+
+                <!-- Color Palette -->
+                <div class="dresscode-palette-section">
+                    <p class="dresscode-palette-label">Color Palette by Role</p>
+                    <div class="dresscode-palette-grid">
+                        <div class="dresscode-palette-item">
+                            <div class="dresscode-palette-swatch" style="background:#C8C8C8;"></div>
+                            <span class="dresscode-palette-color">Light Gray</span>
+                            <span class="dresscode-palette-role">Parent</span>
                         </div>
-                        <div class="color-swatch" style="background:#39ff14;"><span class="tooltip">Neon Green</span>
+                        <div class="dresscode-palette-item">
+                            <div class="dresscode-palette-swatch" style="background:#A7C7E7;"></div>
+                            <span class="dresscode-palette-color">Soft Blue</span>
+                            <span class="dresscode-palette-role">Flower Girl / Boy</span>
                         </div>
-                        <div class="color-swatch" style="background:#ff6600;"><span class="tooltip">Bright Orange</span>
+                        <div class="dresscode-palette-item">
+                            <div class="dresscode-palette-swatch" style="background:#6B9AC4;"></div>
+                            <span class="dresscode-palette-color">Dusty Blue</span>
+                            <span class="dresscode-palette-role">Bridesmaids & Groomsmen</span>
                         </div>
-                        <div class="color-swatch" style="background:#ff0000;"><span class="tooltip">Red</span></div>
+                        <div class="dresscode-palette-item">
+                            <div class="dresscode-palette-swatch" style="background:#8E8E8E;"></div>
+                            <span class="dresscode-palette-color">Gray</span>
+                            <span class="dresscode-palette-role">Principal Sponsor</span>
+                        </div>
+                        <div class="dresscode-palette-item">
+                            <div class="dresscode-palette-swatch" style="background:#7E9BB5;"></div>
+                            <span class="dresscode-palette-color">Smoky Blue</span>
+                            <span class="dresscode-palette-role">Secondary Sponsor</span>
+                        </div>
                     </div>
                 </div>
             </div>
+
             <p class="dresscode-note" data-animate>✨ When in doubt, think timeless elegance ✨</p>
         </section>
 
+        <!-- ENTOURAGE -->
         <section class="entourage-section" id="entourage">
             <h2 class="section-title">The Entourage</h2>
             <p class="section-subtitle">Our Beloved Wedding Party</p>
+
             <div class="entourage-container">
+
+                <!-- Parents -->
                 <div class="entourage-group" data-animate>
                     <h3 class="entourage-group-title">Parents of the Groom</h3>
                     <div class="entourage-group-line"></div>
-                    <div class="entourage-pair">
-                        <div class="entourage-principal">
-                            <!-- Father / Male: 👨 👤 🤵 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <h4>Mr. Roberto Santos</h4><span class="role">Father of the Groom</span>
+                    <div class="entourage-names">
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mr. Roberto Santos</span>
+                            <span class="entourage-role">Father of the Groom</span>
                         </div>
-                        <div class="entourage-principal">
-                            <!-- Mother / Female: 👩 💁‍♀️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M8 7c0-2 1-4 4-4s4 2 4 4"/>
-                                </svg>
-                            </div>
-                            <h4>Mrs. Maria Santos</h4><span class="role">Mother of the Groom</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mrs. Maria Santos</span>
+                            <span class="entourage-role">Mother of the Groom</span>
                         </div>
                     </div>
                 </div>
+
                 <div class="entourage-group" data-animate>
                     <h3 class="entourage-group-title">Parents of the Bride</h3>
                     <div class="entourage-group-line"></div>
-                    <div class="entourage-pair">
-                        <div class="entourage-principal">
-                            <!-- Father / Male: 👨 👤 🤵 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-
-                            <h4>Mr. Eduardo Reyes</h4><span class="role">Father of the Bride</span>
+                    <div class="entourage-names">
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mr. Eduardo Reyes</span>
+                            <span class="entourage-role">Father of the Bride</span>
                         </div>
-                        <div class="entourage-principal">
-                            <!-- Mother / Female: 👩 💁‍♀️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M8 7c0-2 1-4 4-4s4 2 4 4"/>
-                                </svg>
-                            </div>
-                            <h4>Mrs. Ana Reyes</h4><span class="role">Mother of the Bride</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mrs. Ana Reyes</span>
+                            <span class="entourage-role">Mother of the Bride</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Principal Sponsors -->
                 <div class="entourage-group" data-animate>
                     <h3 class="entourage-group-title">Principal Sponsors</h3>
                     <div class="entourage-group-line"></div>
-                    <div class="entourage-pair">
-                        <div class="entourage-principal">
-                            <!-- Couple / Pair: 👤 (for Principal Sponsors) -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
-                                </svg>
-                            </div>
-                            <h4>Mr. & Mrs. Carlos Mendoza</h4><span class="role">Ninong & Ninang</span>
+                    <div class="entourage-names two-columns">
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mr. & Mrs. Carlos Mendoza</span>
                         </div>
-                        <div class="entourage-principal">
-                            <!-- Couple / Pair: 👤 (for Principal Sponsors) -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
-                                </svg>
-                            </div>
-                            <h4>Mr. & Mrs. David Villanueva</h4><span class="role">Ninong & Ninang</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mr. & Mrs. David Villanueva</span>
                         </div>
-                    </div>
-                    <div class="entourage-pair">
-                        <div class="entourage-principal">
-                            <!-- Couple / Pair: 👤 (for Principal Sponsors) -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
-                                </svg>
-                            </div>
-                            <h4>Mr. & Mrs. Jose Gonzales</h4><span class="role">Ninong & Ninang</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mr. & Mrs. Jose Gonzales</span>
                         </div>
-                        <div class="entourage-principal">
-                            <!-- Couple / Pair: 👤 (for Principal Sponsors) -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
-                                </svg>
-                            </div>
-                            <h4>Mr. & Mrs. Miguel Torres</h4><span class="role">Ninong & Ninang</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Mr. & Mrs. Miguel Torres</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Best Man & Maid of Honor -->
                 <div class="entourage-group" data-animate>
                     <h3 class="entourage-group-title">Best Man & Maid of Honor</h3>
                     <div class="entourage-group-line"></div>
-                    <div class="entourage-pair">
-                        <div class="entourage-principal">
-                            <!-- Father / Male: 👨 👤 🤵 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <h4>Marco Santos</h4><span class="role">Best Man</span>
+                    <div class="entourage-names two-columns">
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Marco Santos</span>
+                            <span class="entourage-role">Best Man</span>
                         </div>
-                        <div class="entourage-principal">
-                            <!-- Mother / Female: 👩 💁‍♀️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M8 7c0-2 1-4 4-4s4 2 4 4"/>
-                                </svg>
-                            </div>
-                            <h4>Angela Reyes</h4><span class="role">Maid of Honor</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Angela Reyes</span>
+                            <span class="entourage-role">Maid of Honor</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Groomsmen & Bridesmaids -->
                 <div class="entourage-group" data-animate>
-                    <h3 class="entourage-group-title">Groomsmen</h3>
+                    <h3 class="entourage-group-title">Groomsmen & Bridesmaids</h3>
                     <div class="entourage-group-line"></div>
-                    <div class="entourage-members">
-                        <div class="entourage-member">
-                             <!-- Father / Male: 👨 👤 🤵 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <h4>Luis Garcia</h4><span class="role">Groomsman</span>
+                    <div class="entourage-names two-columns">
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Luis Garcia</span>
+                            <span class="entourage-role">Groomsman</span>
                         </div>
-                        <div class="entourage-member">
-                             <!-- Father / Male: 👨 👤 🤵 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <h4>Paolo Cruz</h4><span class="role">Groomsman</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Sophia Reyes</span>
+                            <span class="entourage-role">Bridesmaid</span>
                         </div>
-                        <div class="entourage-member">
-                             <!-- Groom / Male: 🤵 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <h4>Kevin Lim</h4><span class="role">Groomsman</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Paolo Cruz</span>
+                            <span class="entourage-role">Groomsman</span>
                         </div>
-                        <div class="entourage-member">
-                            <!-- Groom / Male: 🤵 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                                </svg>
-                            </div>
-                            <h4>Daniel Ramos</h4><span class="role">Groomsman</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Camille Tan</span>
+                            <span class="entourage-role">Bridesmaid</span>
+                        </div>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Kevin Lim</span>
+                            <span class="entourage-role">Groomsman</span>
+                        </div>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Isabelle De Leon</span>
+                            <span class="entourage-role">Bridesmaid</span>
+                        </div>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Daniel Ramos</span>
+                            <span class="entourage-role">Groomsman</span>
+                        </div>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Nicole Bautista</span>
+                            <span class="entourage-role">Bridesmaid</span>
                         </div>
                     </div>
                 </div>
-                <div class="entourage-group" data-animate>
-                    <h3 class="entourage-group-title">Bridesmaids</h3>
-                    <div class="entourage-group-line"></div>
-                    <div class="entourage-members">
-                        <div class="entourage-member">
-                            <!-- Bridesmaid / Female: 💁‍♀️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M8 7c0-2 1-4 4-4s4 2 4 4"/>
-                                </svg>
-                            </div>
-                            <h4>Sophia Reyes</h4><span class="role">Bridesmaid</span>
-                        </div>
-                        <div class="entourage-member">
-                            <!-- Bridesmaid / Female: 💁‍♀️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M8 7c0-2 1-4 4-4s4 2 4 4"/>
-                                </svg>
-                            </div>
-                            <h4>Camille Tan</h4><span class="role">Bridesmaid</span>
-                        </div>
-                        <div class="entourage-member">
-                            <!-- Bridesmaid / Female: 💁‍♀️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M8 7c0-2 1-4 4-4s4 2 4 4"/>
-                                </svg>
-                            </div>
-                            <h4>Isabelle De Leon</h4><span class="role">Bridesmaid</span>
-                        </div>
-                        <div class="entourage-member">
-                            <!-- Bridesmaid / Female: 💁‍♀️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M8 7c0-2 1-4 4-4s4 2 4 4"/>
-                                </svg>
-                            </div>
-                            <h4>Nicole Bautista</h4><span class="role">Bridesmaid</span>
-                        </div>
-                    </div>
-                </div>
+
+                <!-- Secondary Sponsors -->
                 <div class="entourage-group" data-animate>
                     <h3 class="entourage-group-title">Secondary Sponsors</h3>
                     <div class="entourage-group-line"></div>
-                    <div class="entourage-pair">
-                        <div class="entourage-member">
-                            <!-- Candle: 🕯️ -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="9" y="8" width="6" height="14" rx="1"/><path d="M12 8V6"/><path d="M10 4c0-1 1-2 2-2s2 1 2 2c0 1.5-2 2-2 2s-2-.5-2-2z"/>
-                                </svg>
-                            </div>
-                            <h4>James & Clara</h4><span class="role">Candle Sponsors</span>
+                    <div class="entourage-names two-columns">
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">James & Clara</span>
+                            <span class="entourage-role">Candle</span>
                         </div>
-                        <div class="entourage-member">
-                            <!-- Cord: 🪢 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M8 4c-2 0-4 2-4 4s2 4 4 4 4-2 4-4-2-4-4-4z"/><path d="M16 12c-2 0-4 2-4 4s2 4 4 4 4-2 4-4-2-4-4-4z"/><path d="M12 8v8"/>
-                                </svg>
-                            </div>
-                            <h4>Adrian & Mia</h4><span class="role">Cord Sponsors</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Adrian & Mia</span>
+                            <span class="entourage-role">Cord</span>
                         </div>
-                    </div>
-                    <div class="entourage-pair" style="margin-top:15px;">
-                        <div class="entourage-member">
-                            <!-- Veil: 🧣 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 6c4-2 8-2 16 0"/><path d="M4 6c0 6 2 12 8 14"/><path d="M20 6c0 6-2 12-8 14"/><path d="M4 10c4-1 8-1 16 0"/><path d="M4 14c4-1 8-1 16 0"/>
-                                </svg>
-                            </div>
-                            <h4>Ryan & Ella</h4><span class="role">Veil Sponsors</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Ryan & Ella</span>
+                            <span class="entourage-role">Veil</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Little Stars -->
                 <div class="entourage-group" data-animate>
                     <h3 class="entourage-group-title">Little Stars</h3>
                     <div class="entourage-group-line"></div>
-                    <div class="entourage-pair">
-                        <div class="entourage-member">
-                            <!-- Flower Girl: 🌸 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="3"/><path d="M12 2a4 4 0 014 4c0 1.5-1 3-4 4"/><path d="M12 2a4 4 0 00-4 4c0 1.5 1 3 4 4"/><path d="M22 12a4 4 0 01-4 4c-1.5 0-3-1-4-4"/><path d="M22 12a4 4 0 00-4-4c-1.5 0-3 1-4 4"/><path d="M2 12a4 4 0 004 4c1.5 0 3-1 4-4"/><path d="M2 12a4 4 0 014-4c1.5 0 3 1 4 4"/><line x1="12" y1="15" x2="12" y2="22"/>
-                                </svg>
-                            </div>
-                            <h4>Sofia Marie</h4><span class="role">Flower Girl</span>
+                    <div class="entourage-names two-columns">
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Sofia Marie</span>
+                            <span class="entourage-role">Flower Girl</span>
                         </div>
-                        <div class="entourage-member">
-                            <!-- Ring Bearer: 💍 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="14" r="6"/><path d="M12 8V4"/><path d="M9 6l3-3 3 3"/><path d="M9 14a3 3 0 016 0"/>
-                                </svg>
-                            </div>
-                            <h4>Lucas Gabriel</h4><span class="role">Ring Bearer</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Lucas Gabriel</span>
+                            <span class="entourage-role">Ring Bearer</span>
                         </div>
-                        <div class="entourage-member">
-                            <!-- Bible Bearer: 📖 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="12" y1="6" x2="12" y2="13"/><line x1="9" y1="9.5" x2="15" y2="9.5"/>
-                                </svg>
-                            </div>
-                            <h4>Elijah James</h4><span class="role">Bible Bearer</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Elijah James</span>
+                            <span class="entourage-role">Bible Bearer</span>
                         </div>
-                        <div class="entourage-member">
-                            <!-- Coin Bearer: 🪙 -->
-                            <div class="entourage-avatar">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="5"/><line x1="12" y1="8" x2="12" y2="10"/><line x1="12" y1="14" x2="12" y2="16"/><path d="M10 10.5c0-.8.9-1.5 2-1.5s2 .7 2 1.5-.9 1.5-2 1.5-2 .7-2 1.5.9 1.5 2 1.5 2-.7 2-1.5"/>
-                                </svg>
-                            </div>
-                            <h4>Isabella Rose</h4><span class="role">Coin Bearer</span>
+                        <div class="entourage-name-item">
+                            <span class="entourage-person">Isabella Rose</span>
+                            <span class="entourage-role">Coin Bearer</span>
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -831,14 +906,14 @@
         <section class="rsvp-section" id="rsvp">
             <h2 class="section-title">RSVP</h2>
             <p class="section-subtitle">Kindly Respond By January 2, 2028</p>
-            <div class="rsvp-card">
-                <!-- Personalized Greeting (shown if guest param exists) -->
+
+            <!-- RSVP Form (shown when invite is valid and unused) -->
+            <div class="rsvp-card" id="rsvpCard">
                 <div class="rsvp-greeting" id="rsvpGreeting" style="display:none;">
                     <p class="greeting-text">Dear</p>
                     <p class="greeting-name" id="greetingName"></p>
                 </div>
 
-                <!-- Guest Allowance Info -->
                 <div class="guest-allowance" id="guestAllowance" style="display:none;">
                     <p>You may bring up to</p>
                     <div class="guest-count"><span id="allowedCount">0</span> additional guest(s)</div>
@@ -878,7 +953,6 @@
                         </div>
                     </div>
 
-                    <!-- Additional Guests (shown only when accepting & extra > 0) -->
                     <div class="additional-guests-section" id="additionalGuestsSection" style="display:none;">
                         <div class="additional-guests-header">
                             <label>Additional Guests</label>
@@ -902,6 +976,36 @@
                         <span id="btnLoading" style="display:none;">Sending...</span>
                     </button>
                 </form>
+            </div>
+
+            <!-- Already Submitted (shown when invite was already used) -->
+            <div class="rsvp-card rsvp-already-used-card" id="rsvpAlreadyUsed" style="display:none;">
+                <div class="already-used-icon-inline">
+                    <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#6B9AC4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <h3 class="already-used-title-inline">RSVP Already Submitted</h3>
+                <div class="already-used-divider-inline"></div>
+                <p class="already-used-message-inline">
+                    This invitation link has already been used to submit an RSVP.
+                    Each invite link can only be used once.
+                </p>
+                <div class="already-used-info-inline">
+                    <div class="used-info-row-inline">
+                        <span class="used-info-label-inline">Submitted by</span>
+                        <span class="used-info-value-inline" id="usedByName">—</span>
+                    </div>
+                    <div class="used-info-row-inline">
+                        <span class="used-info-label-inline">Submitted on</span>
+                        <span class="used-info-value-inline" id="usedAtTime">—</span>
+                    </div>
+                </div>
+                <p class="already-used-help-inline">
+                    If you believe this is an error or need to update your RSVP,
+                    please contact the couple directly.
+                </p>
             </div>
         </section>
 

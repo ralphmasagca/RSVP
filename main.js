@@ -25,10 +25,72 @@ function createPetals() { const c = document.getElementById('petalsContainer'); 
 
 function startCountdown() { const t = new Date('2028-02-02T15:00:00'); function u() { const d = t - new Date(); if (d <= 0) { ['days', 'hours', 'minutes', 'seconds'].forEach(id => document.getElementById(id).textContent = '0'); return; } document.getElementById('days').textContent = Math.floor(d / (1e3 * 60 * 60 * 24)); document.getElementById('hours').textContent = String(Math.floor((d % (1e3 * 60 * 60 * 24)) / (1e3 * 60 * 60))).padStart(2, '0'); document.getElementById('minutes').textContent = String(Math.floor((d % (1e3 * 60 * 60)) / (1e3 * 60))).padStart(2, '0'); document.getElementById('seconds').textContent = String(Math.floor((d % (1e3 * 60)) / 1e3)).padStart(2, '0'); } u(); setInterval(u, 1000); }
 
-function observeAnimations() { const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.12 }); document.querySelectorAll('[data-animate]').forEach(el => obs.observe(el)); }
+//function observeAnimations() { const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.12 }); document.querySelectorAll('[data-animate]').forEach(el => obs.observe(el)); }
+
+function observeAnimations() {
+    const sectionObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                // Small delay to ensure smooth start
+                requestAnimationFrame(function() {
+                    entry.target.classList.add('section-animate');
+                });
+                sectionObserver.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: '0px 0px -80px 0px'
+    });
+
+    const sections = document.querySelectorAll(
+        '.story-section, .details-section, .dresscode-section, ' +
+        '.entourage-section, .prenup-section, .snapshare-section, ' +
+        '.countdown-section, .rsvp-section'
+    );
+
+    sections.forEach(function(section) {
+        sectionObserver.observe(section);
+    });
+
+    // Fallback observer for [data-animate] elements
+    const elementObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('[data-animate]').forEach(function(el) {
+        elementObserver.observe(el);
+    });
+}
 
 window.addEventListener('scroll', () => { const n = document.getElementById('mainNav'); if (n) n.classList.toggle('scrolled', window.scrollY > 80); });
 document.querySelectorAll('.nav-links a').forEach(a => { a.addEventListener('click', function (e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth' }); }); });
+
+
+// ===== HERO ENVELOPE REVEAL =====
+function triggerHeroEnvelopeReveal() {
+    var reveal = document.getElementById('heroEnvelopeReveal');
+    var heroContent = document.getElementById('heroContent');
+    var hero = document.getElementById('hero');
+
+    if (!reveal || !heroContent) return;
+
+    // Start the reveal — CSS animations auto-play
+    // After animations complete, reveal the content
+    setTimeout(function() {
+        heroContent.classList.add('revealed');
+        hero.classList.add('envelope-opened');
+    }, 800);
+
+    // Remove the overlay completely after all animations done
+    setTimeout(function() {
+        reveal.classList.add('done');
+    }, 2500);
+}
 
 // ===== ENCRYPTED ONE-TIME-USE RSVP SYSTEM =====
 
@@ -132,24 +194,21 @@ function showInvalidInvitePage() {
 }
 
 function showAlreadyUsedPage(usedBy, usedAt) {
-    isValidInvite = false;
     hideCheckingOverlay();
 
-    var ep = document.getElementById('envelopePage');
-    var lp = document.getElementById('landingPage');
-    if (ep) ep.style.display = 'none';
-    if (lp) lp.style.display = 'none';
+    // Don't block the entire site — just swap the RSVP card
+    // The envelope and landing page should still work
 
-    var page = document.getElementById('alreadyUsedPage');
-    if (page) {
-        page.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
+    isValidInvite = true; // Allow viewing the site
 
-        if (usedBy) document.getElementById('usedByName').textContent = usedBy;
-        if (usedAt) document.getElementById('usedAtTime').textContent = usedAt;
+    // Store info for when RSVP section loads
+    window._rsvpAlreadyUsed = true;
+    window._rsvpUsedBy = usedBy || '';
+    window._rsvpUsedAt = usedAt || '';
 
-        createBlockedPageParticles('usedParticles');
-    }
+    // Show envelope page normally
+    showEnvelopePage();
+    createParticles();
 }
 
 function showEnvelopePage() {
@@ -211,13 +270,11 @@ async function validateInvite() {
     var encodedData = params.get('d');
     var verificationHash = params.get('v');
 
-    // No parameters — block
     if (!encodedData || !verificationHash) {
         showInvalidInvitePage();
         return false;
     }
 
-    // Decrypt and verify
     var inviteData = decryptInviteData(encodedData, verificationHash);
 
     if (!inviteData || !inviteData.guest) {
@@ -225,30 +282,28 @@ async function validateInvite() {
         return false;
     }
 
-    // Store invite data
     prefilledName = inviteData.guest;
     maxExtraGuests = inviteData.extra;
     inviteCode = inviteData.code;
     inviteHash = generateInviteHash(encodedData);
 
-    // Check Google Sheet only
+    // Check Google Sheet
     try {
         var result = await checkServerStatus(inviteHash);
 
         if (result.status === 'already_used') {
+            // Don't block entire site — just mark as used
+            // The RSVP section will show the already-used card
             showAlreadyUsedPage(
                 result.usedBy || prefilledName,
                 result.usedAt || ''
             );
-            return false;
+            return true; // Still allow site access
         }
     } catch (error) {
         console.warn('Server check error:', error);
-        // If server is unreachable, allow access
-        // They will be checked again on submit
     }
 
-    // Valid and not yet used
     isValidInvite = true;
     showEnvelopePage();
     createParticles();
@@ -260,6 +315,35 @@ async function validateInvite() {
 function initPersonalizedRSVP() {
     if (!isValidInvite) return;
 
+    // Check if RSVP was already used
+    if (window._rsvpAlreadyUsed) {
+        var formCard = document.getElementById('rsvpCard');
+        var usedCard = document.getElementById('rsvpAlreadyUsed');
+
+        if (formCard) formCard.style.display = 'none';
+        if (usedCard) {
+            usedCard.style.display = 'block';
+            document.getElementById('usedByName').textContent = window._rsvpUsedBy || '—';
+            document.getElementById('usedAtTime').textContent = window._rsvpUsedAt || '—';
+
+            // Force reflow before adding animation class
+            void usedCard.offsetWidth;
+
+            // Trigger animation
+            requestAnimationFrame(function() {
+                usedCard.classList.add('animate-in');
+            });
+        }
+
+        var subtitle = document.querySelector('.rsvp-section .section-subtitle');
+        if (subtitle && prefilledName) {
+            subtitle.textContent = prefilledName + "'s Invitation";
+        }
+
+        return;
+    }
+
+    // Normal RSVP init
     var nameInput = document.getElementById('fullName');
 
     if (prefilledName) {
@@ -276,7 +360,9 @@ function initPersonalizedRSVP() {
 
         document.getElementById('rsvpGreeting').style.display = 'block';
         document.getElementById('greetingName').textContent = prefilledName;
-        document.getElementById('nameLockBadge').style.display = 'inline-flex';
+
+        var lockBadge = document.getElementById('nameLockBadge');
+        if (lockBadge) lockBadge.style.display = 'inline-flex';
     }
 
     if (maxExtraGuests > 0) {
@@ -288,7 +374,6 @@ function initPersonalizedRSVP() {
 
     updateGuestCounter();
 }
-
 // ===== ENVELOPE OPEN =====
 
 function openEnvelope() {
@@ -318,6 +403,7 @@ function openEnvelope() {
         startCountdown();
         observeAnimations();
         initPersonalizedRSVP();
+        triggerHeroEnvelopeReveal();
         setTimeout(function() { playYTMusic(); }, 1500);
     }, 1600);
 }
@@ -536,14 +622,41 @@ async function submitRSVP(e) {
         var preCheck = await checkServerStatus(inviteHash);
 
         if (preCheck.status === 'already_used') {
-            showAlreadyUsedPage(
-                preCheck.usedBy || fullName,
-                preCheck.usedAt || ''
-            );
+            var formCard = document.getElementById('rsvpCard');
+            var usedCard = document.getElementById('rsvpAlreadyUsed');
+
+            if (formCard) {
+                // Fade out form first
+                formCard.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                formCard.style.opacity = '0';
+                formCard.style.transform = 'translateY(-20px)';
+
+                setTimeout(function() {
+                    formCard.style.display = 'none';
+
+                    if (usedCard) {
+                        usedCard.style.display = 'block';
+                        document.getElementById('usedByName').textContent = preCheck.usedBy || fullName;
+                        document.getElementById('usedAtTime').textContent = preCheck.usedAt || '';
+
+                        // Trigger animation
+                        void usedCard.offsetWidth;
+                        requestAnimationFrame(function() {
+                            usedCard.classList.add('animate-in');
+                        });
+                    }
+
+                    document.getElementById('rsvp').scrollIntoView({ behavior: 'smooth' });
+                }, 400);
+            }
+
+            btn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
             return;
         }
 
-        // Submit via no-cors
+        // Submit
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -551,32 +664,59 @@ async function submitRSVP(e) {
             body: JSON.stringify(formData)
         });
 
-        // Show success
+        // Show thank you modal
         document.getElementById('thankYouModal').classList.add('active');
 
-        // Reset form display but keep data
-        document.getElementById('rsvpForm').reset();
-        document.getElementById('guestEntriesContainer').innerHTML = '';
-        currentGuestCount = 0;
-        document.getElementById('additionalGuestsSection').style.display = 'none';
-        updateGuestCounter();
-        updateAddButton();
+        // After modal closes, show the already-used card
+        window._rsvpAlreadyUsed = true;
+        window._rsvpUsedBy = fullName;
+        window._rsvpUsedAt = new Date().toLocaleString();
 
-        if (prefilledName) {
-            document.getElementById('fullName').value = prefilledName;
-        }
+        // After successful submission, swap the cards with animation
+        setTimeout(function() {
+            var formCard = document.getElementById('rsvpCard');
+            var usedCard = document.getElementById('rsvpAlreadyUsed');
 
-        // Lock form permanently
-        disableFormAfterSubmit();
+            if (formCard) {
+                formCard.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                formCard.style.opacity = '0';
+                formCard.style.transform = 'translateY(-20px)';
+
+                setTimeout(function() {
+                    formCard.style.display = 'none';
+
+                    if (usedCard) {
+                        usedCard.style.display = 'block';
+                        document.getElementById('usedByName').textContent = fullName;
+                        document.getElementById('usedAtTime').textContent = new Date().toLocaleString();
+
+                        // Force reflow and trigger animation
+                        void usedCard.offsetWidth;
+                        requestAnimationFrame(function() {
+                            usedCard.classList.add('animate-in');
+                        });
+                    }
+                }, 400);
+            }
+        }, 500);
+
         isValidInvite = false;
 
     } catch (error) {
         console.error('RSVP submit error:', error);
-
-        // no-cors usually sends even on catch
         document.getElementById('thankYouModal').classList.add('active');
-        document.getElementById('rsvpForm').reset();
-        disableFormAfterSubmit();
+
+        setTimeout(function() {
+            var formCard = document.getElementById('rsvpCard');
+            var usedCard = document.getElementById('rsvpAlreadyUsed');
+            if (formCard) formCard.style.display = 'none';
+            if (usedCard) {
+                usedCard.style.display = 'block';
+                document.getElementById('usedByName').textContent = fullName;
+                document.getElementById('usedAtTime').textContent = new Date().toLocaleString();
+            }
+        }, 500);
+
         isValidInvite = false;
     } finally {
         btn.disabled = false;
@@ -584,7 +724,6 @@ async function submitRSVP(e) {
         btnLoading.style.display = 'none';
     }
 }
-
 // ===== INIT ON PAGE LOAD =====
 
 document.addEventListener('DOMContentLoaded', function() {
