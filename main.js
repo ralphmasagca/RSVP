@@ -735,7 +735,47 @@ document.addEventListener('DOMContentLoaded', function() {
 function closeModal() { document.getElementById('thankYouModal').classList.remove('active'); }
 document.getElementById('thankYouModal').addEventListener('click', function (e) { if (e.target === this) closeModal(); });
 
-function copyHashtag() { navigator.clipboard.writeText('#KasamaShaiRalphAtGinhawa').then(() => { const m = document.getElementById('copiedMsg'); m.classList.add('show'); setTimeout(() => m.classList.remove('show'), 2000); }).catch(() => { const ta = document.createElement('textarea'); ta.value = '#KasamaShaiRalphAtGinhawa'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); const m = document.getElementById('copiedMsg'); m.classList.add('show'); setTimeout(() => m.classList.remove('show'), 2000); }); }
+//function copyHashtag() { navigator.clipboard.writeText('#KasamaShaiRalphAtGinhawa').then(() => { const m = document.getElementById('copiedMsg'); m.classList.add('show'); setTimeout(() => m.classList.remove('show'), 2000); }).catch(() => { const ta = document.createElement('textarea'); ta.value = '#KasamaShaiRalphAtGinhawa'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); const m = document.getElementById('copiedMsg'); m.classList.add('show'); setTimeout(() => m.classList.remove('show'), 2000); }); }
+
+function copyHashtag() {
+    var hashtag = '#KasamaShaiRalphAtGinhawa';
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(hashtag).then(function() {
+            showCopiedMessage();
+        }).catch(function() {
+            fallbackCopy(hashtag);
+        });
+    } else {
+        fallbackCopy(hashtag);
+    }
+}
+
+function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+        document.execCommand('copy');
+        showCopiedMessage();
+    } catch (err) {
+        console.error('Copy failed:', err);
+    }
+    document.body.removeChild(ta);
+}
+
+function showCopiedMessage() {
+    var m = document.getElementById('copiedMsg');
+    if (m) {
+        m.classList.add('show');
+        setTimeout(function() {
+            m.classList.remove('show');
+        }, 2000);
+    }
+}
 
 function openLightbox(item) { const lb = document.getElementById('lightbox'); const content = document.getElementById('lightboxContent'); const imgDiv = item.querySelector('.prenup-img'); content.innerHTML = '<div class="prenup-img" style="min-width:500px;min-height:400px;font-size:2rem;">' + imgDiv.textContent + '</div>'; lb.classList.add('active'); document.body.style.overflow = 'hidden'; }
 function closeLightbox(e) { if (e.target.classList.contains('lightbox') || e.target.classList.contains('lightbox-close')) { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = 'auto'; } }

@@ -1364,6 +1364,208 @@ body {
     }
 }
 
+/* ===== SECONDARY SPONSORS MEANINGS ===== */
+.secondary-sponsors-group {
+    max-width: 700px;
+    margin: 0 auto 60px;
+}
+
+.secondary-sponsors-meanings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+.sponsor-meaning-card {
+    background: linear-gradient(135deg, #f5f7fa, #e8ecf1);
+    border: 1px solid rgba(107, 154, 196, 0.1);
+    border-radius: 12px;
+    padding: 22px 18px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.sponsor-meaning-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #6B9AC4, transparent);
+    opacity: 0.6;
+}
+
+.sponsor-meaning-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(107, 154, 196, 0.15);
+    border-color: rgba(107, 154, 196, 0.25);
+    background: linear-gradient(135deg, #fff, #f5f7fa);
+}
+
+.sponsor-meaning-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 12px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 12px rgba(107, 154, 196, 0.12);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sponsor-meaning-card:hover .sponsor-meaning-icon {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.sponsor-meaning-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+}
+
+.sponsor-meaning-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    color: #7E9BB5;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Divider between meanings and names */
+.secondary-sponsors-names {
+    padding-top: 20px;
+    border-top: 1px solid rgba(107, 154, 196, 0.08);
+    position: relative;
+}
+
+.secondary-sponsors-names::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #6B9AC4, transparent);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .secondary-sponsors-meanings {
+        gap: 10px;
+        padding: 0 5px;
+    }
+
+    .sponsor-meaning-card {
+        padding: 18px 12px;
+    }
+
+    .sponsor-meaning-icon {
+        width: 42px;
+        height: 42px;
+        margin-bottom: 10px;
+    }
+
+    .sponsor-meaning-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .sponsor-meaning-title {
+        font-size: 0.9rem;
+        margin-bottom: 6px;
+    }
+
+    .sponsor-meaning-desc {
+        font-size: 0.75rem;
+        line-height: 1.5;
+    }
+}
+
+@media (max-width: 480px) {
+    .secondary-sponsors-meanings {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .sponsor-meaning-card {
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
+    }
+
+    .sponsor-meaning-icon {
+        flex-shrink: 0;
+        margin: 0;
+        width: 40px;
+        height: 40px;
+    }
+
+    .sponsor-meaning-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sponsor-meaning-title {
+        font-size: 0.95rem;
+        margin-bottom: 4px;
+    }
+
+    .sponsor-meaning-desc {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    .sponsor-meaning-card > div:not(.sponsor-meaning-icon) {
+        flex: 1;
+    }
+
+    /* Wrapper for text on mobile */
+    .sponsor-meaning-card::after {
+        display: none;
+    }
+}
+
+/* Secondary sponsor cards fade in with stagger */
+.entourage-section .sponsor-meaning-card {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.entourage-section.section-animate .sponsor-meaning-card {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.entourage-section.section-animate .secondary-sponsors-group .sponsor-meaning-card:nth-child(1) {
+    transition-delay: 1.1s;
+}
+
+.entourage-section.section-animate .secondary-sponsors-group .sponsor-meaning-card:nth-child(2) {
+    transition-delay: 1.2s;
+}
+
+.entourage-section.section-animate .secondary-sponsors-group .sponsor-meaning-card:nth-child(3) {
+    transition-delay: 1.3s;
+}
+
 /* ===== HERO ENVELOPE REVEAL ANIMATION ===== */
 .hero {
     position: relative;
@@ -2153,6 +2355,162 @@ section {
     font-style: normal;
 }
 
+/* ===== STORY EVENT WITH IMAGE ===== */
+.story-event-image {
+    margin: 15px 0 18px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(107, 154, 196, 0.15);
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(135deg, #e8ecf1, #d5dce5);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.5s ease;
+}
+
+.story-event-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Elegant frame overlay */
+.story-event-image-frame {
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
+    pointer-events: none;
+    z-index: 2;
+    transition: inset 0.4s ease, border-color 0.4s ease;
+}
+
+/* Corner decorative accents */
+.story-event-image::before,
+.story-event-image::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    z-index: 3;
+    transition: all 0.4s ease;
+}
+
+.story-event-image::before {
+    top: 12px;
+    left: 12px;
+    border-top: 2px solid #A7C7E7;
+    border-left: 2px solid #A7C7E7;
+}
+
+.story-event-image::after {
+    bottom: 12px;
+    right: 12px;
+    border-bottom: 2px solid #A7C7E7;
+    border-right: 2px solid #A7C7E7;
+}
+
+/* Subtle gradient overlay */
+.story-event-image > img {
+    filter: brightness(0.98) saturate(1.05);
+}
+
+/* Hover effects */
+.story-event-with-image:hover .story-event-image {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(107, 154, 196, 0.25);
+}
+
+.story-event-with-image:hover .story-event-image img {
+    transform: scale(1.05);
+}
+
+.story-event-with-image:hover .story-event-image-frame {
+    inset: 6px;
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.story-event-with-image:hover .story-event-image::before,
+.story-event-with-image:hover .story-event-image::after {
+    width: 25px;
+    height: 25px;
+    border-color: #6B9AC4;
+}
+
+/* Loading state - shimmer effect while image loads */
+.story-event-image:not(:has(img[src])) {
+    background: linear-gradient(90deg, #e8ecf1 25%, #f5f7fa 50%, #e8ecf1 75%);
+    background-size: 200% 100%;
+    animation: imageShimmer 2s infinite;
+}
+
+@keyframes imageShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Special badge for the proposal image */
+.story-event-with-image .story-event-image {
+    position: relative;
+}
+
+.story-event-with-image .story-event-image::before,
+.story-event-with-image .story-event-image::after {
+    content: '';
+}
+
+/* Text alignment on the card with image */
+.story-event:nth-child(odd) .story-event-image {
+    /* On odd items (image on left side), align accordingly */
+}
+
+.story-event:nth-child(even) .story-event-image {
+    /* On even items (image on right side), align accordingly */
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .story-event-image {
+        margin: 12px 0 15px;
+        aspect-ratio: 16 / 10;
+    }
+
+    .story-event-image-frame {
+        inset: 6px;
+    }
+
+    .story-event-image::before,
+    .story-event-image::after {
+        width: 16px;
+        height: 16px;
+    }
+
+    .story-event-image::before {
+        top: 10px;
+        left: 10px;
+    }
+
+    .story-event-image::after {
+        bottom: 10px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .story-event-image {
+        margin: 10px 0 12px;
+        aspect-ratio: 4 / 3;
+    }
+
+    .story-event-image::before,
+    .story-event-image::after {
+        width: 14px;
+        height: 14px;
+    }
+}
+
 /* ===== TIMELINE ===== */
 .details-section {
     background: #fff;
@@ -2643,6 +3001,131 @@ section {
     }
 }
 
+/* ===== DRESS CODE — GUEST NOTE ===== */
+.dresscode-guest-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 1px solid rgba(107, 154, 196, 0.08);
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+.dresscode-guest-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(107, 154, 196, 0.25), transparent);
+    max-width: 60px;
+}
+
+.dresscode-guest-content {
+    text-align: center;
+    padding: 0 5px;
+}
+
+.dresscode-guest-label {
+    display: inline-block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #6B9AC4;
+    margin-bottom: 8px;
+    padding: 3px 12px;
+    background: linear-gradient(135deg, rgba(167, 199, 231, 0.1), rgba(107, 154, 196, 0.05));
+    border-radius: 20px;
+    border: 1px solid rgba(107, 154, 196, 0.15);
+}
+
+.dresscode-guest-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    color: #7E9BB5;
+    font-style: italic;
+    line-height: 1.6;
+    letter-spacing: 0.3px;
+    margin: 0;
+    max-width: 320px;
+}
+
+/* Subtle icon accent (optional decoration) */
+.dresscode-guest-content::before {
+    content: '✧';
+    display: inline-block;
+    color: #A7C7E7;
+    font-size: 0.9rem;
+    margin-right: 6px;
+    opacity: 0.7;
+}
+
+.dresscode-guest-content::after {
+    content: '✧';
+    display: inline-block;
+    color: #A7C7E7;
+    font-size: 0.9rem;
+    margin-left: 6px;
+    opacity: 0.7;
+}
+
+/* Hover effect */
+.dresscode-guest-note:hover .dresscode-guest-label {
+    background: linear-gradient(135deg, rgba(167, 199, 231, 0.2), rgba(107, 154, 196, 0.1));
+    border-color: rgba(107, 154, 196, 0.3);
+    transition: all 0.3s ease;
+}
+
+.dresscode-guest-label {
+    transition: all 0.3s ease;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .dresscode-guest-note {
+        margin-top: 25px;
+        padding-top: 20px;
+        gap: 15px;
+    }
+
+    .dresscode-guest-line {
+        max-width: 40px;
+    }
+
+    .dresscode-guest-label {
+        font-size: 0.5rem;
+        letter-spacing: 2.5px;
+        padding: 3px 10px;
+    }
+
+    .dresscode-guest-text {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .dresscode-guest-note {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .dresscode-guest-line {
+        width: 40px;
+        max-width: none;
+    }
+
+    .dresscode-guest-label {
+        font-size: 0.5rem;
+    }
+
+    .dresscode-guest-text {
+        font-size: 0.9rem;
+    }
+}
+
 /* ===== ENTOURAGE (TEXT-BASED COMPACT) ===== */
 .entourage-section {
     background: #fff;
@@ -3037,6 +3520,7 @@ section {
     margin-bottom: 35px;
 }
 
+/* ===== HASHTAG DISPLAY — RESPONSIVE ===== */
 .hashtag-display {
     display: inline-block;
     padding: 20px 50px;
@@ -3044,17 +3528,87 @@ section {
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.3s ease;
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    box-sizing: border-box;
 }
 
 .hashtag-display:hover {
     background: rgba(167, 199, 231, 0.1);
-    transform: scale(1.05);
+    transform: scale(1.03);
 }
 
 .hashtag-text {
     font-family: 'Great Vibes', cursive;
     font-size: 2rem;
     color: #A7C7E7;
+    line-height: 1.2;
+    display: inline-block;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+/* Tablets and small laptops */
+@media (max-width: 992px) {
+    .hashtag-display {
+        padding: 18px 40px;
+    }
+    .hashtag-text {
+        font-size: 1.8rem;
+    }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    .hashtag-display {
+        padding: 16px 30px;
+        border-radius: 40px;
+        max-width: 90%;
+    }
+    .hashtag-text {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+    .hashtag-display {
+        padding: 14px 22px;
+        border-radius: 35px;
+        border-width: 1.5px;
+        max-width: 95%;
+    }
+    .hashtag-text {
+        font-size: 1.3rem;
+        letter-spacing: 0.5px;
+    }
+}
+
+/* Small mobile phones */
+@media (max-width: 480px) {
+    .hashtag-display {
+        padding: 12px 18px;
+        border-radius: 30px;
+        max-width: 100%;
+        margin: 0 10px;
+    }
+    .hashtag-text {
+        font-size: 1.15rem;
+    }
+}
+
+/* Very small phones (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .hashtag-display {
+        padding: 10px 15px;
+        border-radius: 25px;
+    }
+    .hashtag-text {
+        font-size: 1rem;
+    }
 }
 
 .hashtag-sub {
@@ -3861,6 +4415,16 @@ footer {
     color: rgba(167, 199, 231, 0.6);
     font-style: italic;
     margin-top: 20px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    padding: 0 20px;
+    line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+    .footer-hashtag {
+        font-size: 0.95rem;
+    }
 }
 
 /* ===== PETALS ===== */
@@ -4579,6 +5143,18 @@ body.nav-open {
     opacity: 1;
     transform: translate3d(0, 0, 0);
     transition-delay: 2s;
+}
+
+.dresscode-section .dresscode-guest-note {
+    opacity: 0;
+    transform: translate3d(0, 15px, 0);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dresscode-section.section-animate .dresscode-guest-note {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    transition-delay: 1.3s;
 }
 
 /* ===== ENTOURAGE — Smooth Fade Up ===== */
