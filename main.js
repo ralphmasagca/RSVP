@@ -31,7 +31,6 @@ function observeAnimations() {
     const sectionObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
-                // Small delay to ensure smooth start
                 requestAnimationFrame(function() {
                     entry.target.classList.add('section-animate');
                 });
@@ -46,14 +45,13 @@ function observeAnimations() {
     const sections = document.querySelectorAll(
         '.story-section, .details-section, .dresscode-section, ' +
         '.entourage-section, .prenup-section, .snapshare-section, ' +
-        '.countdown-section, .rsvp-section'
+        '.countdown-section, .faq-section, .rsvp-section'
     );
 
     sections.forEach(function(section) {
         sectionObserver.observe(section);
     });
 
-    // Fallback observer for [data-animate] elements
     const elementObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
@@ -90,6 +88,44 @@ function triggerHeroEnvelopeReveal() {
     setTimeout(function() {
         reveal.classList.add('done');
     }, 2500);
+}
+
+function generateVenueQR() {
+    // Full URL (used for QR code and directions button)
+    var mapUrl = 'https://maps.app.goo.gl/aKGToJDLGXM29fHY6';
+
+    var qrContainer = document.getElementById('ceremonyQR');
+    if (!qrContainer) return;
+
+    var qrSize = 200;
+    var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=' + qrSize + 'x' + qrSize +
+                '&data=' + encodeURIComponent(mapUrl) +
+                '&color=2c3e50&bgcolor=ffffff&margin=5';
+
+    var img = document.createElement('img');
+    img.src = qrUrl;
+    img.alt = 'QR Code to Ceremony Venue';
+    img.loading = 'lazy';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.display = 'block';
+
+    img.onerror = function() {
+        qrContainer.innerHTML =
+            '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">' +
+                '<rect width="100" height="100" fill="#f5f7fa"/>' +
+                '<text x="50" y="45" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#6B9AC4">QR</text>' +
+                '<text x="50" y="58" text-anchor="middle" font-family="sans-serif" font-size="6" fill="#8E8E8E">Unavailable</text>' +
+            '</svg>';
+    };
+
+    qrContainer.addEventListener('click', function() {
+        window.open(mapUrl, '_blank', 'noopener,noreferrer');
+    });
+
+    qrContainer.innerHTML = '';
+    qrContainer.appendChild(img);
+    qrContainer.title = 'Click to open in Google Maps';
 }
 
 // ===== ENCRYPTED ONE-TIME-USE RSVP SYSTEM =====
@@ -404,6 +440,7 @@ function openEnvelope() {
         observeAnimations();
         initPersonalizedRSVP();
         triggerHeroEnvelopeReveal();
+        generateVenueQR(); 
         setTimeout(function() { playYTMusic(); }, 1500);
     }, 1600);
 }
@@ -777,5 +814,179 @@ function showCopiedMessage() {
     }
 }
 
-function openLightbox(item) { const lb = document.getElementById('lightbox'); const content = document.getElementById('lightboxContent'); const imgDiv = item.querySelector('.prenup-img'); content.innerHTML = '<div class="prenup-img" style="min-width:500px;min-height:400px;font-size:2rem;">' + imgDiv.textContent + '</div>'; lb.classList.add('active'); document.body.style.overflow = 'hidden'; }
-function closeLightbox(e) { if (e.target.classList.contains('lightbox') || e.target.classList.contains('lightbox-close')) { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow = 'auto'; } }
+// ===== LIGHTBOX FOR PRENUP PHOTOS =====
+var currentLightboxIndex = 0;
+var lightboxImages = [];
+
+function initLightbox() {
+    var lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    // Add navigation arrows and caption if not already present
+    if (!lightbox.querySelector('.lightbox-nav.prev')) {
+        var prevBtn = document.createElement('button');
+        prevBtn.className = 'lightbox-nav prev';
+        prevBtn.innerHTML = '‹';
+        prevBtn.setAttribute('aria-label', 'Previous photo');
+        prevBtn.onclick = function(e) {
+            e.stopPropagation();
+            navigateLightbox(-1);
+        };
+
+        var nextBtn = document.createElement('button');
+        nextBtn.className = 'lightbox-nav next';
+        nextBtn.innerHTML = '›';
+        nextBtn.setAttribute('aria-label', 'Next photo');
+        nextBtn.onclick = function(e) {
+            e.stopPropagation();
+            navigateLightbox(1);
+        };
+
+        var caption = document.createElement('div');
+        caption.className = 'lightbox-caption';
+        caption.id = 'lightboxCaption';
+
+        var counter = document.createElement('div');
+        counter.className = 'lightbox-counter';
+        counter.id = 'lightboxCounter';
+
+        lightbox.appendChild(prevBtn);
+        lightbox.appendChild(nextBtn);
+        lightbox.appendChild(caption);
+        lightbox.appendChild(counter);
+    }
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightboxDirect();
+        else if (e.key === 'ArrowLeft') navigateLightbox(-1);
+        else if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+}
+
+function openLightbox(item) {
+    var lightbox = document.getElementById('lightbox');
+    var content = document.getElementById('lightboxContent');
+    if (!lightbox || !content) {
+        console.error('Lightbox elements not found');
+        return;
+    }
+
+    // Get UNIQUE prenup images (skip duplicates from infinite scroll)
+    lightboxImages = [];
+    var seenSources = {};
+    var allItems = document.querySelectorAll('.prenup-item');
+
+    allItems.forEach(function(el) {
+        var img = el.querySelector('.prenup-img');
+        if (img && img.src && !seenSources[img.src]) {
+            seenSources[img.src] = true;
+            var overlay = el.querySelector('.prenup-overlay span');
+            lightboxImages.push({
+                src: img.src,
+                alt: img.alt || '',
+                caption: overlay ? overlay.textContent : ''
+            });
+        }
+    });
+
+    if (lightboxImages.length === 0) {
+        console.error('No lightbox images found');
+        return;
+    }
+
+    // Find which image was clicked
+    var clickedImg = item.querySelector('.prenup-img');
+    if (!clickedImg) {
+        console.error('No image found in clicked item');
+        return;
+    }
+
+    currentLightboxIndex = 0;
+    for (var i = 0; i < lightboxImages.length; i++) {
+        if (lightboxImages[i].src === clickedImg.src) {
+            currentLightboxIndex = i;
+            break;
+        }
+    }
+
+    showLightboxImage(currentLightboxIndex);
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function showLightboxImage(index) {
+    if (index < 0 || index >= lightboxImages.length) return;
+
+    var content = document.getElementById('lightboxContent');
+    var caption = document.getElementById('lightboxCaption');
+    var counter = document.getElementById('lightboxCounter');
+    var img = lightboxImages[index];
+
+    if (content) {
+        content.innerHTML =
+            '<img src="' + img.src + '" alt="' + img.alt + '" ' +
+            'style="max-width: 100%; max-height: 90vh; display: block; ' +
+            'object-fit: contain; border-radius: 8px;">';
+    }
+
+    if (caption) {
+        if (img.caption) {
+            caption.textContent = img.caption;
+            caption.style.display = 'block';
+        } else {
+            caption.style.display = 'none';
+        }
+    }
+
+    if (counter) {
+        counter.textContent = (index + 1) + ' / ' + lightboxImages.length;
+    }
+
+    currentLightboxIndex = index;
+}
+
+function navigateLightbox(direction) {
+    var newIndex = currentLightboxIndex + direction;
+    if (newIndex < 0) newIndex = lightboxImages.length - 1;
+    if (newIndex >= lightboxImages.length) newIndex = 0;
+    showLightboxImage(newIndex);
+}
+
+function closeLightbox(e) {
+    // Only close if clicking backdrop or close button
+    if (e && e.target) {
+        var isBackdrop = e.target.classList.contains('lightbox');
+        var isCloseBtn = e.target.classList.contains('lightbox-close') ||
+                        e.target.closest('.lightbox-close');
+        if (!isBackdrop && !isCloseBtn) return;
+    }
+    closeLightboxDirect();
+}
+
+function closeLightboxDirect() {
+    var lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+// Initialize lightbox on page load
+document.addEventListener('DOMContentLoaded', function() {
+    initLightbox();
+});
+
+// ===== FAQ TOGGLE =====
+function toggleFAQ(button) {
+    var item = button.parentElement;
+    var isActive = item.classList.contains('active');
+
+    // Toggle current item
+    if (isActive) {
+        item.classList.remove('active');
+    } else {
+        item.classList.add('active');
+    }
+}
