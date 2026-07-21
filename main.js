@@ -45,7 +45,7 @@ function observeAnimations() {
     const sections = document.querySelectorAll(
         '.story-section, .details-section, .dresscode-section, ' +
         '.entourage-section, .prenup-section, .snapshare-section, ' +
-        '.countdown-section, .faq-section, .rsvp-section'
+        '.gift-section, .countdown-section, .faq-section, .rsvp-section'
     );
 
     sections.forEach(function(section) {
@@ -130,7 +130,7 @@ function generateVenueQR() {
 
 // ===== ENCRYPTED ONE-TIME-USE RSVP SYSTEM =====
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyjwf00e1l_e6Q06CgMXRZguaLOmAtEbF11EzFLZqZRS6OZlAJkqlweJyquWmTpIhVI/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-Es0WJ0DcudZcqVKV_PTt-GeeB7HrdcD1joP_YpBD0hNgY6-U5jKrGr66xABNngP3/exec';
 const SECRET_KEY = 'RS2028WEDDING';
 
 let maxExtraGuests = 0;
@@ -988,5 +988,66 @@ function toggleFAQ(button) {
         item.classList.remove('active');
     } else {
         item.classList.add('active');
+    }
+}
+
+// ===== MONETARY GIFT COPY FUNCTION =====
+function copyGiftInfo(elementId, button) {
+    var element = document.getElementById(elementId);
+    if (!element) return;
+
+    var textToCopy = element.textContent.trim();
+
+    // Try modern clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).then(function() {
+            showGiftCopiedFeedback(button);
+        }).catch(function() {
+            fallbackCopyGift(textToCopy, button);
+        });
+    } else {
+        fallbackCopyGift(textToCopy, button);
+    }
+}
+
+function fallbackCopyGift(text, button) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+        document.execCommand('copy');
+        showGiftCopiedFeedback(button);
+    } catch (err) {
+        console.error('Copy failed:', err);
+    }
+    document.body.removeChild(ta);
+}
+
+function showGiftCopiedFeedback(button) {
+    // Change button icon temporarily
+    if (button) {
+        button.classList.add('copied');
+        var originalHTML = button.innerHTML;
+        button.innerHTML =
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                '<polyline points="20 6 9 17 4 12"/>' +
+            '</svg>';
+
+        setTimeout(function() {
+            button.classList.remove('copied');
+            button.innerHTML = originalHTML;
+        }, 2000);
+    }
+
+    // Show toast notification
+    var toast = document.getElementById('giftCopiedToast');
+    if (toast) {
+        toast.classList.add('show');
+        setTimeout(function() {
+            toast.classList.remove('show');
+        }, 2500);
     }
 }

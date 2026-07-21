@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Wall — Ralph & Shaira Wedding</title>
+    <link rel="icon" type="image/png" href="images/monogram.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(180deg, #f5f7fa 0%, #e8ecf1 100%);
+            color: #2c3e50;
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        .wall-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(107, 154, 196, 0.15);
+            padding: 20px 30px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .wall-header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .wall-title-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .wall-title h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: #6B9AC4;
+            line-height: 1;
+        }
+
+        .wall-title p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #8E8E8E;
+            margin-top: 4px;
+        }
+
+        .wall-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .wall-status .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: #4CAF50;
+            border-radius: 50%;
+            animation: livePulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.5); }
+            50% { opacity: 0.7; transform: scale(1.2); box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+        }
+
+        .upload-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #6B9AC4, #5a89b3);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(107, 154, 196, 0.35);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 154, 196, 0.45);
+        }
+
+        /* ===== STATS BAR ===== */
+        .wall-stats {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stat-pill {
+            background: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(107, 154, 196, 0.08);
+            border: 1px solid rgba(107, 154, 196, 0.1);
+        }
+
+        .stat-pill-value {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            color: #6B9AC4;
+            font-weight: 600;
+        }
+
+        .stat-pill-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8E8E8E;
+        }
+
+        /* ===== PHOTO GALLERY ===== */
+        .wall-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px 60px;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 15px;
+        }
+
+        .photo-item {
+            position: relative;
+            aspect-ratio: 4 / 5;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e8ecf1, #d5dce5);
+            box-shadow: 0 6px 20px rgba(107, 154, 196, 0.12);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            opacity: 0;
+            animation: photoReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes photoReveal {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .photo-item.new-photo {
+            animation: newPhotoReveal 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes newPhotoReveal {
+            0% { opacity: 0; transform: scale(0.5) rotate(-5deg); box-shadow: 0 0 30px rgba(107, 154, 196, 0.5); }
+            60% { transform: scale(1.05) rotate(2deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0); }
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(107, 154, 196, 0.25);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 50%, rgba(44, 62, 80, 0.85) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 15px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .photo-item:hover .photo-overlay {
+            opacity: 1;
+        }
+
+        .photo-caption {
+            font-family: 'Cormorant Garamond', serif;
+            color: #fff;
+            font-size: 0.95rem;
+            font-style: italic;
+            line-height: 1.4;
+            margin-bottom: 6px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .photo-guest {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #A7C7E7;
+            font-weight: 600;
+        }
+
+        .photo-time {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.55rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 3px;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #A7C7E7, #6B9AC4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: #fff;
+            box-shadow: 0 8px 30px rgba(107, 154, 196, 0.3);
+            animation: emptyFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes emptyFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .empty-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: #6B9AC4;
+            margin-bottom: 8px;
+        }
+
+        .empty-subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: #7E9BB5;
+            font-style: italic;
+        }
+
+        /* ===== LOADING ===== */
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(107, 154, 196, 0.15);
+            border-top-color: #6B9AC4;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== UPLOAD MODAL ===== */
+        .upload-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 5000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .upload-modal.active {
+            display: flex;
+        }
+
+        .upload-content {
+            background: #fff;
+            border-radius: 20px;
+            padding: 35px 30px;
+            max-width: 480px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: scale(0.9) translateY(20px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .upload-header h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: #6B9AC4;
+            margin-bottom: 5px;
+        }
+
+        .upload-header p {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8E8E8E;
+        }
+
+        /* File Drop Zone */
+        .drop-zone {
+            border: 2px dashed rgba(107, 154, 196, 0.3);
+            border-radius: 15px;
+            padding: 35px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: linear-gradient(135deg, #f5f7fa, #e8ecf1);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: #6B9AC4;
+            background: linear-gradient(135deg, #eaf2f9, #dce8f2);
+        }
+
+        .drop-zone-icon {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: #6B9AC4;
+            box-shadow: 0 4px 15px rgba(107, 154, 196, 0.15);
+        }
+
+        .drop-zone-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .drop-zone-sub {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: #8E8E8E;
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Preview */
+        .preview-container {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .preview-container.active {
+            display: block;
+        }
+
+        .preview-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .change-photo-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 1px solid rgba(107, 154, 196, 0.3);
+            border-radius: 8px;
+            color: #6B9AC4;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .change-photo-btn:hover {
+            background: rgba(107, 154, 196, 0.08);
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #8E8E8E;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid rgba(107, 154, 196, 0.2);
+            border-radius: 10px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            color: #2c3e50;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #6B9AC4;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+            font-style: italic;
+        }
+
+        /* Modal Actions */
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel {
+            background: #f5f7fa;
+            color: #7E9BB5;
+        }
+
+        .btn-cancel:hover {
+            background: #e8ecf1;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #6B9AC4, #5a89b3);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(107, 154, 196, 0.35);
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            background: linear-gradient(135deg, #5a89b3, #4a7da8);
+            transform: translateY(-2px);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 6000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+        }
+
+        .lightbox.active { display: flex; }
+
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-info {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(15px);
+            padding: 12px 25px;
+            border-radius: 25px;
+            color: #fff;
+            text-align: center;
+            max-width: 80vw;
+        }
+
+        .lightbox-caption {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-style: italic;
+            margin-bottom: 4px;
+        }
+
+        .lightbox-meta {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            color: #A7C7E7;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #6B9AC4, #5a89b3);
+            color: #fff;
+            padding: 14px 26px;
+            border-radius: 30px;
+            box-shadow: 0 8px 25px rgba(107, 154, 196, 0.4);
+            z-index: 7000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.error { background: linear-gradient(135deg, #c86464, #b55555); }
+        .toast.success { background: linear-gradient(135deg, #4CAF50, #45a049); }
+
+        /* Upload Progress */
+        .upload-progress {
+            display: none;
+            margin-top: 15px;
+            background: rgba(107, 154, 196, 0.08);
+            padding: 12px 15px;
+            border-radius: 8px;
+        }
+
+        .upload-progress.active { display: block; }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(107, 154, 196, 0.15);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #A7C7E7, #6B9AC4);
+            animation: progressAnim 2s ease-in-out infinite;
+        }
+
+        @keyframes progressAnim {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: #6B9AC4;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wall-header { padding: 15px 20px; }
+            .wall-title h1 { font-size: 1.8rem; }
+            .upload-btn { padding: 10px 18px; font-size: 0.6rem; }
+            .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-pill { padding: 8px 15px; }
+            .stat-pill-value { font-size: 1.1rem; }
+        }
+
+        @media (max-width: 480px) {
+            .photo-grid { grid-template-columns: 1fr; }
+            .wall-header-inner { justify-content: center; text-align: center; }
+            .wall-status { display: none; }
+            .upload-content { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="wall-header">
+        <div class="wall-header-inner">
+            <div class="wall-title-group">
+                <div class="wall-title">
+                    <h1>Live Wall</h1>
+                    <p>Ralph &amp; Shaira</p>
+                </div>
+                <div class="wall-status">
+                    <div class="pulse-dot"></div>
+                    <span>Live</span>
+                </div>
+            </div>
+            <button class="upload-btn" onclick="openUploadModal()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                Share Photo
+            </button>
+        </div>
+    </header>
+
+    <!-- Stats -->
+    <div class="wall-stats">
+        <div class="stat-pill">
+            <span class="stat-pill-value" id="photoCount">0</span>
+            <span class="stat-pill-label">Photos</span>
+        </div>
+        <div class="stat-pill">
+            <span class="stat-pill-value" id="guestCount">0</span>
+            <span class="stat-pill-label">Guests Sharing</span>
+        </div>
+        <div class="stat-pill">
+            <span class="stat-pill-value" id="lastUpdate">—</span>
+            <span class="stat-pill-label">Last Update</span>
+        </div>
+    </div>
+
+    <!-- Gallery -->
+    <div class="wall-container">
+        <div class="photo-grid" id="photoGrid">
+            <div class="loading-state">
+                <div class="loading-spinner"></div>
+                <p style="color: #7E9BB5; font-style: italic;">Loading photos...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Modal -->
+    <div class="upload-modal" id="uploadModal">
+        <div class="upload-content">
+            <div class="upload-header">
+                <h2>Share Your Moment</h2>
+                <p>Add to Our Live Wall</p>
+            </div>
+
+            <div class="drop-zone" id="dropZone">
+                <input type="file" id="fileInput" accept="image/*" onchange="handleFileSelect(event)">
+                <div class="drop-zone-icon">
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                </div>
+                <p class="drop-zone-text">Click or drop a photo here</p>
+                <p class="drop-zone-sub">JPG, PNG or WEBP · Max 10MB</p>
+            </div>
+
+            <div class="preview-container" id="previewContainer">
+                <img id="previewImage" class="preview-image" alt="Preview">
+                <button class="change-photo-btn" onclick="clearPreview()">Change Photo</button>
+            </div>
+
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="guestName" placeholder="e.g. Maria Santos" maxlength="30" required>
+            </div>
+
+            <div class="form-group">
+                <label>Caption (Optional)</label>
+                <textarea id="captionText" placeholder="Share your thoughts..." maxlength="80"></textarea>
+            </div>
+
+            <div class="upload-progress" id="uploadProgress">
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                <p class="progress-text">Uploading photo...</p>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeUploadModal()">Cancel</button>
+                <button class="btn-submit" id="submitBtn" onclick="uploadPhoto()">Share Photo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+        <img id="lightboxImg" alt="Photo">
+        <div class="lightbox-info">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+            <div class="lightbox-meta" id="lightboxMeta"></div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ⚠️ CONFIGURATION
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-Es0WJ0DcudZcqVKV_PTt-GeeB7HrdcD1joP_YpBD0hNgY6-U5jKrGr66xABNngP3/exec';
+        const REFRESH_INTERVAL = 10000; // 10 seconds
+
+        var allPhotos = [];
+        var seenPhotoIds = new Set();
+        var currentFile = null;
+        var isFirstLoad = true;
+        var refreshTimer = null;
+
+        // ===== LOAD PHOTOS =====
+        function loadPhotos() {
+            fetch(GOOGLE_SCRIPT_URL + '?action=photos', { method: 'GET' })
+                .then(function(res) { return res.json(); })
+                .then(function(result) {
+                    if (result.status === 'success') {
+                        var newPhotos = result.photos || [];
+                        var newIds = new Set();
+                        var justAdded = [];
+
+                        newPhotos.forEach(function(p) {
+                            newIds.add(p.id);
+                            if (!seenPhotoIds.has(p.id) && !isFirstLoad) {
+                                justAdded.push(p.id);
+                            }
+                        });
+
+                        allPhotos = newPhotos;
+                        seenPhotoIds = newIds;
+
+                        renderPhotos(justAdded);
+                        updateStats();
+
+                        if (justAdded.length > 0 && !isFirstLoad) {
+                            showToast('📸 New photo added!', 'success');
+                        }
+
+                        isFirstLoad = false;
+                    }
+                })
+                .catch(function(err) {
+                    console.error('Load error:', err);
+                });
+        }
+
+        function renderPhotos(newIds) {
+            var grid = document.getElementById('photoGrid');
+
+            if (allPhotos.length === 0) {
+                grid.innerHTML =
+                    '<div class="empty-state">' +
+                        '<div class="empty-icon">' +
+                            '<svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+                                '<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>' +
+                                '<circle cx="12" cy="13" r="4"/>' +
+                            '</svg>' +
+                        '</div>' +
+                        '<h3 class="empty-title">Be the first to share</h3>' +
+                        '<p class="empty-subtitle">Photos from our special day will appear here</p>' +
+                    '</div>';
+                return;
+            }
+
+            newIds = newIds || [];
+            var html = allPhotos.map(function(photo) {
+                var isNew = newIds.indexOf(photo.id) !== -1;
+                return '<div class="photo-item ' + (isNew ? 'new-photo' : '') + '" onclick="openLightbox(\'' + photo.id + '\')">' +
+                    '<img src="' + photo.url + '" alt="' + escapeHTML(photo.caption || 'Photo') + '" loading="lazy" onerror="this.parentNode.style.display=\'none\'">' +
+                    '<div class="photo-overlay">' +
+                        (photo.caption ? '<p class="photo-caption">' + escapeHTML(photo.caption) + '</p>' : '') +
+                        '<p class="photo-guest">📸 ' + escapeHTML(photo.guestName) + '</p>' +
+                        '<p class="photo-time">' + formatTimeAgo(photo.timestamp) + '</p>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
+
+            grid.innerHTML = html;
+        }
+
+        function updateStats() {
+            document.getElementById('photoCount').textContent = allPhotos.length;
+            var uniqueGuests = new Set(allPhotos.map(function(p) { return p.guestName; }));
+            document.getElementById('guestCount').textContent = uniqueGuests.size;
+
+            if (allPhotos.length > 0) {
+                document.getElementById('lastUpdate').textContent = formatTimeAgo(allPhotos[0].timestamp);
+            }
+        }
+
+        function formatTimeAgo(timestamp) {
+            var seconds = Math.floor((Date.now() - timestamp) / 1000);
+            if (seconds < 60) return 'Just now';
+            var minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return minutes + 'm ago';
+            var hours = Math.floor(minutes / 60);
+            if (hours < 24) return hours + 'h ago';
+            var days = Math.floor(hours / 24);
+            return days + 'd ago';
+        }
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, function(c) {
+                return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+            });
+        }
+
+        // ===== UPLOAD MODAL =====
+        function openUploadModal() {
+            document.getElementById('uploadModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Remember guest name in session
+            var savedName = sessionStorage.getItem('livewall_guest_name');
+            if (savedName) document.getElementById('guestName').value = savedName;
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            clearPreview();
+            document.getElementById('captionText').value = '';
+        }
+
+        function handleFileSelect(event) {
+            var file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showToast('Please select an image file', 'error');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showToast('File too large (max 10MB)', 'error');
+                return;
+            }
+
+            currentFile = file;
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('previewImage').src = e.target.result;
+                document.getElementById('previewContainer').classList.add('active');
+                document.getElementById('dropZone').style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearPreview() {
+            currentFile = null;
+            document.getElementById('fileInput').value = '';
+            document.getElementById('previewContainer').classList.remove('active');
+            document.getElementById('dropZone').style.display = 'block';
+        }
+
+        // Drag and drop
+        var dropZone = document.getElementById('dropZone');
+        ['dragenter', 'dragover'].forEach(function(evt) {
+            dropZone.addEventListener(evt, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.add('dragover');
+            });
+        });
+        ['dragleave', 'drop'].forEach(function(evt) {
+            dropZone.addEventListener(evt, function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                dropZone.classList.remove('dragover');
+            });
+        });
+        dropZone.addEventListener('drop', function(e) {
+            var files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('fileInput').files = files;
+                handleFileSelect({ target: { files: files } });
+            }
+        });
+
+        // ===== UPLOAD =====
+        function uploadPhoto() {
+            var guestName = document.getElementById('guestName').value.trim();
+            var caption = document.getElementById('captionText').value.trim();
+
+            if (!currentFile) { showToast('Please select a photo', 'error'); return; }
+            if (!guestName) { showToast('Please enter your name', 'error'); return; }
+
+            sessionStorage.setItem('livewall_guest_name', guestName);
+
+            var submitBtn = document.getElementById('submitBtn');
+            var progressEl = document.getElementById('uploadProgress');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Uploading...';
+            progressEl.classList.add('active');
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var payload = {
+                    action: 'upload',
+                    imageData: e.target.result,
+                    fileName: currentFile.name,
+                    guestName: guestName,
+                    caption: caption
+                };
+
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
+                })
+                .then(function() {
+                    showToast('✓ Photo uploaded successfully!', 'success');
+                    closeUploadModal();
+                    // Wait a moment for Drive to process, then refresh
+                    setTimeout(loadPhotos, 3000);
+                })
+                .catch(function(err) {
+                    showToast('Upload failed: ' + err.message, 'error');
+                })
+                .finally(function() {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Share Photo';
+                    progressEl.classList.remove('active');
+                });
+            };
+            reader.readAsDataURL(currentFile);
+        }
+
+        // ===== LIGHTBOX =====
+        function openLightbox(photoId) {
+            var photo = allPhotos.find(function(p) { return p.id === photoId; });
+            if (!photo) return;
+
+            document.getElementById('lightboxImg').src = photo.fullUrl;
+            document.getElementById('lightboxCaption').textContent = photo.caption || '';
+            document.getElementById('lightboxCaption').style.display = photo.caption ? 'block' : 'none';
+            document.getElementById('lightboxMeta').textContent = '📸 ' + photo.guestName + ' · ' + formatTimeAgo(photo.timestamp);
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(e) {
+            if (e && e.target && !e.target.classList.contains('lightbox') && !e.target.classList.contains('lightbox-close')) return;
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // ===== TOAST =====
+        function showToast(message, type) {
+            var toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast show ' + (type || '');
+            setTimeout(function() { toast.classList.remove('show'); }, 3000);
+        }
+
+        // Close upload modal on backdrop click
+        document.getElementById('uploadModal').addEventListener('click', function(e) {
+            if (e.target === this) closeUploadModal();
+        });
+
+        // ===== INIT =====
+        loadPhotos();
+        refreshTimer = setInterval(loadPhotos, REFRESH_INTERVAL);
+
+        // Update time labels every 30 seconds
+        setInterval(function() {
+            if (allPhotos.length > 0) updateStats();
+        }, 30000);
+    </script>
+</body>
+</html>

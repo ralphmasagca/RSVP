@@ -126,7 +126,7 @@
             <div class="nav-links">
                 <a href="#hero">Home</a><a href="#ourStory">Our Story</a><a href="#details">Wedding Day</a><a
                     href="#dresscode">Dress Code</a><a href="#entourage">Entourage</a><a href="#prenup">Prenup</a><a
-                    href="#snapshare">Snap & Share</a><a href="#faq">FAQ</a><a href="#rsvp">RSVP</a>
+                    href="#snapshare">Snap & Share</a><a href="#gift">Gift</a><a href="#faq">FAQ</a><a href="#rsvp">RSVP</a>
             </div>
             <button class="hamburger" id="hamburger" onclick="toggleMobileNav()"><span class="hamburger-box"><span
                         class="hamburger-line"></span><span class="hamburger-line"></span><span
@@ -140,15 +140,16 @@
                 <div class="tagline">February 2, 2028</div>
             </div>
             <div class="mobile-nav-divider"></div>
-            <a href="#hero" onclick="closeMobileNav()"><span class="nav-icon">🏠</span>Hero</a>
+            <a href="#hero" onclick="closeMobileNav()"><span class="nav-icon">🏠</span>Home</a>
             <a href="#ourStory" onclick="closeMobileNav()"><span class="nav-icon">💕</span>Our Story</a>
             <a href="#details" onclick="closeMobileNav()"><span class="nav-icon">💒</span>Wedding Day</a>
             <a href="#dresscode" onclick="closeMobileNav()"><span class="nav-icon">👗</span>Dress Code</a>
             <a href="#entourage" onclick="closeMobileNav()"><span class="nav-icon">👥</span>Entourage</a>
             <a href="#prenup" onclick="closeMobileNav()"><span class="nav-icon">📷</span>Prenup Photos</a>
             <a href="#snapshare" onclick="closeMobileNav()"><span class="nav-icon">📸</span>Snap & Share</a>
-            <a href="#rsvp" onclick="closeMobileNav()"><span class="nav-icon">💌</span>RSVP</a>
+            <a href="#gift" onclick="closeMobileNav()"><span class="nav-icon">🎁</span>Gift</a>
             <a href="#faq" onclick="closeMobileNav()"><span class="nav-icon">❓</span>FAQ</a>
+            <a href="#rsvp" onclick="closeMobileNav()"><span class="nav-icon">💌</span>RSVP</a>
             <div class="mobile-nav-footer">
                 <p>Made with <span class="footer-heart">♥</span> for our special day</p>
             </div>
@@ -219,7 +220,7 @@
                 <p class="wedding-invite-text">We're Getting Married</p>
                 <h1 class="couple-names">Ralph <span class="ampersand">&</span> Shaira</h1>
                 <div class="divider"></div>
-                <p class="wedding-date">Wednesday, February 2, 2028</p>
+                <p class="wedding-date">February 2, 2028</p>
                 <p class="wedding-venue">Parish of The Immaculate Heart of Mary — Antipolo, Rizal</p>
             </div>
 
@@ -1040,47 +1041,286 @@
             <div class="lightbox-content" id="lightboxContent"></div>
         </div>
 
+        <!-- SNAP & SHARE -->
         <section class="snapshare-section" id="snapshare">
             <h2 class="section-title">Snap & Share</h2>
             <p class="section-subtitle">Capture Every Moment</p>
             <div class="snapshare-content" data-animate>
                 <div class="snapshare-icon">
-                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#A7C7E7" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                        <circle cx="12" cy="13" r="4"/>
                     </svg>
                 </div>
-                <p class="snapshare-text">We want to see our special day through your eyes! Share your photos and videos
-                    using our wedding hashtag.</p>
-                <div class="hashtag-display" onclick="copyHashtag()"><span
-                        class="hashtag-text">#KasamaShaiRalphAtGinhawa</span></div>
+                <p class="snapshare-text">
+                    We want to see our special day through your eyes! Share your photos and videos using our wedding hashtag.
+                </p>
+
+                <div class="hashtag-display" onclick="copyHashtag()">
+                    <span class="hashtag-text">#KasamaShaiRalphAtGinhawa</span>
+                </div>
                 <p class="hashtag-sub">Tap the hashtag to copy</p>
                 <p class="snapshare-copied" id="copiedMsg">✓ Copied to clipboard!</p>
+
+                <!-- LIVE WALL SECTION -->
+                <div class="livewall-cta">
+                    <div class="livewall-divider">
+                        <div class="livewall-divider-line"></div>
+                        <span class="livewall-divider-text">Or</span>
+                        <div class="livewall-divider-line"></div>
+                    </div>
+
+                    <div class="livewall-info">
+                        <div class="livewall-badge">
+                            <div class="livewall-pulse"></div>
+                            <span>Live Wall</span>
+                        </div>
+                        <h3 class="livewall-title">Share to Our Live Photo Wall</h3>
+                        <p class="livewall-description">
+                            On our wedding day, scan the QR code available at the venue to instantly upload your captured moments to our Live Wall — a real-time gallery of memories from everyone's perspective.
+                        </p>
+
+                        <div class="livewall-features">
+                            <div class="livewall-feature">
+                                <div class="livewall-feature-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="3" width="7" height="7"/>
+                                        <rect x="14" y="3" width="7" height="7"/>
+                                        <rect x="3" y="14" width="7" height="7"/>
+                                        <path d="M14 14h3v3h-3zM14 20h3M20 14v3M20 20h1"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <strong>Scan QR Code</strong>
+                                    <span>Available at the venue</span>
+                                </div>
+                            </div>
+                            <div class="livewall-feature">
+                                <div class="livewall-feature-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                                        <circle cx="12" cy="13" r="4"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <strong>Upload Photos</strong>
+                                    <span>Add captions & your name</span>
+                                </div>
+                            </div>
+                            <div class="livewall-feature">
+                                <div class="livewall-feature-icon">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <strong>Real-Time Updates</strong>
+                                    <span>See everyone's moments</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="live-wall.html" target="_blank" class="livewall-preview-btn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            Preview Live Wall
+                        </a>
+                    </div>
+                </div>
+
                 <div class="snapshare-platforms">
-                    <!-- Instagram -->
                     <div class="platform-icon" title="Instagram">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
                         </svg>
                     </div>
-                    <!-- Facebook -->
                     <div class="platform-icon" title="Facebook">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
                         </svg>
                     </div>
-                    <!-- Twitter/X -->
                     <div class="platform-icon" title="Twitter">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M4 4l7.07 8.51L4 20h2l5.39-5.71L16 20h4l-7.45-8.95L20 4h-2l-5.01 5.31L9 4H4z"/>
                         </svg>
                     </div>
-                    <!-- TikTok -->
                     <div class="platform-icon" title="TikTok">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/>
                         </svg>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- ===== MONETARY GIFT SECTION ===== -->
+        <section class="gift-section" id="gift">
+            <h2 class="section-title">A Gift of Love</h2>
+            <p class="section-subtitle">With Grateful Hearts</p>
+
+            <p class="gift-intro" data-animate>
+                Your presence at our wedding is truly the greatest gift we could ask for.
+                However, if you wish to bless us further as we begin our new life together,
+                a <em>monetary gift</em> would be warmly appreciated.
+            </p>
+
+            <div class="gift-cards-container">
+
+                <!-- GCash Card -->
+                <div class="gift-card" data-animate>
+                    <div class="gift-card-header">
+                        <div class="gift-card-icon gcash">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                                <path d="M6 12h2m8 0h2"/>
+                                <circle cx="12" cy="12" r="2.5"/>
+                            </svg>
+                        </div>
+                        <div class="gift-card-title-group">
+                            <h3 class="gift-card-title">GCash</h3>
+                            <p class="gift-card-subtitle">Mobile Wallet</p>
+                        </div>
+                    </div>
+
+                    <div class="gift-card-body">
+                        <div class="gift-qr-container">
+                            <img src="images/gcash-qr.jpg" alt="GCash QR Code" class="gift-qr-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="gift-qr-placeholder" style="display:none;">
+                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#C8C8C8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="7" height="7"/>
+                                    <rect x="14" y="3" width="7" height="7"/>
+                                    <rect x="3" y="14" width="7" height="7"/>
+                                    <path d="M14 14h3v3h-3zM14 20h3M20 14v3M20 20h1"/>
+                                </svg>
+                                <span>QR Code</span>
+                            </div>
+                        </div>
+
+                        <div class="gift-details">
+                            <div class="gift-detail-row">
+                                <span class="gift-detail-label">Number</span>
+                                <div class="gift-detail-value-group">
+                                    <span class="gift-detail-value" id="gcashNumber">0977 464 8173</span>
+                                    <button class="gift-copy-btn" onclick="copyGiftInfo('gcashNumber', this)" aria-label="Copy number">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="gift-detail-row">
+                                <span class="gift-detail-label">Name</span>
+                                <span class="gift-detail-value" id="gcashName">RA**H JA**N M.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bank Transfer Card -->
+                <div class="gift-card" data-animate>
+                    <div class="gift-card-header">
+                        <div class="gift-card-icon bank">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+                            </svg>
+                        </div>
+                        <div class="gift-card-title-group">
+                            <h3 class="gift-card-title">Bank Transfer</h3>
+                            <p class="gift-card-subtitle">BPI</p>
+                        </div>
+                    </div>
+
+                    <div class="gift-card-body">
+                        <div class="gift-qr-container">
+                            <img src="images/bank-qr.jpg" alt="Bank QR Code" class="gift-qr-image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="gift-qr-placeholder" style="display:none;">
+                                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#C8C8C8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="3" width="7" height="7"/>
+                                    <rect x="14" y="3" width="7" height="7"/>
+                                    <rect x="3" y="14" width="7" height="7"/>
+                                    <path d="M14 14h3v3h-3zM14 20h3M20 14v3M20 20h1"/>
+                                </svg>
+                                <span>QR Code</span>
+                            </div>
+                        </div>
+
+                        <div class="gift-details">
+                            <div class="gift-detail-row">
+                                <span class="gift-detail-label">Account #</span>
+                                <div class="gift-detail-value-group">
+                                    <span class="gift-detail-value" id="bankAccount">1234 5678 9012</span>
+                                    <button class="gift-copy-btn" onclick="copyGiftInfo('bankAccount', this)" aria-label="Copy account">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="gift-detail-row">
+                                <span class="gift-detail-label">Name</span>
+                                <span class="gift-detail-value" id="bankName">Ralphski</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wishing Well / Envelope Card -->
+                <div class="gift-card wishing-well-card" data-animate>
+                    <div class="gift-card-header">
+                        <div class="gift-card-icon envelope">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                <polyline points="22,6 12,13 2,6"/>
+                            </svg>
+                        </div>
+                        <div class="gift-card-title-group">
+                            <h3 class="gift-card-title">Wishing Well</h3>
+                            <p class="gift-card-subtitle">At the Reception</p>
+                        </div>
+                    </div>
+
+                    <div class="gift-card-body wishing-well-body">
+                        <div class="wishing-well-icon-wrap">
+                            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#6B9AC4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                <path d="M12 2a10 10 0 0110 10"/>
+                                <path d="M8 12l3 3 5-5"/>
+                            </svg>
+                        </div>
+                        <p class="wishing-well-text">
+                            A beautifully decorated <strong>wishing well</strong> will be available at the reception venue for those who prefer to give their gifts in person.
+                        </p>
+                        <p class="wishing-well-note">
+                            Look for the elegant blue box near the entrance ✨
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thank You Note -->
+            <div class="gift-thankyou" data-animate>
+                <div class="gift-thankyou-line"></div>
+                <p class="gift-thankyou-text">
+                    Whatever you choose to give, please know that your presence and blessings
+                    mean the world to us. Thank you for being part of our love story.
+                </p>
+                <p class="gift-thankyou-signature">— With love, Ralph &amp; Shaira</p>
+                <div class="gift-thankyou-line"></div>
+            </div>
+
+            <!-- Copied Notification -->
+            <div class="gift-copied-toast" id="giftCopiedToast">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span>Copied to clipboard!</span>
             </div>
         </section>
 
@@ -1119,7 +1359,7 @@
                         </button>
                         <div class="faq-answer">
                             <div class="faq-answer-content">
-                                <p>Our wedding will take place on <strong>Monday, February 2, 2028</strong> at <strong>3:00 PM</strong> at <strong>Immaculate Heart of Mary Church</strong> in the Diocese of Antipolo, followed by the reception at The Grand Ballroom, Rosewood Hotel.</p>
+                                <p>Our wedding will take place on <strong>February 2, 2028</strong> at <strong>3:00 PM</strong> at <strong>Immaculate Heart of Mary Church</strong> in the Diocese of Antipolo, followed by the reception at The Grand Ballroom, Rosewood Hotel.</p>
                             </div>
                         </div>
                     </div>
@@ -1370,7 +1610,8 @@
                         </button>
                         <div class="faq-answer">
                             <div class="faq-answer-content">
-                                <p>Your presence is truly the greatest gift! However, if you wish to bless us further, we would appreciate <strong>monetary gifts</strong> to help us start our new life together. A wishing well will be available at the reception.</p>
+                                <p>Your presence is truly the greatest gift! However, if you wish to bless us further, we would appreciate <strong>monetary gifts</strong> to help us start our new life together.</p>
+                                <p>Please visit our <a href="#gift" class="faq-link">Gift section</a> for GCash, bank transfer, and wishing well details.</p>
                             </div>
                         </div>
                     </div>
@@ -1461,16 +1702,28 @@
                     </div>
                     <div class="form-group">
                         <label>Will You Attend?</label>
-                        <div class="radio-group">
-                            <label class="radio-option">
-                                <input type="radio" name="attendance" value="Joyfully Accept" required onchange="toggleGuestSection()">
-                                <div class="radio-custom"></div>
-                                <span>Joyfully Accept</span>
+                        <div class="attendance-buttons">
+                            <input type="radio" name="attendance" id="attendAccept" value="Joyfully Accept" required onchange="toggleGuestSection()">
+                            <label for="attendAccept" class="attendance-btn accept-btn">
+                                <span class="attendance-btn-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                                        <polyline points="22 4 12 14.01 9 11.01"/>
+                                    </svg>
+                                </span>
+                                <span class="attendance-btn-text">Joyfully Accept</span>
                             </label>
-                            <label class="radio-option">
-                                <input type="radio" name="attendance" value="Respectfully Decline" onchange="toggleGuestSection()">
-                                <div class="radio-custom"></div>
-                                <span>Respectfully Decline</span>
+
+                            <input type="radio" name="attendance" id="attendDecline" value="Respectfully Decline" onchange="toggleGuestSection()">
+                            <label for="attendDecline" class="attendance-btn decline-btn">
+                                <span class="attendance-btn-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="15" y1="9" x2="9" y2="15"/>
+                                        <line x1="9" y1="9" x2="15" y2="15"/>
+                                    </svg>
+                                </span>
+                                <span class="attendance-btn-text">Respectfully Decline</span>
                             </label>
                         </div>
                     </div>
