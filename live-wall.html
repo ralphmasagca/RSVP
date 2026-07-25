@@ -149,6 +149,237 @@
             color: #8E8E8E;
         }
 
+        /* ===== HEART REACTION BUTTON ===== */
+        .heart-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 25px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            z-index: 3;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .heart-btn:hover {
+            transform: scale(1.1);
+            background: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .heart-btn svg {
+            color: #8E8E8E;
+            fill: none;
+            transition: all 0.3s;
+            width: 16px;
+            height: 16px;
+        }
+
+        .heart-btn.reacted svg {
+            color: #e74c3c;
+            fill: #e74c3c;
+            animation: heartBeat 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.4); }
+            60% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-count {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #2c3e50;
+            min-width: 12px;
+            text-align: center;
+        }
+
+        .heart-btn.reacted .heart-count {
+            color: #e74c3c;
+        }
+
+        /* Floating hearts animation */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 24px;
+            animation: floatUp 1.5s ease-out forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        /* ===== DOWNLOAD BUTTON ===== */
+        .download-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 3;
+            opacity: 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            color: #6B9AC4;
+        }
+
+        .photo-item:hover .download-btn {
+            opacity: 1;
+        }
+
+        .download-btn:hover {
+            background: #6B9AC4;
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        .download-btn.downloading {
+            background: #4CAF50;
+            color: #fff;
+            animation: downloadPulse 0.6s ease;
+        }
+
+        @keyframes downloadPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* Lightbox action buttons */
+        .lightbox-actions {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 6002; /* Higher than lightbox */
+            pointer-events: auto;
+        }
+
+        .lightbox-action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 10px 18px;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .lightbox-action-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .lightbox-action-btn:active {
+            transform: translateY(0);
+        }
+
+        .lightbox-action-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .lightbox-action-btn.heart-active {
+            background: rgba(231, 76, 60, 0.25);
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .lightbox-action-btn.heart-active svg {
+            fill: #e74c3c;
+            animation: heartBeat 0.6s ease;
+        }
+
+        .lightbox-close {
+            z-index: 6002;
+            pointer-events: auto;
+        }
+
+        /* Ensure lightbox image doesn't block button clicks */
+        .lightbox img {
+            max-width: 90vw;
+            max-height: 85vh;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            user-select: none;
+            -webkit-user-drag: none;
+            pointer-events: auto;
+        }
+
+        .lightbox-info {
+            pointer-events: auto;
+            z-index: 6001;
+        }
+
+        /* Mobile: always show download button */
+        @media (max-width: 768px) {
+            .download-btn {
+                opacity: 1;
+                width: 30px;
+                height: 30px;
+            }
+
+            .download-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .heart-btn {
+                padding: 4px 10px;
+            }
+
+            .heart-btn svg {
+                width: 14px;
+                height: 14px;
+            }
+
+            .heart-count {
+                font-size: 0.65rem;
+            }
+
+            .lightbox-action-btn {
+                padding: 6px 12px;
+                font-size: 0.65rem;
+            }
+        }
+
         /* ===== PHOTO GALLERY ===== */
         .wall-container {
             max-width: 1400px;
@@ -156,6 +387,18 @@
             padding: 30px 20px 60px;
         }
 
+        @media (max-width: 768px) {
+            .wall-container {
+                padding: 20px 12px 50px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wall-container {
+                padding: 15px 10px 40px;
+            }
+        }
+        /* ===== PHOTO GRID ===== */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -164,7 +407,7 @@
 
         .photo-item {
             position: relative;
-            aspect-ratio: 4 / 5;
+            aspect-ratio: 1 / 1;
             border-radius: 12px;
             overflow: hidden;
             background: linear-gradient(135deg, #e8ecf1, #d5dce5);
@@ -195,10 +438,13 @@
             box-shadow: 0 15px 35px rgba(107, 154, 196, 0.25);
         }
 
+        /* IMAGE FILLS THE ENTIRE ITEM */
         .photo-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center;
+            display: block;
             transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
@@ -213,7 +459,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 15px;
+            padding: 12px;
             opacity: 0;
             transition: opacity 0.4s ease;
         }
@@ -225,27 +471,99 @@
         .photo-caption {
             font-family: 'Cormorant Garamond', serif;
             color: #fff;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-style: italic;
-            line-height: 1.4;
-            margin-bottom: 6px;
+            line-height: 1.3;
+            margin-bottom: 5px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .photo-guest {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             color: #A7C7E7;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .photo-time {
             font-family: 'Montserrat', sans-serif;
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             color: rgba(255, 255, 255, 0.6);
             margin-top: 3px;
+        }
+
+        /* ===== RESPONSIVE — 2-3 COLUMNS ON MOBILE ===== */
+        @media (max-width: 768px) {
+            .photo-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .photo-item {
+                border-radius: 8px;
+            }
+
+            .photo-overlay {
+                padding: 8px;
+                /* Always show on mobile since no hover */
+                opacity: 1;
+                background: linear-gradient(180deg, transparent 60%, rgba(44, 62, 80, 0.75) 100%);
+            }
+
+            .photo-caption {
+                font-size: 0.7rem;
+                -webkit-line-clamp: 1;
+            }
+
+            .photo-guest {
+                font-size: 0.5rem;
+                letter-spacing: 1px;
+            }
+
+            .photo-time {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+            }
+
+            .photo-item {
+                border-radius: 8px;
+            }
+
+            .photo-overlay {
+                padding: 8px 10px;
+            }
+
+            .photo-caption {
+                font-size: 0.75rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .photo-guest {
+                font-size: 0.55rem;
+            }
+        }
+
+        /* Very small phones - keep 2 columns */
+        @media (max-width: 360px) {
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 5px;
+            }
         }
 
         /* ===== EMPTY STATE ===== */
@@ -307,6 +625,59 @@
 
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+
+        /* ===== REFRESH INDICATOR ===== */
+        .refresh-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(107, 154, 196, 0.1);
+            border: 1px solid rgba(107, 154, 196, 0.2);
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.6rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #6B9AC4;
+            font-weight: 600;
+        }
+
+        .refresh-indicator svg {
+            animation: refreshRotate 60s linear infinite;
+        }
+
+        @keyframes refreshRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .refresh-indicator.refreshing svg {
+            animation: refreshFast 0.8s linear infinite;
+        }
+
+        @keyframes refreshFast {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .refresh-countdown {
+            color: #6B9AC4;
+            font-weight: 700;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .refresh-indicator {
+                padding: 6px 12px;
+                font-size: 0.55rem;
+            }
+            .refresh-indicator svg {
+                width: 12px;
+                height: 12px;
+            }
         }
 
         /* ===== UPLOAD MODAL ===== */
@@ -676,13 +1047,11 @@
             .wall-header { padding: 15px 20px; }
             .wall-title h1 { font-size: 1.8rem; }
             .upload-btn { padding: 10px 18px; font-size: 0.6rem; }
-            .photo-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .stat-pill { padding: 8px 15px; }
             .stat-pill-value { font-size: 1.1rem; }
         }
 
         @media (max-width: 480px) {
-            .photo-grid { grid-template-columns: 1fr; }
             .wall-header-inner { justify-content: center; text-align: center; }
             .wall-status { display: none; }
             .upload-content { padding: 25px 20px; }
@@ -728,6 +1097,37 @@
         <div class="stat-pill">
             <span class="stat-pill-value" id="lastUpdate">—</span>
             <span class="stat-pill-label">Last Update</span>
+        </div>
+
+        <!-- Refresh Indicator -->
+        <div class="refresh-indicator" id="refreshIndicator" title="Auto-refresh every minute">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+            </svg>
+            <span>Refreshing in <span class="refresh-countdown" id="refreshCountdown">60</span>s</span>
+        </div>
+    </div>
+
+    <!-- Spotlight Section -->
+    <div class="spotlight-section" id="spotlightSection" style="display:none;">
+        <div class="spotlight-container">
+            <div class="spotlight-header">
+                <div class="spotlight-title-group">
+                    <div class="spotlight-icon-wrap">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#2c3e50" stroke="none">
+                            <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7-6.3-4.6L5.7 21l2.3-7L2 9.4h7.6z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="spotlight-title">Spotlight</h3>
+                        <div class="spotlight-subtitle">Most Loved Photos</div>
+                    </div>
+                </div>
+                <div class="spotlight-count" id="spotlightCount"></div>
+            </div>
+            <div class="spotlight-grid" id="spotlightGrid"></div>
         </div>
     </div>
 
@@ -791,8 +1191,27 @@
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
         <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
-        <img id="lightboxImg" alt="Photo">
-        <div class="lightbox-info">
+
+        <div class="lightbox-actions" onclick="event.stopPropagation()">
+            <button class="lightbox-action-btn" id="lightboxHeartBtn" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+                </svg>
+                <span id="lightboxHeartCount">0</span>
+            </button>
+            <button class="lightbox-action-btn" id="lightboxDownloadBtn" type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Download
+            </button>
+        </div>
+
+        <img id="lightboxImg" alt="Photo" onclick="event.stopPropagation()">
+
+        <div class="lightbox-info" onclick="event.stopPropagation()">
             <div class="lightbox-caption" id="lightboxCaption"></div>
             <div class="lightbox-meta" id="lightboxMeta"></div>
         </div>
@@ -804,7 +1223,7 @@
     <script>
         // ⚠️ CONFIGURATION
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-Es0WJ0DcudZcqVKV_PTt-GeeB7HrdcD1joP_YpBD0hNgY6-U5jKrGr66xABNngP3/exec';
-        const REFRESH_INTERVAL = 10000; // 10 seconds
+        const REFRESH_INTERVAL = 60000; // 60 seconds
 
         var allPhotos = [];
         var seenPhotoIds = new Set();
@@ -812,11 +1231,33 @@
         var isFirstLoad = true;
         var refreshTimer = null;
 
-        // ===== LOAD PHOTOS =====
+        // ===== GENERATE UNIQUE REACTOR ID =====
+        function getReactorId() {
+            var id = localStorage.getItem('livewall_reactor_id');
+            if (!id) {
+                id = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('livewall_reactor_id', id);
+            }
+            return id;
+        }
+
+        var REACTOR_ID = getReactorId();
+        var currentLightboxPhoto = null;
+
+        // ===== UPDATE LOAD PHOTOS TO INCLUDE REACTOR ID =====
         function loadPhotos() {
-            fetch(GOOGLE_SCRIPT_URL + '?action=photos', { method: 'GET' })
-                .then(function(res) { return res.json(); })
-                .then(function(result) {
+            var url = GOOGLE_SCRIPT_URL + '?action=photos&reactorId=' + REACTOR_ID + '&t=' + Date.now();
+
+            fetch(url, { method: 'GET', redirect: 'follow' })
+                .then(function(response) { return response.text(); })
+                .then(function(text) {
+                    var result;
+                    try {
+                        result = JSON.parse(text);
+                    } catch (e) {
+                        throw new Error('Invalid response');
+                    }
+
                     if (result.status === 'success') {
                         var newPhotos = result.photos || [];
                         var newIds = new Set();
@@ -847,6 +1288,8 @@
                 });
         }
 
+
+        // ===== UPDATE RENDER PHOTOS TO INCLUDE HEART & DOWNLOAD BUTTONS =====
         function renderPhotos(newIds) {
             var grid = document.getElementById('photoGrid');
 
@@ -868,9 +1311,27 @@
             newIds = newIds || [];
             var html = allPhotos.map(function(photo) {
                 var isNew = newIds.indexOf(photo.id) !== -1;
-                return '<div class="photo-item ' + (isNew ? 'new-photo' : '') + '" onclick="openLightbox(\'' + photo.id + '\')">' +
-                    '<img src="' + photo.url + '" alt="' + escapeHTML(photo.caption || 'Photo') + '" loading="lazy" onerror="this.parentNode.style.display=\'none\'">' +
-                    '<div class="photo-overlay">' +
+                var reactedClass = photo.userReacted ? 'reacted' : '';
+
+                return '<div class="photo-item ' + (isNew ? 'new-photo' : '') + '" data-photo-id="' + photo.id + '">' +
+                    '<img src="' + photo.url + '" alt="' + escapeHTML(photo.caption || 'Photo') + '" loading="lazy" onerror="this.parentNode.style.display=\'none\'" onclick="openLightbox(\'' + photo.id + '\')">' +
+
+                    '<button class="download-btn" onclick="downloadPhoto(\'' + photo.id + '\', \'' + escapeHTML(photo.guestName) + '\', event)" title="Download">' +
+                        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                            '<path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>' +
+                            '<polyline points="7 10 12 15 17 10"/>' +
+                            '<line x1="12" y1="15" x2="12" y2="3"/>' +
+                        '</svg>' +
+                    '</button>' +
+
+                    '<button class="heart-btn ' + reactedClass + '" onclick="toggleReaction(\'' + photo.id + '\', event)" title="React">' +
+                        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                            '<path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>' +
+                        '</svg>' +
+                        '<span class="heart-count">' + photo.reactions + '</span>' +
+                    '</button>' +
+
+                    '<div class="photo-overlay" onclick="openLightbox(\'' + photo.id + '\')">' +
                         (photo.caption ? '<p class="photo-caption">' + escapeHTML(photo.caption) + '</p>' : '') +
                         '<p class="photo-guest">📸 ' + escapeHTML(photo.guestName) + '</p>' +
                         '<p class="photo-time">' + formatTimeAgo(photo.timestamp) + '</p>' +
@@ -879,6 +1340,169 @@
             }).join('');
 
             grid.innerHTML = html;
+        }
+
+        // ===== TOGGLE REACTION =====
+        function toggleReaction(photoId, event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+
+            var photo = allPhotos.find(function(p) { return p.id === photoId; });
+            if (!photo) return;
+
+            var wasReacted = photo.userReacted;
+            var newAction = wasReacted ? 'remove' : 'add';
+
+            // Optimistic UI update
+            photo.userReacted = !wasReacted;
+            photo.reactions += wasReacted ? -1 : 1;
+
+            // Update all instances of this photo (grid + spotlight)
+            updatePhotoUI(photoId, photo);
+
+            // Show floating heart animation
+            if (!wasReacted && event) {
+                showFloatingHeart(event.clientX, event.clientY);
+            }
+
+            // Send to server
+            var payload = {
+                action: 'react',
+                photoId: photoId,
+                reactorId: REACTOR_ID,
+                reactionAction: newAction
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            }).catch(function(err) {
+                // Rollback on error
+                photo.userReacted = wasReacted;
+                photo.reactions += wasReacted ? 1 : -1;
+                updatePhotoUI(photoId, photo);
+                showToast('Failed to react', 'error');
+            });
+        }
+
+        function updatePhotoUI(photoId, photo) {
+            // Update all heart buttons for this photo
+            document.querySelectorAll('[data-photo-id="' + photoId + '"] .heart-btn').forEach(function(btn) {
+                if (photo.userReacted) {
+                    btn.classList.add('reacted');
+                } else {
+                    btn.classList.remove('reacted');
+                }
+                var countEl = btn.querySelector('.heart-count');
+                if (countEl) countEl.textContent = photo.reactions;
+            });
+
+            // Update lightbox if open with same photo
+            if (currentLightboxPhoto && currentLightboxPhoto.id === photoId) {
+                currentLightboxPhoto = photo;
+                var lightboxBtn = document.getElementById('lightboxHeartBtn');
+                var lightboxCount = document.getElementById('lightboxHeartCount');
+                if (lightboxBtn) {
+                    lightboxBtn.classList.toggle('heart-active', photo.userReacted);
+                }
+                if (lightboxCount) {
+                    lightboxCount.textContent = photo.reactions;
+                }
+            }
+        }
+
+        function showFloatingHeart(x, y) {
+            var heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.textContent = '❤️';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            document.body.appendChild(heart);
+
+            setTimeout(function() { heart.remove(); }, 1500);
+        }
+
+        // ===== DOWNLOAD PHOTO =====
+        function downloadPhoto(photoId, guestName, event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+
+            var photo = allPhotos.find(function(p) { return p.id === photoId; });
+            if (!photo) return;
+
+            var btn = event ? event.currentTarget : null;
+            if (btn) btn.classList.add('downloading');
+
+            // Method 1: Try direct Google Drive download URL
+            // This URL forces download instead of viewing
+            var downloadUrl = 'https://drive.google.com/uc?export=download&id=' + photoId;
+            var fileName = 'RalphAndShaira_' + (guestName || 'Photo').replace(/\s+/g, '_') + '_' + photoId.substr(0, 8) + '.jpg';
+
+            // Create hidden link and trigger download
+            var link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = fileName;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('✓ Opening download...', 'success');
+
+            if (btn) {
+                setTimeout(function() { btn.classList.remove('downloading'); }, 800);
+            }
+        }
+
+        // ===== DOWNLOAD FROM LIGHTBOX (FIXED) =====
+        function downloadPhotoFromLightbox(event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+
+            if (!currentLightboxPhoto) return;
+
+            var btn = event ? event.currentTarget : null;
+            if (btn) {
+                var originalHTML = btn.innerHTML;
+                btn.innerHTML =
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+                        '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>' +
+                        '<polyline points="22 4 12 14.01 9 11.01"/>' +
+                    '</svg>' +
+                    'Downloading...';
+                btn.disabled = true;
+
+                setTimeout(function() {
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                }, 2000);
+            }
+
+            var photoId = currentLightboxPhoto.id;
+            var guestName = currentLightboxPhoto.guestName;
+
+            var downloadUrl = 'https://drive.google.com/uc?export=download&id=' + photoId;
+            var fileName = 'RalphAndShaira_' + (guestName || 'Photo').replace(/\s+/g, '_') + '_' + photoId.substr(0, 8) + '.jpg';
+
+            var link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = fileName;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('✓ Opening download...', 'success');
         }
 
         function updateStats() {
@@ -1032,15 +1656,23 @@
             reader.readAsDataURL(currentFile);
         }
 
-        // ===== LIGHTBOX =====
+        // ===== UPDATE LIGHTBOX =====
         function openLightbox(photoId) {
             var photo = allPhotos.find(function(p) { return p.id === photoId; });
             if (!photo) return;
+
+            currentLightboxPhoto = photo;
 
             document.getElementById('lightboxImg').src = photo.fullUrl;
             document.getElementById('lightboxCaption').textContent = photo.caption || '';
             document.getElementById('lightboxCaption').style.display = photo.caption ? 'block' : 'none';
             document.getElementById('lightboxMeta').textContent = '📸 ' + photo.guestName + ' · ' + formatTimeAgo(photo.timestamp);
+
+            var heartBtn = document.getElementById('lightboxHeartBtn');
+            var heartCount = document.getElementById('lightboxHeartCount');
+            heartBtn.classList.toggle('heart-active', photo.userReacted);
+            heartCount.textContent = photo.reactions;
+
             document.getElementById('lightbox').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -1049,6 +1681,81 @@
             if (e && e.target && !e.target.classList.contains('lightbox') && !e.target.classList.contains('lightbox-close')) return;
             document.getElementById('lightbox').classList.remove('active');
             document.body.style.overflow = 'auto';
+            currentLightboxPhoto = null;
+        }
+
+        function toggleLightboxReaction(event) {
+            if (event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+
+            if (!currentLightboxPhoto) return;
+
+            var photoId = currentLightboxPhoto.id;
+            var photo = allPhotos.find(function(p) { return p.id === photoId; });
+            if (!photo) return;
+
+            var wasReacted = photo.userReacted;
+            var newAction = wasReacted ? 'remove' : 'add';
+
+            // Optimistic UI update
+            photo.userReacted = !wasReacted;
+            photo.reactions += wasReacted ? -1 : 1;
+            currentLightboxPhoto = photo;
+
+            // Update lightbox UI immediately
+            var heartBtn = document.getElementById('lightboxHeartBtn');
+            var heartCount = document.getElementById('lightboxHeartCount');
+
+            if (heartBtn) {
+                heartBtn.classList.toggle('heart-active', photo.userReacted);
+            }
+            if (heartCount) {
+                heartCount.textContent = photo.reactions;
+            }
+
+            // Update grid photo cards
+            document.querySelectorAll('[data-photo-id="' + photoId + '"] .heart-btn').forEach(function(btn) {
+                btn.classList.toggle('reacted', photo.userReacted);
+                var countEl = btn.querySelector('.heart-count');
+                if (countEl) countEl.textContent = photo.reactions;
+            });
+
+            // Update spotlight
+            renderSpotlight();
+
+            // Show floating heart animation
+            if (!wasReacted && event) {
+                var rect = heartBtn.getBoundingClientRect();
+                showFloatingHeart(rect.left + rect.width / 2, rect.top);
+            }
+
+            // Send to server
+            var payload = {
+                action: 'react',
+                photoId: photoId,
+                reactorId: REACTOR_ID,
+                reactionAction: newAction
+            };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            }).catch(function(err) {
+                console.error('Reaction error:', err);
+                // Rollback on error
+                photo.userReacted = wasReacted;
+                photo.reactions += wasReacted ? 1 : -1;
+                currentLightboxPhoto = photo;
+
+                if (heartBtn) heartBtn.classList.toggle('heart-active', photo.userReacted);
+                if (heartCount) heartCount.textContent = photo.reactions;
+
+                showToast('Failed to react', 'error');
+            });
         }
 
         // ===== TOAST =====
@@ -1064,14 +1771,105 @@
             if (e.target === this) closeUploadModal();
         });
 
+        // ===== REFRESH COUNTDOWN =====
+        var countdownSeconds = 60;
+        var countdownTimer = null;
+
+        function startRefreshCountdown() {
+            countdownSeconds = 60;
+            updateCountdownDisplay();
+
+            if (countdownTimer) clearInterval(countdownTimer);
+
+            countdownTimer = setInterval(function() {
+                countdownSeconds--;
+
+                if (countdownSeconds <= 0) {
+                    countdownSeconds = 60;
+                    refreshPhotos();
+                }
+
+                updateCountdownDisplay();
+            }, 1000);
+        }
+
+        function updateCountdownDisplay() {
+            var el = document.getElementById('refreshCountdown');
+            if (el) el.textContent = countdownSeconds;
+
+            // Change color as time gets closer to refresh
+            var indicator = document.getElementById('refreshIndicator');
+            if (indicator) {
+                if (countdownSeconds <= 5) {
+                    indicator.style.background = 'rgba(76, 175, 80, 0.15)';
+                    indicator.style.borderColor = 'rgba(76, 175, 80, 0.3)';
+                    indicator.style.color = '#4CAF50';
+                } else {
+                    indicator.style.background = 'rgba(107, 154, 196, 0.1)';
+                    indicator.style.borderColor = 'rgba(107, 154, 196, 0.2)';
+                    indicator.style.color = '#6B9AC4';
+                }
+            }
+        }
+
+        function refreshPhotos() {
+            var indicator = document.getElementById('refreshIndicator');
+            if (indicator) {
+                indicator.classList.add('refreshing');
+                var textSpan = indicator.querySelector('span:last-child');
+                var originalHTML = textSpan.innerHTML;
+                textSpan.textContent = 'Refreshing...';
+
+                loadPhotos();
+
+                setTimeout(function() {
+                    indicator.classList.remove('refreshing');
+                    textSpan.innerHTML = 'Refreshing in <span class="refresh-countdown" id="refreshCountdown">60</span>s';
+                    countdownSeconds = 60;
+                    updateCountdownDisplay();
+                }, 2000);
+            } else {
+                loadPhotos();
+            }
+        }
+
         // ===== INIT =====
         loadPhotos();
-        refreshTimer = setInterval(loadPhotos, REFRESH_INTERVAL);
+        startRefreshCountdown();
 
         // Update time labels every 30 seconds
         setInterval(function() {
             if (allPhotos.length > 0) updateStats();
         }, 30000);
+
+        // Manual refresh when tab becomes active
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                refreshPhotos();
+            }
+        });
+
+        // ===== ATTACH LIGHTBOX BUTTON HANDLERS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            var heartBtn = document.getElementById('lightboxHeartBtn');
+            var downloadBtn = document.getElementById('lightboxDownloadBtn');
+
+            if (heartBtn) {
+                heartBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    toggleLightboxReaction(e);
+                });
+            }
+
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    downloadPhotoFromLightbox(e);
+                });
+            }
+        });
     </script>
 </body>
 </html>

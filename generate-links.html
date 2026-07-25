@@ -259,8 +259,12 @@ Paolo Cruz, 0"></textarea>
             localStorage.setItem('rsvp_base_url', baseUrl);
 
             const { d, v } = encodeInviteData(name, extra, code);
-            const separator = baseUrl.includes('?') ? '&' : '?';
-            return baseUrl + separator + 'd=' + encodeURIComponent(d) + '&v=' + encodeURIComponent(v);
+
+            // Remove trailing slash if present, then add hash
+            var cleanUrl = baseUrl.replace(/\/$/, '');
+
+            // Combine d and v with a dot separator in the hash
+            return cleanUrl + '/#' + d + '.' + v;
         }
 
         // Single link

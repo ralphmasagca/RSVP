@@ -302,9 +302,21 @@ function checkServerStatus(hash) {
 // ===== VALIDATE INVITE =====
 
 async function validateInvite() {
-    var params = new URLSearchParams(window.location.search);
-    var encodedData = params.get('d');
-    var verificationHash = params.get('v');
+    var encodedData = '';
+    var verificationHash = '';
+
+    // Check hash format first (new format)
+    var hash = window.location.hash.substring(1); // Remove the #
+    if (hash && hash.includes('.')) {
+        var parts = hash.split('.');
+        encodedData = parts[0];
+        verificationHash = parts[1];
+    } else {
+        // Fallback to old query parameter format
+        var params = new URLSearchParams(window.location.search);
+        encodedData = params.get('d');
+        verificationHash = params.get('v');
+    }
 
     if (!encodedData || !verificationHash) {
         showInvalidInvitePage();
@@ -328,13 +340,11 @@ async function validateInvite() {
         var result = await checkServerStatus(inviteHash);
 
         if (result.status === 'already_used') {
-            // Don't block entire site — just mark as used
-            // The RSVP section will show the already-used card
             showAlreadyUsedPage(
                 result.usedBy || prefilledName,
                 result.usedAt || ''
             );
-            return true; // Still allow site access
+            return true;
         }
     } catch (error) {
         console.warn('Server check error:', error);
@@ -1050,4 +1060,25 @@ function showGiftCopiedFeedback(button) {
             toast.classList.remove('show');
         }, 2500);
     }
+}
+
+// ===== LOAD YOUTUBE VIDEO ON CLICK =====
+function loadStoryVideo(container) {
+    if (container.classList.contains('loaded')) return;
+
+    var videoId = container.getAttribute('data-video-id');
+    if (!videoId) return;
+
+    // Replace thumbnail with iframe (autoplay when clicked)
+    container.innerHTML =
+        '<iframe ' +
+            'src="https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0&modestbranding=1" ' +
+            'title="Video" ' +
+            'frameborder="0" ' +
+            'allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" ' +
+            'referrerpolicy="strict-origin-when-cross-origin" ' +
+            'allowfullscreen>' +
+        '</iframe>';
+
+    container.classList.add('loaded');
 }

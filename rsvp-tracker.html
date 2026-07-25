@@ -958,6 +958,7 @@
             data.forEach(function(row, index) {
                 var isAccepted = row.attendance === 'Joyfully Accept';
                 var isPrimary = row.type === 'Primary Guest';
+                var messageStr = String(row.message || '');
 
                 html += '<tr>';
                 html += '<td class="cell-secondary">' + (row.rowIndex || (index + 2)) + '</td>';
@@ -966,13 +967,13 @@
                 html += '<td class="cell-secondary">' + escapeHTML(row.contact || '—') + '</td>';
                 html += '<td><span class="badge ' + (isAccepted ? 'badge-accept' : 'badge-decline') + '">' +
                         (isAccepted ? '✓ Accept' : '✕ Decline') + '</span></td>';
-                html += '<td>' + (row.totalGuests || '—') + '</td>';
+                html += '<td>' + escapeHTML(row.totalGuests || '—') + '</td>';
                 html += '<td><span class="badge ' + (isPrimary ? 'badge-primary' : 'badge-guest') + '">' +
                         escapeHTML(row.type || '') + '</span></td>';
                 html += '<td class="cell-secondary">' + escapeHTML(row.inviteCode || '—') + '</td>';
                 html += '<td class="cell-secondary" style="max-width:200px;">' +
-                        escapeHTML((row.message || '').substring(0, 60)) +
-                        ((row.message || '').length > 60 ? '...' : '') + '</td>';
+                        escapeHTML(messageStr.substring(0, 60)) +
+                        (messageStr.length > 60 ? '...' : '') + '</td>';
                 html += '<td>' +
                         '<button class="action-btn delete" onclick="openDeleteModal(' + index + ')">' +
                             '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
@@ -996,16 +997,21 @@
             var type = document.getElementById('typeFilter').value;
 
             var filtered = allRsvpData.filter(function(row) {
+                // Convert everything to string safely
+                var name = String(row.name || '').toLowerCase();
+                var contact = String(row.contact || '').toLowerCase();
+                var inviteCode = String(row.inviteCode || '').toLowerCase();
+
                 var matchSearch = !search ||
-                    (row.name || '').toLowerCase().includes(search) ||
-                    (row.contact || '').toLowerCase().includes(search) ||
-                    (row.inviteCode || '').toLowerCase().includes(search);
+                    name.includes(search) ||
+                    contact.includes(search) ||
+                    inviteCode.includes(search);
 
                 var matchAttendance = !attendance || row.attendance === attendance;
 
                 var matchType = !type ||
                     (type === 'Primary Guest' && row.type === 'Primary Guest') ||
-                    (type === 'Guest of' && (row.type || '').startsWith('Guest of'));
+                    (type === 'Guest of' && String(row.type || '').startsWith('Guest of'));
 
                 return matchSearch && matchAttendance && matchType;
             });
@@ -1186,6 +1192,7 @@
 
         function escapeCsv(value) {
             if (value === null || value === undefined) return '';
+            // Convert to string first
             var str = String(value);
             if (str.includes(',') || str.includes('"') || str.includes('\n')) {
                 return '"' + str.replace(/"/g, '""') + '"';
@@ -1194,7 +1201,8 @@
         }
 
         function escapeHTML(str) {
-            if (!str) return '';
+            if (str === null || str === undefined) return '';
+            // Convert to string first (handles numbers, booleans, etc.)
             return String(str).replace(/[&<>"']/g, function(c) {
                 return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
             });

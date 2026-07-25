@@ -4,6 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Open Graph / Facebook / Messenger -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shairalph.netlify.app/">
+    <meta property="og:title" content="You're Invited — Ralph & Shaira">
+    <meta property="og:description" content="Click to open your personal wedding invitation">
+    <meta property="og:image" content="https://shairalph.netlify.app/images/monogram.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ralph & Shaira Wedding — You're Invited!">
+    <meta property="og:description" content="Click to open your personal wedding invitation">
+    <meta name="twitter:image" content="https://shairalph.netlify.app/images/invitation-preview.jpg">
+
+    <!-- Prevent messenger from stripping URL -->
+    <meta name="robots" content="noindex">
     <title>Ralph & Shaira</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Montserrat:wght@300;400;500;600&family=Great+Vibes&display=swap"
@@ -292,21 +309,45 @@
                     <div style="flex:1"></div>
                 </div>
                 <div class="story-event story-event-with-image" data-animate>
-                    <div class="story-event-content"><span class="story-event-year">March 2025</span>
+                    <div class="story-event-content">
+                        <span class="story-event-year">March 2025</span>
                         <h3 class="story-event-title">The Proposal</h3>
-                        <div class="story-event-image">
-                            <img src="images/the-proposal-img.jpg" alt="The Proposal" loading="lazy">
-                            <div class="story-event-image-frame"></div>
+
+                        <!-- "Watch the special moment" label ABOVE the video -->
+                        <p class="video-external-label">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="23 7 16 12 23 17 23 7"/>
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                            </svg>
+                            Watch the special moment
+                        </p>
+
+                        <!-- YouTube Video with Click-to-Play Thumbnail -->
+                        <div class="story-event-video" onclick="loadStoryVideo(this)" data-video-id="B16qJhgYUE8">
+                            <div class="video-thumbnail">
+                                <img src="https://img.youtube.com/vi/B16qJhgYUE8/hqdefault.jpg" alt="Watch the special moment" loading="lazy">
+                                <div class="video-thumbnail-overlay">
+                                    <div class="video-play-button">
+                                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" stroke="none">
+                                            <polygon points="5 3 19 12 5 21 5 3"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                         <p class="story-event-description">
-                            At the beach where they they were celebrating their anniversary, Ralph planned a surprise proposal.
+                            At the beach where they were celebrating their anniversary, Ralph planned a surprise proposal.
                             Ralph got down on one knee. Through happy tears, she said "Yes!"
                         </p>
                     </div>
-                    <!-- Proposal: 💍 → Ring SVG -->
+
                     <div class="story-event-icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="14" r="6"/><path d="M12 8V2"/><path d="M9 5l3-3 3 3"/><path d="M9 14a3 3 0 016 0"/>
+                            <circle cx="12" cy="14" r="6"/>
+                            <path d="M12 8V2"/>
+                            <path d="M9 5l3-3 3 3"/>
+                            <path d="M9 14a3 3 0 016 0"/>
                         </svg>
                     </div>
                     <div style="flex:1"></div>
@@ -472,250 +513,132 @@
                 Please wear the color assigned to your role in the entourage.
             </p>
 
-            <div class="dresscode-card-single" data-animate>
-                <!-- Illustrations -->
-                <div class="dresscode-illustrations">
+            <!-- Dress Code by Role Grid -->
+            <div class="dresscode-roles-grid">
 
-                    <!-- Male Figure - Formal Suit -->
-                    <div class="dresscode-figure">
-                        <svg width="130" height="280" viewBox="0 0 130 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Hair (back) -->
-                            <path d="M45 42c0-18 8-30 20-30s20 12 20 30v10H45V42z" fill="#3d566e"/>
-
-                            <!-- Face -->
-                            <ellipse cx="65" cy="48" rx="16" ry="19" fill="#e8d5c4"/>
-
-                            <!-- Hair (front swept) -->
-                            <path d="M49 40c2-8 8-14 16-14s14 6 16 14c-4-2-8-3-16-3s-12 1-16 3z" fill="#3d566e"/>
-                            <path d="M50 38c8-4 20-4 30 0-2 4-8 6-14 6-8 0-14-2-16-6z" fill="#2c3e50"/>
-
-                            <!-- Ears -->
-                            <ellipse cx="49" cy="50" rx="2.5" ry="4" fill="#e0c8b8"/>
-                            <ellipse cx="81" cy="50" rx="2.5" ry="4" fill="#e0c8b8"/>
-
-                            <!-- Neck -->
-                            <path d="M58 63h14v10c0 3-3 5-7 5s-7-2-7-5V63z" fill="#e8d5c4"/>
-
-                            <!-- Shirt collar area -->
-                            <path d="M42 78l23-5 23 5v8H42v-8z" fill="#f5f7fa"/>
-
-                            <!-- Suit jacket - open style -->
-                            <path d="M35 82l30-4 30 4 6 90H29l6-90z" fill="#6B9AC4"/>
-
-                            <!-- Jacket shadow/depth -->
-                            <path d="M35 82l30-4v90l-30-1 6-89z" fill="#5a89b3" opacity="0.3"/>
-
-                            <!-- Lapels -->
-                            <path d="M43 82l22 8-6 45-14-2z" fill="#4a6d8c"/>
-                            <path d="M87 82l-22 8 6 45 14-2z" fill="#4a6d8c"/>
-
-                            <!-- Inner shirt (V shape) -->
-                            <path d="M55 82h20l-4 40h-12z" fill="#f5f7fa"/>
-
-                            <!-- Tie -->
-                            <path d="M62 85h6l1 5-4 3-4-3z" fill="#7E9BB5"/>
-                            <path d="M60 93h10l-3 32-2 3-2-3z" fill="#7E9BB5"/>
-                            <path d="M63 96h4v25h-4z" fill="#6B8AA5" opacity="0.5"/>
-
-                            <!-- Pocket square -->
-                            <path d="M40 105h10v2l-2 6-4-1-4 2z" fill="#A7C7E7"/>
-                            <path d="M42 107l3-1 3 2-2 3z" fill="#fff" opacity="0.6"/>
-
-                            <!-- Buttons -->
-                            <circle cx="65" cy="130" r="2" fill="#3d566e"/>
-                            <circle cx="65" cy="150" r="2" fill="#3d566e"/>
-
-                            <!-- Arms -->
-                            <path d="M35 82l-10 78 10 4 12-80z" fill="#6B9AC4"/>
-                            <path d="M95 82l10 78-10 4-12-80z" fill="#6B9AC4"/>
-                            <path d="M35 82l-6 45 4 2 6-45z" fill="#5a89b3" opacity="0.3"/>
-
-                            <!-- Sleeve cuffs (shirt) -->
-                            <path d="M25 160h12v4H25z" fill="#f5f7fa"/>
-                            <path d="M93 160h12v4H93z" fill="#f5f7fa"/>
-
-                            <!-- Hands (in pockets style) -->
-                            <ellipse cx="31" cy="167" rx="6" ry="5" fill="#e8d5c4"/>
-                            <ellipse cx="99" cy="167" rx="6" ry="5" fill="#e8d5c4"/>
-
-                            <!-- Belt line -->
-                            <rect x="32" y="170" width="66" height="4" fill="#2c3e50"/>
-                            <rect x="62" y="170" width="6" height="4" fill="#8E8E8E"/>
-
-                            <!-- Pants -->
-                            <path d="M32 174h32v96H36l-4-96z" fill="#4a6d8c"/>
-                            <path d="M66 174h32l-4 96H66z" fill="#4a6d8c"/>
-
-                            <!-- Pants crease -->
-                            <line x1="48" y1="180" x2="46" y2="265" stroke="#3d566e" stroke-width="1" opacity="0.4"/>
-                            <line x1="82" y1="180" x2="84" y2="265" stroke="#3d566e" stroke-width="1" opacity="0.4"/>
-
-                            <!-- Shoes -->
-                            <ellipse cx="44" cy="272" rx="14" ry="5" fill="#2c3e50"/>
-                            <ellipse cx="86" cy="272" rx="14" ry="5" fill="#2c3e50"/>
-                            <path d="M32 270h24l-2 5H34z" fill="#1a252f"/>
-                            <path d="M74 270h24l-2 5H76z" fill="#1a252f"/>
-                        </svg>
-                        <span class="dresscode-figure-label">For Him</span>
+                <!-- Parents -->
+                <div class="role-card" data-animate>
+                    <div class="role-image-wrapper">
+                        <img src="images/dresscode/parents.jpeg" alt="Parents dress code" loading="lazy">
+                        <div class="role-color-bar" style="background: #C8C8C8;"></div>
                     </div>
-
-                    <!-- Center Divider -->
-                    <div class="dresscode-center-divider">
-                        <div class="dresscode-center-line"></div>
-                        <div class="dresscode-center-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B9AC4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-                            </svg>
+                    <div class="role-info">
+                        <h3 class="role-name">Parents</h3>
+                        <div class="role-color-info">
+                            <div class="role-color-swatch" style="background: #C8C8C8;"></div>
+                            <span class="role-color-name">Light Gray</span>
                         </div>
-                        <div class="dresscode-center-line"></div>
-                    </div>
-
-                    <!-- Female Figure - Elegant Dress -->
-                    <div class="dresscode-figure">
-                        <svg width="130" height="280" viewBox="0 0 130 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Hair (back long) -->
-                            <path d="M35 40c0-20 12-32 30-32s30 12 30 32v70c0 4-4 6-10 6H45c-6 0-10-2-10-6V40z" fill="#3d566e"/>
-
-                            <!-- Face -->
-                            <ellipse cx="65" cy="50" rx="16" ry="20" fill="#e8d5c4"/>
-
-                            <!-- Hair (front, side parted) -->
-                            <path d="M40 42c0-16 10-28 25-28s25 12 25 28c-4-4-10-6-16-6-4 0-6 2-9 4-3-2-5-4-9-4-6 0-12 2-16 6z" fill="#3d566e"/>
-                            <path d="M42 42c4-6 12-10 23-10s19 4 23 10c-8-2-14-4-23-4s-15 2-23 4z" fill="#2c3e50"/>
-
-                            <!-- Long hair strands beside face -->
-                            <path d="M35 55c-2 15-2 30 2 45l6-2c-4-14-4-28-2-42z" fill="#3d566e"/>
-                            <path d="M95 55c2 15 2 30-2 45l-6-2c4-14 4-28 2-42z" fill="#3d566e"/>
-
-                            <!-- Ears (small, hidden by hair) -->
-                            <ellipse cx="50" cy="52" rx="2" ry="3" fill="#e0c8b8" opacity="0.6"/>
-
-                            <!-- Earrings -->
-                            <circle cx="50" cy="58" r="1.5" fill="#A7C7E7"/>
-                            <circle cx="80" cy="58" r="1.5" fill="#A7C7E7"/>
-
-                            <!-- Neck -->
-                            <path d="M58 65h14v12c0 3-3 5-7 5s-7-2-7-5V65z" fill="#e8d5c4"/>
-
-                            <!-- Necklace -->
-                            <path d="M50 82q15 8 30 0" stroke="#A7C7E7" stroke-width="0.8" fill="none"/>
-                            <circle cx="65" cy="87" r="2" fill="#A7C7E7"/>
-
-                            <!-- Dress bodice (v-neck) -->
-                            <path d="M42 82l23-3 23 3v8l-8 25H50l-8-25z" fill="#6B9AC4"/>
-
-                            <!-- V-neck detail -->
-                            <path d="M50 82l15 22 15-22-8 30H58z" fill="#5a89b3"/>
-                            <path d="M55 82q10 15 20 0" fill="#4a6d8c"/>
-
-                            <!-- Small dot pattern on bodice -->
-                            <circle cx="55" cy="95" r="0.8" fill="#A7C7E7" opacity="0.6"/>
-                            <circle cx="65" cy="100" r="0.8" fill="#A7C7E7" opacity="0.6"/>
-                            <circle cx="75" cy="95" r="0.8" fill="#A7C7E7" opacity="0.6"/>
-                            <circle cx="60" cy="105" r="0.8" fill="#A7C7E7" opacity="0.6"/>
-                            <circle cx="70" cy="105" r="0.8" fill="#A7C7E7" opacity="0.6"/>
-
-                            <!-- Sleeves (short cap) -->
-                            <path d="M42 82q-8 4-10 15l14 4z" fill="#6B9AC4"/>
-                            <path d="M88 82q8 4 10 15l-14 4z" fill="#6B9AC4"/>
-
-                            <!-- Arms -->
-                            <path d="M32 100l-4 60h8l6-55z" fill="#e8d5c4"/>
-                            <path d="M98 100l4 60h-8l-6-55z" fill="#e8d5c4"/>
-
-                            <!-- Hands -->
-                            <ellipse cx="30" cy="165" rx="5" ry="6" fill="#e8d5c4"/>
-                            <ellipse cx="100" cy="165" rx="5" ry="6" fill="#e8d5c4"/>
-
-                            <!-- Waist definition -->
-                            <path d="M45 115h40l-2 8H47z" fill="#5a89b3"/>
-
-                            <!-- Full A-line skirt -->
-                            <path d="M47 122l38 1q8 80 15 145H32q7-65 15-146z" fill="#6B9AC4"/>
-
-                            <!-- Skirt fold lines -->
-                            <path d="M50 130q-6 60-14 130" stroke="#5a89b3" stroke-width="1" fill="none" opacity="0.5"/>
-                            <path d="M58 128q-2 60-6 135" stroke="#5a89b3" stroke-width="0.8" fill="none" opacity="0.4"/>
-                            <path d="M65 128v140" stroke="#5a89b3" stroke-width="0.8" fill="none" opacity="0.3"/>
-                            <path d="M72 128q2 60 6 135" stroke="#5a89b3" stroke-width="0.8" fill="none" opacity="0.4"/>
-                            <path d="M80 130q6 60 14 130" stroke="#5a89b3" stroke-width="1" fill="none" opacity="0.5"/>
-
-                            <!-- Skirt highlights -->
-                            <path d="M55 130q-3 60-10 130" stroke="#A7C7E7" stroke-width="0.5" fill="none" opacity="0.6"/>
-                            <path d="M75 130q3 60 10 130" stroke="#A7C7E7" stroke-width="0.5" fill="none" opacity="0.6"/>
-
-                            <!-- Hem line -->
-                            <path d="M32 268q33 4 66 0" stroke="#4a6d8c" stroke-width="1.5" fill="none"/>
-
-                            <!-- Shoes/heels peek -->
-                            <ellipse cx="52" cy="272" rx="6" ry="3" fill="#7E9BB5"/>
-                            <ellipse cx="78" cy="272" rx="6" ry="3" fill="#7E9BB5"/>
-                            <path d="M48 270h8v4l-2 2h-4z" fill="#5a89b3"/>
-                            <path d="M74 270h8v4l-2 2h-4z" fill="#5a89b3"/>
-                        </svg>
-                        <span class="dresscode-figure-label">For Her</span>
                     </div>
                 </div>
 
-                <!-- Attire Description -->
-                <div class="dresscode-attire-info">
-                    <div class="dresscode-attire-row">
-                        <div class="dresscode-attire-item">
-                            <span class="attire-label">Him</span>
-                            <span class="attire-desc">Semi-Formal or Smart Casual with a touch of our motif</span>
-                        </div>
-                        <div class="dresscode-attire-divider"></div>
-                        <div class="dresscode-attire-item">
-                            <span class="attire-label">Her</span>
-                            <span class="attire-desc">Semi-Formal or Smart Casual with a touch of our motif</span>
-                        </div>
+                <!-- Flower Girls / Boys -->
+                <div class="role-card" data-animate>
+                    <div class="role-image-wrapper">
+                        <img src="images/dresscode/flower-kids.jpeg" alt="Flower Girls and Boys dress code" loading="lazy">
+                        <div class="role-color-bar" style="background: #A7C7E7;"></div>
                     </div>
-
-                    <!-- Guest Attire Note -->
-                    <div class="dresscode-guest-note">
-                        <div class="dresscode-guest-line"></div>
-                        <div class="dresscode-guest-content">
-                            <span class="dresscode-guest-label">For Our Guests</span>
-                            <p class="dresscode-guest-text">
-                                Any comfortable attire with a touch of our motif.
-                            </p>
+                    <div class="role-info">
+                        <h3 class="role-name">Flower Girl / Boy</h3>
+                        <div class="role-color-info">
+                            <div class="role-color-swatch" style="background: #A7C7E7;"></div>
+                            <span class="role-color-name">Soft Blue</span>
                         </div>
-                        <div class="dresscode-guest-line"></div>
                     </div>
                 </div>
 
-                <!-- Color Palette -->
-                <div class="dresscode-palette-section">
-                    <p class="dresscode-palette-label">Color Palette by Role</p>
-                    <div class="dresscode-palette-grid">
-                        <div class="dresscode-palette-item">
-                            <div class="dresscode-palette-swatch" style="background:#C8C8C8;"></div>
-                            <span class="dresscode-palette-color">Light Gray</span>
-                            <span class="dresscode-palette-role">Parent</span>
-                        </div>
-                        <div class="dresscode-palette-item">
-                            <div class="dresscode-palette-swatch" style="background:#A7C7E7;"></div>
-                            <span class="dresscode-palette-color">Soft Blue</span>
-                            <span class="dresscode-palette-role">Flower Girl / Boy</span>
-                        </div>
-                        <div class="dresscode-palette-item">
-                            <div class="dresscode-palette-swatch" style="background:#6B9AC4;"></div>
-                            <span class="dresscode-palette-color">Dusty Blue</span>
-                            <span class="dresscode-palette-role">Bridesmaids & Groomsmen</span>
-                        </div>
-                        <div class="dresscode-palette-item">
-                            <div class="dresscode-palette-swatch" style="background:#8E8E8E;"></div>
-                            <span class="dresscode-palette-color">Gray</span>
-                            <span class="dresscode-palette-role">Principal Sponsor</span>
-                        </div>
-                        <div class="dresscode-palette-item">
-                            <div class="dresscode-palette-swatch" style="background:#7E9BB5;"></div>
-                            <span class="dresscode-palette-color">Smoky Blue</span>
-                            <span class="dresscode-palette-role">Secondary Sponsor</span>
+                <!-- Bridesmaids & Groomsmen -->
+                <div class="role-card" data-animate>
+                    <div class="role-image-wrapper">
+                        <img src="images/dresscode/entourage.jpeg" alt="Bridesmaids and Groomsmen dress code" loading="lazy">
+                        <div class="role-color-bar" style="background: #6B9AC4;"></div>
+                    </div>
+                    <div class="role-info">
+                        <h3 class="role-name">Bridesmaids &amp; Groomsmen</h3>
+                        <div class="role-color-info">
+                            <div class="role-color-swatch" style="background: #6B9AC4;"></div>
+                            <span class="role-color-name">Dusty Blue</span>
                         </div>
                     </div>
                 </div>
+
+                <!-- Principal Sponsors -->
+                <div class="role-card" data-animate>
+                    <div class="role-image-wrapper">
+                        <img src="images/dresscode/principal-sponsors.jpg" alt="Principal Sponsors dress code" loading="lazy">
+                        <div class="role-color-bar" style="background: #8E8E8E;"></div>
+                    </div>
+                    <div class="role-info">
+                        <h3 class="role-name">Principal Sponsors</h3>
+                        <div class="role-color-info">
+                            <div class="role-color-swatch" style="background: #8E8E8E;"></div>
+                            <span class="role-color-name">Gray</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Sponsors -->
+                <div class="role-card" data-animate>
+                    <div class="role-image-wrapper">
+                        <img src="images/dresscode/secondary-sponsors.jpg" alt="Secondary Sponsors dress code" loading="lazy">
+                        <div class="role-color-bar" style="background: #7E9BB5;"></div>
+                    </div>
+                    <div class="role-info">
+                        <h3 class="role-name">Secondary Sponsors</h3>
+                        <div class="role-color-info">
+                            <div class="role-color-swatch" style="background: #7E9BB5;"></div>
+                            <span class="role-color-name">Smoky Blue</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+
+            <!-- Attire Description -->
+            <div class="dresscode-attire-info">
+                <div class="dresscode-attire-row">
+                    <div class="dresscode-attire-item">
+                        <span class="attire-label">Attire</span>
+                        <span class="attire-desc">Semi-Formal or Smart Casual with a touch of our motif</span>
+                    </div>
+                </div>
+
+                <!-- Guest Attire Note with Full Palette -->
+                <div class="dresscode-guest-note">
+                    <div class="dresscode-guest-content">
+                        <span class="dresscode-guest-label">For Our Guests</span>
+                        <p class="dresscode-guest-text">
+                            Any comfortable attire with a touch of our motif colors.
+                        </p>
+
+                        <!-- Full Color Palette for Guests -->
+                        <div class="guest-palette">
+                            <div class="guest-palette-item">
+                                <div class="guest-palette-swatch" style="background: #C8C8C8;"></div>
+                                <span class="guest-palette-name">Light Gray</span>
+                            </div>
+                            <div class="guest-palette-item">
+                                <div class="guest-palette-swatch" style="background: #A7C7E7;"></div>
+                                <span class="guest-palette-name">Soft Blue</span>
+                            </div>
+                            <div class="guest-palette-item">
+                                <div class="guest-palette-swatch" style="background: #6B9AC4;"></div>
+                                <span class="guest-palette-name">Dusty Blue</span>
+                            </div>
+                            <div class="guest-palette-item">
+                                <div class="guest-palette-swatch" style="background: #8E8E8E;"></div>
+                                <span class="guest-palette-name">Gray</span>
+                            </div>
+                            <div class="guest-palette-item">
+                                <div class="guest-palette-swatch" style="background: #7E9BB5;"></div>
+                                <span class="guest-palette-name">Smoky Blue</span>
+                            </div>
+                            <div class="guest-palette-item">
+                                <div class="guest-palette-swatch" style="background: #F5BCA7;"></div>
+                                <span class="guest-palette-name">Blush Peach</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             <p class="dresscode-note" data-animate>✨ When in doubt, think timeless elegance ✨</p>
         </section>
