@@ -701,6 +701,150 @@
                 font-size: 0.75rem;
             }
         }
+        .login-security-note {
+            margin-top: 14px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.58rem;
+            letter-spacing: 0.5px;
+            color: #9aa9b6;
+            line-height: 1.5;
+        }
+
+        .tracker-logout { color: #8E8E8E; }
+
+        /* ===== INVITATION LINK STUDIO ===== */
+        .link-studio {
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 28px;
+            border: 1px solid rgba(107, 154, 196, 0.17);
+            border-radius: 16px;
+            padding: 26px;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(167, 199, 231, 0.28), transparent 30%),
+                linear-gradient(135deg, #ffffff, #f5f9fc);
+            box-shadow: 0 9px 26px rgba(47, 79, 103, 0.07);
+        }
+        .link-studio::after {
+            content: '';
+            position: absolute;
+            right: -56px;
+            bottom: -68px;
+            width: 175px;
+            height: 175px;
+            border: 1px solid rgba(107, 154, 196, 0.12);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .link-studio-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+        .link-studio-eyebrow {
+            margin: 0 0 5px;
+            color: #7696ad;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.53rem;
+            font-weight: 700;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .link-studio-title {
+            margin: 0;
+            color: #35576e;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.55rem;
+            font-weight: 500;
+        }
+        .link-studio-note {
+            max-width: 370px;
+            margin: 2px 0 0;
+            color: #7992a5;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1rem;
+            font-style: italic;
+            line-height: 1.4;
+            text-align: right;
+        }
+        .link-studio-form {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: minmax(180px, 1.25fr) minmax(110px, .55fr) minmax(130px, .72fr) auto;
+            gap: 12px;
+            align-items: end;
+        }
+        .link-studio-form .link-field:first-child { grid-column: span 1; }
+        .link-field { display: grid; min-width: 0; gap: 6px; }
+        .link-field--url { grid-column: 1 / -1; }
+        .link-field label {
+            color: #7390a6;
+            font-size: 0.54rem;
+            font-weight: 700;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+        .link-field input, .link-field select {
+            width: 100%;
+            min-height: 42px;
+            border: 1px solid rgba(107, 154, 196, 0.23);
+            border-radius: 9px;
+            padding: 0 12px;
+            background: rgba(255,255,255,0.9);
+            color: #34536b;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.72rem;
+            outline: none;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        .link-field input:focus, .link-field select:focus {
+            border-color: #6B9AC4;
+            box-shadow: 0 0 0 3px rgba(107, 154, 196, 0.12);
+        }
+        .link-generate-btn {
+            min-height: 42px;
+            white-space: nowrap;
+            box-shadow: 0 7px 16px rgba(90, 137, 179, 0.23);
+        }
+        .link-result {
+            position: relative;
+            z-index: 1;
+            display: none;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            border: 1px solid rgba(107, 154, 196, 0.17);
+            border-radius: 10px;
+            padding: 10px 11px 10px 14px;
+            background: rgba(235, 244, 250, 0.76);
+        }
+        .link-result.is-visible { display: grid; animation: linkResultIn .42s cubic-bezier(.22, 1, .36, 1) both; }
+        .link-result-copy { min-width: 0; }
+        .link-result-label { display: block; margin-bottom: 3px; color: #668ba9; font-size: 0.49rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+        .link-result-value { display: block; overflow: hidden; color: #3f6079; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 0.67rem; line-height: 1.45; text-overflow: ellipsis; white-space: nowrap; }
+        .copy-link-btn { min-height: 34px; border: 1px solid rgba(107, 154, 196, .28); border-radius: 7px; padding: 0 12px; background: #fff; color: #6289ab; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: .53rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; transition: .2s ease; }
+        .copy-link-btn:hover { background: #6B9AC4; color: #fff; }
+        .link-studio-status { min-height: 17px; margin: 7px 0 0; color: #5a9b71; font-size: .71rem; }
+        .link-studio-status.is-error { color: #bd6666; }
+        @keyframes linkResultIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+        @media (max-width: 800px) {
+            .link-studio-form { grid-template-columns: 1fr 1fr; }
+            .link-field--url { grid-column: 1 / -1; }
+            .link-generate-btn { grid-column: 1 / -1; }
+        }
+        @media (max-width: 520px) {
+            .link-studio { padding: 20px 16px; }
+            .link-studio-header { display: block; margin-bottom: 17px; }
+            .link-studio-note { margin-top: 7px; text-align: left; }
+            .link-studio-form { grid-template-columns: 1fr; }
+            .link-field--url, .link-generate-btn { grid-column: auto; }
+            .link-result { align-items: stretch; grid-template-columns: 1fr; }
+            .copy-link-btn { min-height: 38px; }
+        }
     </style>
 </head>
 <body>
@@ -713,7 +857,8 @@
             <form onsubmit="checkLogin(event)">
                 <input type="password" id="passwordInput" placeholder="Enter password" required autocomplete="off">
                 <button type="submit">Access Dashboard</button>
-                <p class="login-error" id="loginError">Incorrect password. Please try again.</p>
+                <p class="login-error" id="loginError">Unable to verify access. Please try again.</p>
+                <p class="login-security-note">Your access is verified securely by the RSVP server.</p>
             </form>
         </div>
     </div>
@@ -743,11 +888,69 @@
                 </svg>
                 Export CSV
             </button>
+            <button class="btn btn-secondary tracker-logout" onclick="logoutTracker()" title="Sign out securely">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 17l5-5-5-5"/>
+                    <path d="M15 12H3"/>
+                    <path d="M21 3v18"/>
+                </svg>
+                Sign Out
+            </button>
         </div>
     </div>
 
     <!-- CONTENT -->
     <div class="container">
+
+        <!-- INVITATION LINK STUDIO -->
+        <section class="link-studio" aria-labelledby="linkStudioTitle">
+            <div class="link-studio-header">
+                <div>
+                    <p class="link-studio-eyebrow">Personalized invitations</p>
+                    <h2 class="link-studio-title" id="linkStudioTitle">Invitation Link Studio</h2>
+                </div>
+                <p class="link-studio-note">Create a personalized RSVP link with the exact guest allowance you choose.</p>
+            </div>
+            <form class="link-studio-form" id="linkStudioForm" onsubmit="createCustomInviteLink(event)">
+                <div class="link-field">
+                    <label for="inviteGuestName">Guest name</label>
+                    <input id="inviteGuestName" type="text" maxlength="100" placeholder="e.g. Maria Santos" required>
+                </div>
+                <div class="link-field">
+                    <label for="inviteExtraGuests">Extra guests</label>
+                    <select id="inviteExtraGuests" aria-label="Additional guests allowed">
+                        <option value="0">0 · Solo</option>
+                        <option value="1">1 · Plus one</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                <div class="link-field">
+                    <label for="inviteCode">Invite code <span aria-hidden="true">(optional)</span></label>
+                    <input id="inviteCode" type="text" maxlength="40" placeholder="e.g. FAM-001">
+                </div>
+                <button class="btn btn-success link-generate-btn" type="submit">Create Link</button>
+                <div class="link-field link-field--url">
+                    <label for="inviteBaseUrl">Wedding website URL</label>
+                    <input id="inviteBaseUrl" type="url" autocomplete="url" placeholder="https://your-wedding-site.com">
+                </div>
+            </form>
+            <div class="link-result" id="inviteLinkResult" aria-live="polite">
+                <div class="link-result-copy">
+                    <span class="link-result-label">Ready to share</span>
+                    <code class="link-result-value" id="inviteLinkValue"></code>
+                </div>
+                <button class="copy-link-btn" id="copyInviteLink" type="button" onclick="copyCustomInviteLink()">Copy Link</button>
+            </div>
+            <p class="link-studio-status" id="inviteLinkStatus" aria-live="polite"></p>
+        </section>
 
         <!-- Stats -->
         <div class="stats-grid" id="statsGrid">
@@ -845,37 +1048,123 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        const ADMIN_PASSWORD = 'Shairalph@07';  
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-Es0WJ0DcudZcqVKV_PTt-GeeB7HrdcD1joP_YpBD0hNgY6-U5jKrGr66xABNngP3/exec';
+        const TRACKER_TOKEN_KEY = 'rsvp_tracker_session_token';
 
         var allRsvpData = [];
         var deleteTargetIndex = null;
 
-        // ===== LOGIN =====
-        function checkLogin(e) {
-            e.preventDefault();
-            var password = document.getElementById('passwordInput').value;
-            var errorEl = document.getElementById('loginError');
-
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('loginScreen').classList.add('hidden');
-                sessionStorage.setItem('rsvp_admin_auth', 'true');
-                loadData();
-            } else {
-                errorEl.classList.add('show');
-                document.getElementById('passwordInput').value = '';
-                setTimeout(function() { errorEl.classList.remove('show'); }, 3000);
-            }
+        // ===== SERVER-VERIFIED LOGIN =====
+        function getTrackerToken() {
+            return sessionStorage.getItem(TRACKER_TOKEN_KEY) || '';
         }
 
-        // Check if already logged in
-        if (sessionStorage.getItem('rsvp_admin_auth') === 'true') {
+        function createLoginRequestId() {
+            if (window.crypto && window.crypto.randomUUID) {
+                return window.crypto.randomUUID().replace(/-/g, '') + Date.now().toString(36);
+            }
+            var values = new Uint32Array(5);
+            if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(values);
+            return Array.prototype.map.call(values, function(value) { return value.toString(36); }).join('') + Date.now().toString(36);
+        }
+
+        function wait(ms) {
+            return new Promise(function(resolve) { setTimeout(resolve, ms); });
+        }
+
+        function showLoginError(message) {
+            var errorEl = document.getElementById('loginError');
+            errorEl.textContent = message || 'Unable to verify access. Please try again.';
+            errorEl.classList.add('show');
+            setTimeout(function() { errorEl.classList.remove('show'); }, 3500);
+        }
+
+        function showDashboard() {
             document.getElementById('loginScreen').classList.add('hidden');
-            document.addEventListener('DOMContentLoaded', loadData);
+            document.getElementById('passwordInput').value = '';
+            loadData();
+        }
+
+        function showLoginScreen(message) {
+            sessionStorage.removeItem(TRACKER_TOKEN_KEY);
+            document.getElementById('loginScreen').classList.remove('hidden');
+            if (message) showLoginError(message);
+        }
+
+        function pollLoginResult(requestId, attempt) {
+            var endpoint = GOOGLE_SCRIPT_URL + '?action=tracker-session&requestId=' + encodeURIComponent(requestId) + '&t=' + Date.now();
+            return fetch(endpoint, { method: 'GET', redirect: 'follow' })
+                .then(function(response) { return response.json(); })
+                .then(function(result) {
+                    if (result.status === 'authorized' && result.token) return result;
+                    if (result.status === 'denied') throw new Error('Access denied');
+                    if (attempt >= 14) throw new Error('Verification timed out');
+                    return wait(350).then(function() { return pollLoginResult(requestId, attempt + 1); });
+                });
+        }
+
+        function checkLogin(e) {
+            e.preventDefault();
+            var passwordInput = document.getElementById('passwordInput');
+            var password = passwordInput.value;
+            var submitBtn = e.currentTarget.querySelector('button[type="submit"]');
+            if (!password) return;
+
+            var requestId = createLoginRequestId();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Verifying…';
+
+            // no-cors keeps this cross-origin POST simple. The server stores a
+            // short-lived result, which is then read with the random request ID.
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ action: 'tracker-login', password: password, loginRequestId: requestId })
+            })
+            .then(function() { return pollLoginResult(requestId, 0); })
+            .then(function(result) {
+                sessionStorage.setItem(TRACKER_TOKEN_KEY, result.token);
+                showDashboard();
+            })
+            .catch(function(error) {
+                console.warn('Tracker sign-in failed:', error);
+                passwordInput.value = '';
+                showLoginError('Access could not be verified. Please check the password and try again.');
+            })
+            .finally(function() {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Access Dashboard';
+            });
+        }
+
+        function verifyTrackerSession() {
+            var token = getTrackerToken();
+            if (!token) return Promise.resolve(false);
+            var endpoint = GOOGLE_SCRIPT_URL + '?action=tracker-verify&token=' + encodeURIComponent(token) + '&t=' + Date.now();
+            return fetch(endpoint, { method: 'GET', redirect: 'follow' })
+                .then(function(response) { return response.json(); })
+                .then(function(result) { return result.status === 'success'; })
+                .catch(function() { return false; });
+        }
+
+        function logoutTracker() {
+            var token = getTrackerToken();
+            sessionStorage.removeItem(TRACKER_TOKEN_KEY);
+            if (token) {
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: 'tracker-logout', adminToken: token })
+                }).catch(function() {});
+            }
+            showLoginScreen();
         }
 
         // ===== LOAD DATA FROM GOOGLE SHEET =====
         function loadData() {
+            var token = getTrackerToken();
+            if (!token) { showLoginScreen(); return; }
+
             var container = document.getElementById('tableContainer');
             container.innerHTML =
                 '<div class="loading">' +
@@ -883,26 +1172,133 @@
                     '<p>Loading RSVP data...</p>' +
                 '</div>';
 
-            fetch(GOOGLE_SCRIPT_URL + '?action=list', { method: 'GET' })
+            fetch(GOOGLE_SCRIPT_URL + '?action=list&token=' + encodeURIComponent(token) + '&t=' + Date.now(), { method: 'GET', redirect: 'follow' })
                 .then(function(res) { return res.json(); })
                 .then(function(result) {
                     if (result.status === 'success') {
                         allRsvpData = result.data || [];
                         updateStats();
                         renderTable(allRsvpData);
+                    } else if (result.status === 'unauthorized') {
+                        showLoginScreen('Your secure session has expired. Please sign in again.');
                     } else {
                         showToast('Error loading data: ' + (result.message || 'Unknown error'), 'error');
                     }
                 })
                 .catch(function(err) {
                     console.error('Fetch error:', err);
-                    showToast('Failed to connect to server', 'error');
-                    container.innerHTML =
-                        '<div class="empty-state">' +
-                            '<p>❌ Failed to load data.</p>' +
-                            '<p style="margin-top:10px;font-size:0.8rem;">Check console for details.</p>' +
-                        '</div>';
+                    showToast('Failed to connect to the RSVP server', 'error');
+                    container.innerHTML = '<div class="empty-state"><p>Unable to load data right now.</p><p style="margin-top:10px;font-size:0.8rem;">Please refresh and try again.</p></div>';
                 });
+        }
+
+        // Restore only an opaque server-issued session token—never a password.
+        if (getTrackerToken()) {
+            document.addEventListener('DOMContentLoaded', function() {
+                verifyTrackerSession().then(function(valid) {
+                    if (valid) showDashboard();
+                    else showLoginScreen();
+                });
+            });
+        }
+
+        // ===== PERSONALIZED INVITATION LINK STUDIO =====
+        // This intentionally mirrors the validation format in main.js.
+        const INVITE_LINK_SECRET = 'RS2028WEDDING';
+        const INVITE_URL_STORAGE_KEY = 'rsvp_invitation_base_url';
+
+        function generateInviteLinkHash(encodedData, key) {
+            var hash = 0;
+            var text = encodedData + '|' + key;
+            for (var i = 0; i < text.length; i++) {
+                hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+                hash = Math.abs(hash);
+            }
+            var secondHash = hash;
+            for (var j = 0; j < text.length; j++) {
+                secondHash = ((secondHash << 3) + secondHash + text.charCodeAt(j)) | 0;
+                secondHash = Math.abs(secondHash);
+            }
+            return hash.toString(36) + secondHash.toString(36);
+        }
+
+        function encodeInvitationLinkData(name, extraGuests, inviteCode) {
+            var payload = {
+                g: name,
+                e: Math.max(0, Math.min(10, parseInt(extraGuests, 10) || 0)),
+                c: inviteCode || '',
+                t: Date.now()
+            };
+            var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+            return { data: encoded, verification: generateInviteLinkHash(encoded, INVITE_LINK_SECRET) };
+        }
+
+        function normalizeInvitationBaseUrl(value) {
+            var raw = String(value || '').trim();
+            if (!raw) throw new Error('Enter the wedding website URL first.');
+            if (!/^https?:\/\//i.test(raw)) raw = 'https://' + raw;
+            var url;
+            try { url = new URL(raw); } catch (error) { throw new Error('Please enter a valid website URL.'); }
+            if (url.protocol !== 'https:' && url.protocol !== 'http:') throw new Error('Use an http or https website URL.');
+            url.search = '';
+            url.hash = '';
+            var normalized = url.href.replace(/\/$/, '');
+            normalized = normalized.replace(/\/index\.html$/i, '');
+            return normalized;
+        }
+
+        function setInvitationLinkStatus(message, isError) {
+            var status = document.getElementById('inviteLinkStatus');
+            status.textContent = message || '';
+            status.classList.toggle('is-error', !!isError);
+        }
+
+        function createCustomInviteLink(event) {
+            event.preventDefault();
+            var name = document.getElementById('inviteGuestName').value.trim();
+            var extraGuests = document.getElementById('inviteExtraGuests').value;
+            var inviteCode = document.getElementById('inviteCode').value.trim();
+            var baseInput = document.getElementById('inviteBaseUrl');
+            if (!name) { setInvitationLinkStatus('Enter a guest name to create a link.', true); return; }
+
+            try {
+                var baseUrl = normalizeInvitationBaseUrl(baseInput.value);
+                localStorage.setItem(INVITE_URL_STORAGE_KEY, baseUrl);
+                var invitation = encodeInvitationLinkData(name, extraGuests, inviteCode);
+                var link = baseUrl + '/#' + invitation.data + '.' + invitation.verification;
+                document.getElementById('inviteLinkValue').textContent = link;
+                document.getElementById('inviteLinkResult').classList.add('is-visible');
+                setInvitationLinkStatus('Personalized link created for ' + name + '.');
+            } catch (error) {
+                setInvitationLinkStatus(error.message || 'Unable to create the invitation link.', true);
+            }
+        }
+
+        function copyTextWithFallback(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+            return new Promise(function(resolve, reject) {
+                var input = document.createElement('textarea');
+                input.value = text;
+                input.style.position = 'fixed';
+                input.style.left = '-9999px';
+                document.body.appendChild(input);
+                input.select();
+                try { document.execCommand('copy'); resolve(); } catch (error) { reject(error); }
+                input.remove();
+            });
+        }
+
+        function copyCustomInviteLink() {
+            var link = document.getElementById('inviteLinkValue').textContent;
+            if (!link) return;
+            var button = document.getElementById('copyInviteLink');
+            copyTextWithFallback(link).then(function() {
+                button.textContent = 'Copied ✓';
+                setInvitationLinkStatus('The invitation link is ready to paste into a message.');
+                setTimeout(function() { button.textContent = 'Copy Link'; }, 1600);
+            }).catch(function() {
+                setInvitationLinkStatus('Copy failed. Select the link and copy it manually.', true);
+            });
         }
 
         // ===== UPDATE STATS =====
@@ -1130,14 +1526,22 @@
                 inviteHash: row.inviteHash || '',
                 name: row.name,
                 type: row.type,
-                deleteMode: deleteModeTarget
+                deleteMode: deleteModeTarget,
+                adminToken: getTrackerToken()
             };
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
+            verifyTrackerSession()
+            .then(function(valid) {
+                if (!valid) {
+                    showLoginScreen('Your secure session has expired. Please sign in again.');
+                    throw new Error('Session expired');
+                }
+                return fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
+                });
             })
             .then(function() {
                 var msg = deleteModeTarget === 'primary'
@@ -1145,10 +1549,10 @@
                     : '✓ Additional guest removed';
                 showToast(msg, 'success');
                 closeModal();
-                setTimeout(loadData, 600);
+                setTimeout(loadData, 700);
             })
             .catch(function(err) {
-                showToast('Failed to delete: ' + err.message, 'error');
+                if (err.message !== 'Session expired') showToast('Failed to delete: ' + err.message, 'error');
             })
             .finally(function() {
                 confirmBtn.disabled = false;
@@ -1217,6 +1621,12 @@
                 toast.classList.remove('show');
             }, 3000);
         }
+
+        // Set a reusable website URL for the Invitation Link Studio.
+        (function initializeInvitationLinkStudio() {
+            var input = document.getElementById('inviteBaseUrl');
+            if (input) input.value = localStorage.getItem(INVITE_URL_STORAGE_KEY) || 'https://shairalph-wedding.vercel.app';
+        })();
 
         // Close modal on backdrop click
         document.getElementById('deleteModal').addEventListener('click', function(e) {

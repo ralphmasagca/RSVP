@@ -6,88 +6,209 @@ function playYTMusic() { if (ytReady && ytPlayer) { ytPlayer.playVideo(); docume
 function toggleMusic() { if (!ytPlayer || !ytReady) return; const btn = document.getElementById('musicBtn'); if (ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) { ytPlayer.pauseVideo(); btn.classList.add('paused'); } else { ytPlayer.playVideo(); btn.classList.remove('paused'); } }
 function changeVolume(v) { if (ytPlayer && ytReady) ytPlayer.setVolume(parseInt(v)); }
 
-const AudioCtx = window.AudioContext || window.webkitAudioContext; let audioCtx;
-function getAudioCtx() { if (!audioCtx) audioCtx = new AudioCtx(); return audioCtx; }
-function playSealBreak() { const c = getAudioCtx(), d = 0.3, bs = c.sampleRate * d, b = c.createBuffer(1, bs, c.sampleRate), dt = b.getChannelData(0); for (let i = 0; i < bs; i++) { const t = i / c.sampleRate; dt[i] = (Math.random() * 2 - 1) * Math.exp(-t * 15) * 0.4; } const n = c.createBufferSource(); n.buffer = b; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 3000; f.Q.value = 1.5; const g = c.createGain(); g.gain.setValueAtTime(0.5, c.currentTime); g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + d); n.connect(f); f.connect(g); g.connect(c.destination); n.start(c.currentTime); n.stop(c.currentTime + d); const o = c.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(800, c.currentTime); o.frequency.exponentialRampToValueAtTime(200, c.currentTime + 0.08); const pg = c.createGain(); pg.gain.setValueAtTime(0.3, c.currentTime); pg.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1); o.connect(pg); pg.connect(c.destination); o.start(c.currentTime); o.stop(c.currentTime + 0.1); }
-function playPaperSlide() { const c = getAudioCtx(), d = 0.6, bs = c.sampleRate * d, b = c.createBuffer(1, bs, c.sampleRate), dt = b.getChannelData(0); for (let i = 0; i < bs; i++) { const t = i / c.sampleRate; dt[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * t / d) * 0.15; } const s = c.createBufferSource(); s.buffer = b; const f1 = c.createBiquadFilter(); f1.type = 'highpass'; f1.frequency.value = 2000; const f2 = c.createBiquadFilter(); f2.type = 'lowpass'; f2.frequency.setValueAtTime(6000, c.currentTime); f2.frequency.linearRampToValueAtTime(3000, c.currentTime + d); const g = c.createGain(); g.gain.value = 0.3; s.connect(f1); f1.connect(f2); f2.connect(g); g.connect(c.destination); s.start(c.currentTime); s.stop(c.currentTime + d); }
-function playFlapOpen() { const c = getAudioCtx(), d = 0.4, bs = c.sampleRate * d, b = c.createBuffer(1, bs, c.sampleRate), dt = b.getChannelData(0); for (let i = 0; i < bs; i++) { const t = i / c.sampleRate; dt[i] = (Math.random() * 2 - 1) * Math.exp(-t * 6) * 0.2; } const s = c.createBufferSource(); s.buffer = b; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.setValueAtTime(1500, c.currentTime); f.frequency.linearRampToValueAtTime(4000, c.currentTime + d); f.Q.value = 0.8; const g = c.createGain(); g.gain.setValueAtTime(0.25, c.currentTime); g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + d); s.connect(f); f.connect(g); g.connect(c.destination); s.start(c.currentTime); s.stop(c.currentTime + d); }
-function playRevealChime() { const c = getAudioCtx();[523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((fr, i) => { const o = c.createOscillator(); o.type = 'sine'; o.frequency.value = fr; const g = c.createGain(); const st = c.currentTime + i * 0.12; g.gain.setValueAtTime(0, st); g.gain.linearRampToValueAtTime(0.15, st + 0.05); g.gain.exponentialRampToValueAtTime(0.001, st + 0.8); o.connect(g); g.connect(c.destination); o.start(st); o.stop(st + 0.8); }); }
+// Tiny Web Audio cues add tactility without requiring external sound files.
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function getAudioCtx() {
+    if (!AudioCtx) return null;
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume().catch(function() {});
+    return audioCtx;
+}
+function playSealBreak() { const c = getAudioCtx(); if (!c) return; const d = 0.3, bs = c.sampleRate * d, b = c.createBuffer(1, bs, c.sampleRate), dt = b.getChannelData(0); for (let i = 0; i < bs; i++) { const t = i / c.sampleRate; dt[i] = (Math.random() * 2 - 1) * Math.exp(-t * 15) * 0.4; } const n = c.createBufferSource(); n.buffer = b; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 3000; f.Q.value = 1.5; const g = c.createGain(); g.gain.setValueAtTime(0.5, c.currentTime); g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + d); n.connect(f); f.connect(g); g.connect(c.destination); n.start(c.currentTime); n.stop(c.currentTime + d); const o = c.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(800, c.currentTime); o.frequency.exponentialRampToValueAtTime(200, c.currentTime + 0.08); const pg = c.createGain(); pg.gain.setValueAtTime(0.3, c.currentTime); pg.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.1); o.connect(pg); pg.connect(c.destination); o.start(c.currentTime); o.stop(c.currentTime + 0.1); }
+function playPaperSlide() { const c = getAudioCtx(); if (!c) return; const d = 0.6, bs = c.sampleRate * d, b = c.createBuffer(1, bs, c.sampleRate), dt = b.getChannelData(0); for (let i = 0; i < bs; i++) { const t = i / c.sampleRate; dt[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * t / d) * 0.15; } const source = c.createBufferSource(); source.buffer = b; const f1 = c.createBiquadFilter(); f1.type = 'highpass'; f1.frequency.value = 2000; const f2 = c.createBiquadFilter(); f2.type = 'lowpass'; f2.frequency.setValueAtTime(6000, c.currentTime); f2.frequency.linearRampToValueAtTime(3000, c.currentTime + d); const g = c.createGain(); g.gain.value = 0.3; source.connect(f1); f1.connect(f2); f2.connect(g); g.connect(c.destination); source.start(c.currentTime); source.stop(c.currentTime + d); }
+function playFlapOpen() { const c = getAudioCtx(); if (!c) return; const d = 0.4, bs = c.sampleRate * d, b = c.createBuffer(1, bs, c.sampleRate), dt = b.getChannelData(0); for (let i = 0; i < bs; i++) { const t = i / c.sampleRate; dt[i] = (Math.random() * 2 - 1) * Math.exp(-t * 6) * 0.2; } const source = c.createBufferSource(); source.buffer = b; const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.setValueAtTime(1500, c.currentTime); f.frequency.linearRampToValueAtTime(4000, c.currentTime + d); f.Q.value = 0.8; const g = c.createGain(); g.gain.setValueAtTime(0.25, c.currentTime); g.gain.exponentialRampToValueAtTime(0.01, c.currentTime + d); source.connect(f); f.connect(g); g.connect(c.destination); source.start(c.currentTime); source.stop(c.currentTime + d); }
+function playRevealChime() { const c = getAudioCtx(); if (!c) return; [523.25, 659.25, 783.99, 1046.5, 1318.51].forEach(function(fr, i) { const o = c.createOscillator(); o.type = 'sine'; o.frequency.value = fr; const g = c.createGain(); const st = c.currentTime + i * 0.12; g.gain.setValueAtTime(0, st); g.gain.linearRampToValueAtTime(0.15, st + 0.05); g.gain.exponentialRampToValueAtTime(0.001, st + 0.8); o.connect(g); g.connect(c.destination); o.start(st); o.stop(st + 0.8); }); }
 
-(function () { const c = document.getElementById('particles'); for (let i = 0; i < 30; i++) { const p = document.createElement('div'); p.classList.add('particle'); p.style.left = Math.random() * 100 + '%'; const s = (Math.random() * 4 + 2) + 'px'; p.style.width = s; p.style.height = s; p.style.animationDuration = (Math.random() * 8 + 6) + 's'; p.style.animationDelay = (Math.random() * 10) + 's'; c.appendChild(p); } })();
+// This used to be an unnamed IIFE while other parts of the app called
+// createParticles(), which caused a ReferenceError after invite validation.
+function createParticles() {
+    const container = document.getElementById('particles');
+    if (!container || container.dataset.ready === 'true') return;
+    container.dataset.ready = 'true';
+    const particleCount = window.matchMedia('(max-width: 768px)').matches ? 18 : 28;
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        const size = (Math.random() * 3 + 1.5) + 'px';
+        particle.style.width = size;
+        particle.style.height = size;
+        particle.style.animationDuration = (Math.random() * 7 + 7) + 's';
+        particle.style.animationDelay = (Math.random() * 9) + 's';
+        container.appendChild(particle);
+    }
+}
 
-// function openEnvelope() { const w = document.getElementById('envelopeWrapper'), ep = document.getElementById('envelopePage'), lp = document.getElementById('landingPage'); if (w.classList.contains('opening')) return; w.classList.add('opening'); playSealBreak(); setTimeout(() => playFlapOpen(), 200); setTimeout(() => playPaperSlide(), 500); setTimeout(() => ep.classList.add('hidden'), 1000); setTimeout(() => playRevealChime(), 1200); setTimeout(() => { lp.classList.add('visible'); ep.style.display = 'none'; document.body.style.overflow = 'auto'; createPetals(); startCountdown(); observeAnimations(); initPersonalizedRSVP(); setTimeout(() => playYTMusic(), 1500); }, 1600); }
 
 function toggleMobileNav() { const h = document.getElementById('hamburger'), mn = document.getElementById('mobileNav'), o = document.getElementById('mobileNavOverlay'); if (mn.classList.contains('active')) { closeMobileNav(); } else { h.classList.add('active'); mn.classList.add('active'); o.classList.add('active'); document.body.classList.add('nav-open'); } }
 function closeMobileNav() { document.getElementById('hamburger').classList.remove('active'); document.getElementById('mobileNav').classList.remove('active'); document.getElementById('mobileNavOverlay').classList.remove('active'); document.body.classList.remove('nav-open'); }
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMobileNav(); });
 
-function createPetals() { const c = document.getElementById('petalsContainer'); const colors = ['#A7C7E7', '#C8D8E8', '#D4E2F0', '#B8D0E8', '#E0EBF5', '#d5dce5', '#c5d5e8']; function spawn() { const p = document.createElement('div'); p.classList.add('petal'); const sz = Math.random() * 10 + 6; p.style.width = sz + 'px'; p.style.height = sz + 'px'; p.style.left = Math.random() * 100 + '%'; p.style.background = colors[Math.floor(Math.random() * colors.length)]; p.style.borderRadius = '50% 0 50% 50%'; p.style.animationDuration = (Math.random() * 5 + 6) + 's'; p.style.opacity = Math.random() * 0.4 + 0.2; c.appendChild(p); setTimeout(() => p.remove(), 12000); } for (let i = 0; i < 15; i++)setTimeout(() => spawn(), i * 200); setInterval(spawn, 800); }
+let petalTimer = null;
+function createPetals() {
+    const container = document.getElementById('petalsContainer');
+    if (!container || container.dataset.ready === 'true' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    container.dataset.ready = 'true';
+    const colors = ['#A7C7E7', '#C8D8E8', '#D4E2F0', '#B8D0E8', '#E0EBF5', '#d5dce5', '#c5d5e8'];
+    const spawn = function() {
+        if (document.hidden) return;
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        const size = Math.random() * 8 + 6;
+        petal.style.width = size + 'px';
+        petal.style.height = size + 'px';
+        petal.style.left = Math.random() * 100 + '%';
+        petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+        petal.style.borderRadius = '50% 0 50% 50%';
+        petal.style.animationDuration = (Math.random() * 5 + 7) + 's';
+        petal.style.opacity = Math.random() * 0.32 + 0.18;
+        container.appendChild(petal);
+        window.setTimeout(function() { petal.remove(); }, 13000);
+    };
+    const initialPetals = window.matchMedia('(max-width: 768px)').matches ? 7 : 11;
+    for (let i = 0; i < initialPetals; i++) window.setTimeout(spawn, i * 180);
+    petalTimer = window.setInterval(spawn, window.matchMedia('(max-width: 768px)').matches ? 1150 : 900);
+}
+
+// Build two mathematically identical photo sets before the gallery is revealed.
+// The old gallery had 8 photos in one set and 10 in the duplicate set, so a
+// translateX(-50%) reset could never line up cleanly and appeared to jump.
+function setupPrenupLoop() {
+    const gallery = document.querySelector('.prenup-gallery');
+    if (!gallery || gallery.dataset.loopReady === 'true') return;
+
+    const uniqueItems = [];
+    const seenSources = new Set();
+    gallery.querySelectorAll('.prenup-item').forEach(function(item) {
+        const image = item.querySelector('.prenup-img');
+        const source = image && image.getAttribute('src');
+        if (!source || seenSources.has(source)) return;
+        seenSources.add(source);
+        uniqueItems.push(item.cloneNode(true));
+    });
+    if (!uniqueItems.length) return;
+
+    gallery.replaceChildren();
+    for (let setIndex = 0; setIndex < 2; setIndex++) {
+        const set = document.createElement('div');
+        set.className = 'prenup-loop-set';
+        if (setIndex === 1) set.setAttribute('aria-hidden', 'true');
+        uniqueItems.forEach(function(item) { set.appendChild(item.cloneNode(true)); });
+        gallery.appendChild(set);
+    }
+    gallery.dataset.loopReady = 'true';
+}
 
 function startCountdown() { const t = new Date('2028-02-02T15:00:00'); function u() { const d = t - new Date(); if (d <= 0) { ['days', 'hours', 'minutes', 'seconds'].forEach(id => document.getElementById(id).textContent = '0'); return; } document.getElementById('days').textContent = Math.floor(d / (1e3 * 60 * 60 * 24)); document.getElementById('hours').textContent = String(Math.floor((d % (1e3 * 60 * 60 * 24)) / (1e3 * 60 * 60))).padStart(2, '0'); document.getElementById('minutes').textContent = String(Math.floor((d % (1e3 * 60 * 60)) / (1e3 * 60))).padStart(2, '0'); document.getElementById('seconds').textContent = String(Math.floor((d % (1e3 * 60)) / 1e3)).padStart(2, '0'); } u(); setInterval(u, 1000); }
 
-//function observeAnimations() { const obs = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.12 }); document.querySelectorAll('[data-animate]').forEach(el => obs.observe(el)); }
-
+let scrollExperienceStarted = false;
 function observeAnimations() {
-    const sectionObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                requestAnimationFrame(function() {
-                    entry.target.classList.add('section-animate');
-                });
-                sectionObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -80px 0px'
-    });
+    if (scrollExperienceStarted) return;
+    scrollExperienceStarted = true;
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const sections = document.querySelectorAll(
-        '.story-section, .details-section, .dresscode-section, ' +
-        '.entourage-section, .prenup-section, .snapshare-section, ' +
-        '.gift-section, .countdown-section, .faq-section, .rsvp-section'
+        '.story-section, .details-section, .dresscode-section, .entourage-section, ' +
+        '.prenup-section, .snapshare-section, .gift-section, .countdown-section, .faq-section, .rsvp-section'
     );
 
+    // Decorative layers move very slightly with the reader, while the existing
+    // section choreography remains responsible for the primary content.
     sections.forEach(function(section) {
-        sectionObserver.observe(section);
+        const accent = document.createElement('span');
+        accent.className = 'section-scroll-accent';
+        accent.setAttribute('aria-hidden', 'true');
+        section.prepend(accent);
     });
+
+    const extraRevealSelectors = '.venue-card, .dresscode-guest-note, .prenup-intro, .snapshare-platforms, .faq-contact';
+    const extraReveals = Array.prototype.slice.call(document.querySelectorAll(extraRevealSelectors));
+    extraReveals.forEach(function(element, index) {
+        element.classList.add('scroll-reveal');
+        element.style.setProperty('--reveal-delay', (index % 3) * 80 + 'ms');
+    });
+
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+        sections.forEach(function(section) { section.classList.add('section-animate'); });
+        document.querySelectorAll('[data-animate]').forEach(function(element) { element.classList.add('visible'); });
+        extraReveals.forEach(function(element) { element.classList.add('is-revealed'); });
+        return;
+    }
+
+    const sectionObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('section-animate');
+            sectionObserver.unobserve(entry.target);
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -9% 0px' });
+    sections.forEach(function(section) { sectionObserver.observe(section); });
 
     const elementObserver = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('visible');
+            elementObserver.unobserve(entry.target);
         });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
+    document.querySelectorAll('[data-animate]').forEach(function(element) { elementObserver.observe(element); });
 
-    document.querySelectorAll('[data-animate]').forEach(function(el) {
-        elementObserver.observe(el);
-    });
+    const revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('is-revealed');
+            revealObserver.unobserve(entry.target);
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
+    extraReveals.forEach(function(element) { revealObserver.observe(element); });
+
+    let ticking = false;
+    const updateScrollProgress = function() {
+        const viewportHeight = window.innerHeight || 1;
+        sections.forEach(function(section) {
+            const rect = section.getBoundingClientRect();
+            const progress = Math.max(0, Math.min(1, (viewportHeight - rect.top) / (viewportHeight + rect.height)));
+            section.style.setProperty('--scroll-progress', progress.toFixed(3));
+        });
+        ticking = false;
+    };
+    const requestProgressUpdate = function() {
+        if (!ticking) {
+            ticking = true;
+            window.requestAnimationFrame(updateScrollProgress);
+        }
+    };
+    window.addEventListener('scroll', requestProgressUpdate, { passive: true });
+    window.addEventListener('resize', requestProgressUpdate, { passive: true });
+    requestProgressUpdate();
 }
 
-window.addEventListener('scroll', () => { const n = document.getElementById('mainNav'); if (n) n.classList.toggle('scrolled', window.scrollY > 80); });
-document.querySelectorAll('.nav-links a').forEach(a => { a.addEventListener('click', function (e) { e.preventDefault(); const t = document.querySelector(this.getAttribute('href')); if (t) t.scrollIntoView({ behavior: 'smooth' }); }); });
+window.addEventListener('scroll', function() {
+    const nav = document.getElementById('mainNav');
+    if (nav) nav.classList.toggle('scrolled', window.scrollY > 80);
+}, { passive: true });
+document.querySelectorAll('.nav-links a').forEach(function(anchor) {
+    anchor.addEventListener('click', function(event) {
+        event.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+});
 
 
 // ===== HERO ENVELOPE REVEAL =====
 function triggerHeroEnvelopeReveal() {
-    var reveal = document.getElementById('heroEnvelopeReveal');
-    var heroContent = document.getElementById('heroContent');
-    var hero = document.getElementById('hero');
+    const heroContent = document.getElementById('heroContent');
+    const hero = document.getElementById('hero');
+    if (!heroContent || !hero) return;
 
-    if (!reveal || !heroContent) return;
-
-    // Start the reveal — CSS animations auto-play
-    // After animations complete, reveal the content
-    setTimeout(function() {
+    // The guest has just physically opened the invitation. A calm content reveal
+    // is more polished than replaying a second, unrelated envelope animation.
+    window.setTimeout(function() {
         heroContent.classList.add('revealed');
         hero.classList.add('envelope-opened');
-    }, 800);
-
-    // Remove the overlay completely after all animations done
-    setTimeout(function() {
-        reveal.classList.add('done');
-    }, 2500);
+    }, 160);
 }
 
 function generateVenueQR() {
@@ -224,6 +345,7 @@ function showInvalidInvitePage() {
     var page = document.getElementById('invalidInvitePage');
     if (page) {
         page.style.display = 'flex';
+        document.body.classList.remove('envelope-active');
         document.body.style.overflow = 'hidden';
         createBlockedPageParticles('invalidParticles');
     }
@@ -251,6 +373,7 @@ function showEnvelopePage() {
     hideCheckingOverlay();
     var ep = document.getElementById('envelopePage');
     if (ep) ep.style.display = 'flex';
+    document.body.classList.add('envelope-active');
 }
 
 function createBlockedPageParticles(containerId) {
@@ -428,31 +551,36 @@ function openEnvelope() {
         return;
     }
 
-    var w = document.getElementById('envelopeWrapper');
-    var ep = document.getElementById('envelopePage');
-    var lp = document.getElementById('landingPage');
+    const wrapper = document.getElementById('envelopeWrapper');
+    const envelopePage = document.getElementById('envelopePage');
+    const landingPage = document.getElementById('landingPage');
+    if (!wrapper || !envelopePage || !landingPage || wrapper.classList.contains('opening')) return;
 
-    if (w.classList.contains('opening')) return;
-    w.classList.add('opening');
+    wrapper.classList.add('opening');
+    wrapper.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('envelope-opening');
+    envelopePage.classList.add('is-opening');
 
     playSealBreak();
-    setTimeout(function() { playFlapOpen(); }, 200);
-    setTimeout(function() { playPaperSlide(); }, 500);
-    setTimeout(function() { ep.classList.add('hidden'); }, 1000);
-    setTimeout(function() { playRevealChime(); }, 1200);
+    window.setTimeout(playFlapOpen, 190);
+    window.setTimeout(playPaperSlide, 720);
+    window.setTimeout(function() { playRevealChime(); }, 1780);
+    window.setTimeout(function() { envelopePage.classList.add('hidden'); }, 2140);
 
-    setTimeout(function() {
-        lp.classList.add('visible');
-        ep.style.display = 'none';
+    // Let the letter complete its upward movement before bringing in the site.
+    window.setTimeout(function() {
+        landingPage.classList.add('visible');
+        envelopePage.style.display = 'none';
+        document.body.classList.remove('envelope-active', 'envelope-opening');
         document.body.style.overflow = 'auto';
         createPetals();
         startCountdown();
         observeAnimations();
         initPersonalizedRSVP();
         triggerHeroEnvelopeReveal();
-        generateVenueQR(); 
-        setTimeout(function() { playYTMusic(); }, 1500);
-    }, 1600);
+        generateVenueQR();
+        window.setTimeout(playYTMusic, 900);
+    }, 2760);
 }
 
 // ===== GUEST MANAGEMENT =====
@@ -774,6 +902,41 @@ async function submitRSVP(e) {
 // ===== INIT ON PAGE LOAD =====
 
 document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('envelope-active');
+    createParticles();
+    setupPrenupLoop();
+
+    const wrapper = document.getElementById('envelopeWrapper');
+    if (wrapper) {
+        wrapper.addEventListener('click', openEnvelope);
+        wrapper.addEventListener('animationend', function(event) {
+            // Release the entry animation's transform so desktop pointer tilt can take over.
+            if (event.animationName === 'invitationArrival') wrapper.classList.add('ready');
+        });
+        wrapper.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openEnvelope();
+            }
+        });
+        // A very restrained pointer tilt gives desktop users depth without
+        // turning the invitation into a distracting 3D effect.
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+            wrapper.addEventListener('pointermove', function(event) {
+                if (wrapper.classList.contains('opening')) return;
+                const rect = wrapper.getBoundingClientRect();
+                const x = (event.clientX - rect.left) / rect.width - 0.5;
+                const y = (event.clientY - rect.top) / rect.height - 0.5;
+                wrapper.style.setProperty('--tilt-x', (-y * 3.1).toFixed(2) + 'deg');
+                wrapper.style.setProperty('--tilt-y', (x * 4.1).toFixed(2) + 'deg');
+            });
+            wrapper.addEventListener('pointerleave', function() {
+                wrapper.style.setProperty('--tilt-x', '0deg');
+                wrapper.style.setProperty('--tilt-y', '0deg');
+            });
+        }
+    }
+
     showCheckingOverlay();
     validateInvite();
 });

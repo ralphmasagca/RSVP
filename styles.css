@@ -7676,3 +7676,1294 @@ html {
         transform: scale(1) translate3d(0, 0, 0);
     }
 }
+
+/* ================================================================
+   MERGED EXPERIENCE ENHANCEMENTS
+   Originally authored as enhancement.css and entourage-enhancement.css
+   ================================================================ */
+
+/*
+   ================================================================
+   RSVP EXPERIENCE ENHANCEMENT — July 2026
+   Loaded after the original stylesheet. This layer intentionally only
+   overrides the invitation, motion, and accessibility behavior.
+   ================================================================ */
+
+:root {
+    --motion-spring: cubic-bezier(0.22, 1, 0.36, 1);
+    --motion-fold: cubic-bezier(0.16, 0.84, 0.44, 1);
+}
+
+html {
+    scroll-padding-top: 88px;
+}
+
+body.envelope-active {
+    overflow: hidden;
+}
+
+/* ===== Invitation opening screen ===== */
+.envelope-page {
+    min-height: 100dvh;
+    height: 100dvh;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+        radial-gradient(ellipse at 50% 110%, rgba(134, 172, 205, 0.23) 0%, transparent 48%),
+        radial-gradient(circle at 12% 12%, rgba(198, 216, 232, 0.13), transparent 30%),
+        linear-gradient(145deg, #172a3c 0%, #263e54 47%, #17283a 100%);
+    transition: opacity 0.8s var(--motion-spring), transform 0.8s var(--motion-spring), visibility 0.8s;
+}
+
+.envelope-page::before,
+.envelope-page::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.envelope-page::before {
+    inset: 0;
+    opacity: 0.32;
+    background-image:
+        linear-gradient(30deg, rgba(255,255,255,0.018) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,0.018) 87.5%),
+        linear-gradient(150deg, rgba(255,255,255,0.012) 12%, transparent 12.5%, transparent 87%, rgba(255,255,255,0.012) 87.5%);
+    background-size: 7px 12px;
+    mix-blend-mode: soft-light;
+}
+
+.envelope-page::after {
+    width: min(70vw, 800px);
+    aspect-ratio: 1;
+    left: 50%;
+    top: 50%;
+    border: 1px solid rgba(190, 214, 234, 0.08);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    box-shadow: 0 0 0 42px rgba(190, 214, 234, 0.024), 0 0 0 84px rgba(190, 214, 234, 0.015);
+    animation: invitationHalo 7s ease-in-out infinite;
+}
+
+@keyframes invitationHalo {
+    50% { transform: translate(-50%, -50%) scale(1.04); opacity: 0.72; }
+}
+
+.envelope-page.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.035);
+}
+
+.envelope-ambient {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.envelope-ambient::before,
+.envelope-ambient::after {
+    content: '';
+    position: absolute;
+    width: 46vmax;
+    height: 46vmax;
+    border: 1px solid rgba(212, 175, 55, 0.055);
+    border-radius: 50%;
+}
+
+.envelope-ambient::before {
+    left: -25vmax;
+    bottom: -31vmax;
+}
+
+.envelope-ambient::after {
+    right: -28vmax;
+    top: -33vmax;
+}
+
+.particles {
+    z-index: -1;
+}
+
+.particle {
+    width: 3px;
+    height: 3px;
+    background: radial-gradient(circle, rgba(224, 237, 247, 0.9) 0%, rgba(167, 199, 231, 0.15) 45%, transparent 72%);
+    box-shadow: 0 0 9px rgba(167, 199, 231, 0.28);
+    will-change: transform, opacity;
+}
+
+.envelope-title {
+    position: relative;
+    z-index: 2;
+    margin: 0 0 clamp(22px, 4vh, 42px);
+    color: #dbeafa;
+    font-size: clamp(1.85rem, 4vw, 2.8rem);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 22px rgba(0, 0, 0, 0.28);
+    animation: invitationTitleIn 0.9s var(--motion-spring) 0.15s both;
+}
+
+@keyframes invitationTitleIn {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.envelope-stage {
+    position: relative;
+    z-index: 1;
+    width: min(88vw, 510px);
+    perspective: 1500px;
+    perspective-origin: 50% 42%;
+}
+
+.envelope-wrapper {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    position: relative;
+    width: 100%;
+    opacity: 0;
+    cursor: pointer;
+    outline: none;
+    border-radius: 5px;
+    touch-action: manipulation;
+    transform: translate3d(0, 0, 0) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+    transform-style: preserve-3d;
+    transition: transform 0.28s ease-out;
+    animation: invitationArrival 1s var(--motion-spring) 0.35s forwards;
+}
+
+.envelope-wrapper:focus-visible {
+    box-shadow: 0 0 0 3px rgba(219, 234, 250, 0.88), 0 0 0 7px rgba(107, 154, 196, 0.46);
+}
+
+@keyframes invitationArrival {
+    from { opacity: 0; transform: translate3d(0, 34px, 0) scale(0.94); }
+    to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Do not leave a filled transform animation on the element: it would block
+   the subtle desktop pointer tilt after the entrance has completed. */
+.envelope-wrapper.ready {
+    animation: none;
+    opacity: 1;
+}
+
+.envelope {
+    --env-w: min(88vw, 510px);
+    --env-h: calc(var(--env-w) * 0.626);
+    position: relative;
+    width: var(--env-w);
+    height: var(--env-h);
+    overflow: visible;
+    transform-style: preserve-3d;
+    filter: drop-shadow(0 32px 20px rgba(2, 13, 24, 0.34));
+    animation: invitationFloat 5.5s ease-in-out 1.15s infinite;
+}
+
+@keyframes invitationFloat {
+    0%, 100% { transform: translateY(0) rotateZ(0.15deg); }
+    50% { transform: translateY(-7px) rotateZ(-0.15deg); }
+}
+
+.envelope-wrapper:hover .envelope {
+    transform: translateY(-8px) rotateZ(0deg);
+}
+
+.envelope-body {
+    z-index: 1;
+    overflow: hidden;
+    border: 1px solid rgba(71, 91, 108, 0.2);
+    border-radius: 4px;
+    background:
+        linear-gradient(110deg, rgba(255,255,255,0.45), transparent 22%, transparent 76%, rgba(77, 96, 112, 0.1)),
+        repeating-linear-gradient(0deg, rgba(95, 114, 126, 0.025) 0 1px, transparent 1px 4px),
+        linear-gradient(140deg, #f8f7f3 0%, #e7e5df 48%, #d5d4cf 100%);
+    box-shadow:
+        inset 0 1px 1px rgba(255,255,255,0.95),
+        inset 0 -2px 8px rgba(50, 65, 75, 0.12),
+        0 4px 8px rgba(3, 15, 25, 0.15);
+}
+
+.envelope-body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    height: auto;
+    border: 0;
+    border-radius: inherit;
+    opacity: 0.42;
+    background: radial-gradient(ellipse at 50% 100%, rgba(65, 85, 99, 0.16), transparent 54%);
+}
+
+.envelope-letter-shadow {
+    position: absolute;
+    z-index: 2;
+    top: 15%;
+    left: 8%;
+    width: 84%;
+    height: 69%;
+    border-radius: 3px;
+    background: rgba(26, 39, 48, 0.24);
+    filter: blur(8px);
+    transform: translateY(17px) scale(0.96);
+    transition: opacity 0.3s ease;
+}
+
+.envelope-card {
+    position: absolute;
+    z-index: 3;
+    top: 8.5%;
+    left: 7.5%;
+    right: 7.5%;
+    height: 78%;
+    margin: 0;
+    padding: 7% 8% 5%;
+    overflow: hidden;
+    border: 1px solid rgba(115, 140, 154, 0.19);
+    border-radius: 2px;
+    background:
+        linear-gradient(90deg, rgba(255,255,255,0.76), transparent 20%, transparent 80%, rgba(212,219,217,0.34)),
+        repeating-linear-gradient(0deg, rgba(111, 134, 142, 0.021) 0 1px, transparent 1px 5px),
+        #fffefa;
+    box-shadow: 0 4px 13px rgba(29, 41, 49, 0.21), inset 0 0 22px rgba(128, 154, 166, 0.07);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(2px, 0.5vw, 6px);
+    transform: translateZ(5px);
+    transform-origin: center bottom;
+    will-change: transform, opacity;
+}
+
+.envelope-card::before,
+.envelope-card::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+}
+
+.envelope-card::before {
+    inset: 8px;
+    border: 1px solid rgba(167, 145, 91, 0.26);
+}
+
+.envelope-card::after {
+    width: 58%;
+    height: 1px;
+    bottom: 15%;
+    background: linear-gradient(90deg, transparent, rgba(167, 145, 91, 0.6), transparent);
+}
+
+.envelope-card-kicker,
+.envelope-card-names {
+    font-family: 'Montserrat', sans-serif;
+    color: #6d8293;
+    font-size: clamp(0.39rem, 1.05vw, 0.56rem);
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    line-height: 1.15;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.envelope-card-text {
+    color: #5c7d9c;
+    font-size: clamp(1.35rem, 4.2vw, 2.25rem);
+    line-height: 0.98;
+    text-shadow: none;
+}
+
+.envelope-card-monogram {
+    width: clamp(31px, 8.5vw, 53px);
+    height: auto;
+    margin: 0;
+    mix-blend-mode: multiply;
+    opacity: 0.77;
+}
+
+.envelope-flap {
+    z-index: 6;
+    width: 100%;
+    height: 57%;
+    overflow: visible;
+    transform: translateZ(12px);
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    filter: drop-shadow(0 3px 2px rgba(31, 46, 56, 0.18));
+}
+
+.envelope-flap::before,
+.envelope-flap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+    border: 0;
+    filter: none;
+}
+
+.envelope-flap::before {
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    background:
+        linear-gradient(90deg, rgba(255,255,255,0.3), transparent 30%, transparent 68%, rgba(71,90,103,0.14)),
+        linear-gradient(152deg, #f7f6f1 0%, #e1e0db 50%, #cececa 100%);
+    box-shadow: inset 0 1px rgba(255,255,255,0.84);
+}
+
+.envelope-flap::after {
+    top: 1px;
+    clip-path: polygon(0 0, 100% 0, 50% 99%);
+    opacity: 0.35;
+    background: linear-gradient(142deg, rgba(255,255,255,0.65), transparent 42%, rgba(64,81,94,0.18));
+}
+
+.envelope-front-v {
+    z-index: 5;
+    overflow: hidden;
+    border-radius: 0 0 4px 4px;
+    background: linear-gradient(155deg, #e7e6e1, #d4d4cf);
+    clip-path: polygon(0 15%, 50% 61%, 100% 15%, 100% 100%, 0 100%);
+    box-shadow: inset 0 -4px 8px rgba(53, 69, 80, 0.12);
+}
+
+.envelope-front-v::before,
+.envelope-front-v::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: auto;
+    height: auto;
+    border: 0;
+}
+
+.envelope-front-v::before {
+    left: -1px;
+    clip-path: polygon(0 14%, 50% 61%, 0 100%);
+    background: linear-gradient(130deg, #f1f0eb 0%, #deddd8 68%, #c7c9c7 100%);
+}
+
+.envelope-front-v::after {
+    right: -1px;
+    clip-path: polygon(100% 14%, 50% 61%, 100% 100%);
+    background: linear-gradient(230deg, #e3e2dd 0%, #d1d2cf 68%, #bdc0c0 100%);
+}
+
+.envelope-border {
+    z-index: 8;
+    border: 1px solid rgba(72, 93, 108, 0.27);
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.37);
+}
+
+.seal {
+    z-index: 9;
+    width: clamp(49px, 12vw, 75px);
+    height: clamp(49px, 12vw, 75px);
+    bottom: 26%;
+    animation: waxSealGlow 3.2s ease-in-out 1.5s infinite;
+    transform: translateX(-50%) translateZ(25px);
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+}
+
+@keyframes waxSealGlow {
+    0%, 100% { filter: drop-shadow(0 5px 5px rgba(47, 32, 7, 0.32)); }
+    50% { filter: drop-shadow(0 6px 9px rgba(212, 175, 55, 0.44)); }
+}
+
+.seal-outer {
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 28% 21%, rgba(255,244,186,0.94) 0 3%, transparent 18%),
+        radial-gradient(ellipse at 73% 75%, rgba(96,51,10,0.34), transparent 44%),
+        radial-gradient(circle at 38% 35%, #e0bd48 0%, #bd8e23 49%, #8a5e12 100%);
+    box-shadow:
+        0 4px 7px rgba(21, 16, 5, 0.45),
+        inset 1px 2px 3px rgba(255,246,190,0.65),
+        inset -3px -4px 6px rgba(79,46,8,0.4);
+}
+
+.seal-outer::before {
+    width: 84%;
+    height: 84%;
+    border: 1px dashed rgba(255,244,191,0.38);
+}
+
+.seal-outer::after {
+    width: 69%;
+    height: 69%;
+    border: 1px solid rgba(90, 54, 10, 0.34);
+}
+
+.seal-monogram {
+    filter: brightness(0) invert(1) drop-shadow(0 1px 1px rgba(58, 36, 6, 0.75));
+}
+
+.click-hint {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: clamp(28px, 5vh, 48px);
+    color: rgba(221, 236, 248, 0.76);
+    font-size: 0.62rem;
+    letter-spacing: 0.28em;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.25);
+    animation: hintFadeIn 0.7s ease 1.1s both, hintBreath 2.8s ease-in-out 1.8s infinite;
+}
+
+.click-hint-icon {
+    color: #d4af37;
+    font-size: 1rem;
+    line-height: 1;
+    transform: rotate(180deg);
+}
+
+@keyframes hintFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 0.76; transform: translateY(0); } }
+@keyframes hintBreath { 50% { opacity: 1; } }
+
+/* Precise opening choreography: wax releases, flap folds back, letter rises. */
+.envelope-wrapper.opening {
+    pointer-events: none;
+    cursor: default;
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+}
+
+.envelope-wrapper.opening .envelope {
+    animation: envelopeSettle 2.2s var(--motion-spring) forwards;
+}
+
+@keyframes envelopeSettle {
+    0%, 20% { transform: translateY(0) rotateZ(0deg); }
+    68% { transform: translateY(4px) rotateZ(0deg); }
+    100% { transform: translateY(0) rotateZ(0deg); }
+}
+
+.envelope-wrapper.opening .seal {
+    animation: waxRelease 0.46s cubic-bezier(0.38, -0.28, 0.68, 0.95) 0.04s forwards;
+}
+
+@keyframes waxRelease {
+    0% { opacity: 1; transform: translateX(-50%) translateZ(25px) scale(1) rotate(0deg); }
+    35% { opacity: 1; transform: translateX(-50%) translateZ(45px) scale(1.13) rotate(-3deg); }
+    100% { opacity: 0; transform: translateX(-50%) translateZ(55px) scale(1.75) rotate(10deg); }
+}
+
+.envelope-wrapper.opening .envelope-flap {
+    animation: foldInvitationFlap 0.94s var(--motion-fold) 0.18s forwards;
+}
+
+@keyframes foldInvitationFlap {
+    0% { z-index: 6; transform: translateZ(12px) rotateX(0deg); }
+    48% { z-index: 6; transform: translateZ(12px) rotateX(-136deg); }
+    49%, 100% { z-index: 2; transform: translateZ(-8px) rotateX(-180deg); }
+}
+
+.envelope-wrapper.opening .envelope-card {
+    animation: drawInvitation 1.2s var(--motion-spring) 0.62s forwards;
+}
+
+@keyframes drawInvitation {
+    0% { opacity: 1; transform: translate3d(0, 0, 5px) rotateX(0deg); }
+    62% { opacity: 1; transform: translate3d(0, calc(var(--env-h) * -0.72), 48px) rotateX(1.2deg); }
+    100% { opacity: 1; transform: translate3d(0, calc(var(--env-h) * -0.68), 38px) rotateX(0deg); }
+}
+
+.envelope-wrapper.opening .envelope-letter-shadow {
+    animation: letterShadowLift 0.95s ease 0.62s forwards;
+}
+
+@keyframes letterShadowLift {
+    to { opacity: 0; transform: translateY(-46px) scale(0.78); }
+}
+
+.envelope-wrapper.opening .envelope-front-v {
+    animation: frontPanelSettle 0.65s ease 0.45s both;
+}
+
+@keyframes frontPanelSettle {
+    50% { transform: translateY(2px); }
+    100% { transform: translateY(0); }
+}
+
+.envelope-wrapper.opening ~ .click-hint {
+    animation: hintExit 0.24s ease forwards;
+}
+
+@keyframes hintExit { to { opacity: 0; transform: translateY(6px); } }
+
+/* The hand-opened invitation already tells the story—avoid a second automatic envelope. */
+.hero-envelope-reveal {
+    display: none !important;
+}
+
+.hero-content.revealed {
+    animation-timing-function: var(--motion-spring);
+}
+
+/* ===== Scroll polish ===== */
+.landing-page section {
+    --scroll-progress: 0;
+    isolation: isolate;
+}
+
+.section-scroll-accent {
+    position: absolute;
+    inset: 12% 0 auto;
+    height: min(42vw, 320px);
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.7;
+}
+
+.section-scroll-accent::before,
+.section-scroll-accent::after {
+    content: '';
+    position: absolute;
+    width: min(32vw, 380px);
+    aspect-ratio: 1;
+    border: 1px solid rgba(107, 154, 196, 0.1);
+    border-radius: 50%;
+    transform: translate3d(0, calc((0.5 - var(--scroll-progress)) * 46px), 0) scale(calc(0.76 + var(--scroll-progress) * 0.24));
+    transition: transform 0.12s linear;
+}
+
+.section-scroll-accent::before { left: -13vw; }
+.section-scroll-accent::after { right: -13vw; top: 19%; }
+
+.scroll-reveal {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0) scale(0.985);
+    transition: opacity 0.72s ease, transform 0.72s var(--motion-spring);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.scroll-reveal.is-revealed {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+}
+
+.scroll-reveal:nth-of-type(even) {
+    transform: translate3d(0, 30px, 0) scale(0.985);
+}
+
+.is-revealed {
+    will-change: auto;
+}
+
+/* A small, elegant emphasis after headings enter the viewport. */
+.section-animate .section-title::after {
+    animation: titleRuleGlow 1.2s ease 0.22s both;
+}
+
+@keyframes titleRuleGlow {
+    from { opacity: 0; transform: translateX(-50%) scaleX(0); }
+    to { opacity: 1; transform: translateX(-50%) scaleX(1); }
+}
+
+/* Modern mobile viewport behavior and lower-cost compositing on small screens. */
+@media (max-width: 768px) {
+    html { scroll-padding-top: 70px; }
+
+    .envelope-page { justify-content: center; padding: 22px 0; }
+    .envelope-stage { width: min(88vw, 400px); perspective: 1100px; }
+    .envelope { --env-w: min(88vw, 400px); }
+    .envelope-title { margin-bottom: clamp(18px, 4vh, 28px); }
+    .envelope-card { padding-top: 6%; }
+    .section-scroll-accent { display: none; }
+
+    .music-player {
+        right: 15px;
+        bottom: max(15px, env(safe-area-inset-bottom));
+    }
+}
+
+@media (max-width: 420px) {
+    .envelope-title { font-size: 1.7rem; }
+    .envelope-card-text { font-size: 1.35rem; }
+    .envelope-card-kicker, .envelope-card-names { font-size: 0.38rem; }
+    .click-hint { margin-top: 29px; }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .envelope-wrapper:hover .envelope { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .envelope-page::after,
+    .particles,
+    .petals-container,
+    .section-scroll-accent { display: none; }
+
+    .envelope-wrapper,
+    .envelope-title,
+    .click-hint,
+    .scroll-reveal,
+    .scroll-reveal.is-revealed {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+
+/* ===== MERGED CANDLE, CORD & VEIL ENTOURAGE ENHANCEMENT ===== */
+
+/* Candle, Cord & Veil — each sponsor pair remains with its ceremony meaning. */
+.secondary-sponsors-group {
+    max-width: 1040px;
+}
+
+.secondary-sponsor-intro {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: -2px auto 24px;
+    color: #7E9BB5;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+}
+
+.secondary-sponsor-intro-line {
+    width: min(12vw, 66px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(107, 154, 196, .55));
+}
+.secondary-sponsor-intro-line:last-child { transform: scaleX(-1); }
+
+.secondary-sponsor-rituals {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    max-width: 1020px;
+    margin: 0 auto;
+}
+
+.ritual-sponsor-card {
+    --ritual-color: #6B9AC4;
+    --ritual-wash: rgba(107, 154, 196, .14);
+    position: relative;
+    display: flex;
+    min-height: 315px;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 25px 23px 21px;
+    border: 1px solid rgba(107, 154, 196, .14);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 98% 0%, var(--ritual-wash), transparent 38%),
+        linear-gradient(145deg, #ffffff, #f7fafc);
+    box-shadow: 0 10px 26px rgba(50, 78, 101, .07);
+    text-align: left;
+    transition: transform .45s cubic-bezier(.22, 1, .36, 1), box-shadow .45s ease, border-color .45s ease;
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+}
+
+.ritual-sponsor-card::before {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    left: 20px;
+    height: 3px;
+    border-radius: 0 0 3px 3px;
+    background: linear-gradient(90deg, transparent, var(--ritual-color), transparent);
+    content: '';
+    opacity: .8;
+}
+
+.ritual-sponsor-card::after {
+    position: absolute;
+    right: -26px;
+    bottom: -34px;
+    width: 116px;
+    height: 116px;
+    border: 1px solid var(--ritual-wash);
+    border-radius: 50%;
+    content: '';
+}
+
+.ritual-candle { --ritual-color: #b88a20; --ritual-wash: rgba(212, 175, 55, .16); }
+.ritual-cord { --ritual-color: #638ab2; --ritual-wash: rgba(107, 154, 196, .16); }
+.ritual-veil { --ritual-color: #879db6; --ritual-wash: rgba(167, 199, 231, .34); }
+
+.ritual-sponsor-card:hover {
+    z-index: 1;
+    border-color: color-mix(in srgb, var(--ritual-color) 38%, white);
+    box-shadow: 0 20px 42px rgba(50, 78, 101, .14);
+    transform: translate3d(0, -7px, 0);
+}
+
+.ritual-card-top {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.ritual-icon-shell {
+    display: grid;
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    place-items: center;
+    border: 1px solid var(--ritual-wash);
+    border-radius: 17px;
+    background: linear-gradient(145deg, #fff, var(--ritual-wash));
+    box-shadow: inset 0 1px rgba(255,255,255,.85), 0 7px 16px rgba(55, 83, 104, .08);
+    color: var(--ritual-color);
+    transition: transform .45s cubic-bezier(.22, 1, .36, 1);
+}
+
+.ritual-icon-shell svg { width: 39px; height: 39px; overflow: visible; }
+.ritual-sponsor-card:hover .ritual-icon-shell { transform: rotate(-5deg) scale(1.07); }
+.ritual-candle:hover .candle-flame { animation: candleFlicker 1s ease-in-out infinite alternate; transform-origin: 24px 15px; }
+.ritual-cord:hover .cord-loop { animation: cordBreathe 1.8s ease-in-out infinite; transform-origin: center; }
+.ritual-veil:hover .veil-wave { animation: veilSway 1.4s ease-in-out infinite alternate; }
+
+.ritual-kicker {
+    margin: 0 0 3px;
+    color: var(--ritual-color);
+    font-family: 'Montserrat', sans-serif;
+    font-size: .51rem;
+    font-weight: 600;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+}
+
+.ritual-card-top h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.ritual-description {
+    margin: 19px 0 17px;
+    color: #6c8397;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.58;
+}
+
+.ritual-sponsors {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+    padding-top: 13px;
+    border-top: 1px solid var(--ritual-wash);
+}
+
+.ritual-sponsors-label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--ritual-color);
+    font-family: 'Montserrat', sans-serif;
+    font-size: .52rem;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+}
+
+.ritual-sponsor-names { display: grid; gap: 4px; }
+.ritual-sponsor-names span {
+    color: #32495c;
+    font-family: 'Playfair Display', serif;
+    font-size: .91rem;
+    line-height: 1.3;
+}
+
+.entourage-section.section-animate .ritual-sponsor-card { opacity: 1; transform: translate3d(0, 0, 0); }
+.entourage-section.section-animate .ritual-sponsor-card:nth-child(1) { transition-delay: .72s; }
+.entourage-section.section-animate .ritual-sponsor-card:nth-child(2) { transition-delay: .86s; }
+.entourage-section.section-animate .ritual-sponsor-card:nth-child(3) { transition-delay: 1s; }
+
+@keyframes candleFlicker { from { transform: rotate(-3deg) scale(.92, 1.06); } to { transform: rotate(3deg) scale(1.07, .94); } }
+@keyframes cordBreathe { 50% { transform: scale(1.04); } }
+@keyframes veilSway { from { transform: translateX(-1px); } to { transform: translateX(2px); } }
+
+@media (max-width: 840px) {
+    .secondary-sponsor-rituals { grid-template-columns: 1fr; max-width: 560px; }
+    .ritual-sponsor-card { min-height: 0; }
+    .ritual-description { margin: 15px 0; }
+    .ritual-sponsor-names { grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+}
+
+@media (max-width: 480px) {
+    .secondary-sponsors-group { margin-bottom: 42px; }
+    .secondary-sponsor-intro { font-size: .9rem; margin-bottom: 17px; }
+    .ritual-sponsor-card { padding: 20px 18px 17px; border-radius: 15px; }
+    .ritual-icon-shell { width: 51px; height: 51px; flex-basis: 51px; border-radius: 14px; }
+    .ritual-icon-shell svg { width: 34px; height: 34px; }
+    .ritual-description { font-size: .94rem; }
+    .ritual-sponsor-names { grid-template-columns: 1fr; gap: 3px; }
+    .ritual-sponsor-names span { font-size: .86rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ritual-sponsor-card { opacity: 1; transform: none; }
+}
+
+
+/* ==================================================================
+   EDITORIAL MOTIF REFRESH — timeless blue, ivory and soft gold
+   Visual treatment and section-specific motion, appended after legacy CSS.
+   ================================================================== */
+:root {
+    --motif-ink: #27465d;
+    --motif-blue: #6b97bd;
+    --motif-sky: #dceaf4;
+    --motif-paper: #fcfbf8;
+    --motif-ivory: #f6f2eb;
+    --motif-gold: #c8a95d;
+    --motif-line: rgba(90, 130, 157, .16);
+    --motif-shadow: 0 20px 44px rgba(42, 69, 89, .11);
+    --motif-ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+.landing-page {
+    background:
+        radial-gradient(circle at 100% 20%, rgba(200, 222, 237, .28), transparent 28rem),
+        linear-gradient(180deg, #f9fcfd, #f4f8fa 48%, #fcfbf8);
+}
+
+/* A shared editorial heading system gives every chapter a coherent motif. */
+.landing-page section { isolation: isolate; }
+.section-title {
+    position: relative;
+    margin-bottom: 8px;
+    color: var(--motif-ink);
+    font-size: clamp(2.05rem, 4vw, 3.15rem);
+    font-weight: 500;
+    letter-spacing: -.035em;
+    line-height: 1.05;
+    text-shadow: 0 1px rgba(255,255,255,.8);
+}
+.section-title::after {
+    display: block;
+    width: 54px;
+    height: 1px;
+    margin: 16px auto 0;
+    background: linear-gradient(90deg, transparent, var(--motif-gold), transparent);
+    content: '';
+    transform-origin: center;
+}
+.section-subtitle {
+    color: #7795aa;
+    font-family: 'Montserrat', sans-serif;
+    font-size: .57rem;
+    font-weight: 700;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+}
+
+/* Navigation gets the same airy paper treatment once the page has been revealed. */
+.nav.scrolled {
+    border-bottom: 1px solid rgba(107, 154, 196, .14);
+    background: rgba(252, 253, 253, .86);
+    box-shadow: 0 8px 25px rgba(36, 64, 83, .07);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+.nav a::after { background: linear-gradient(90deg, transparent, var(--motif-gold), transparent); }
+
+/* ===== Our Story — handwritten chapter cards ===== */
+.story-section {
+    background:
+        radial-gradient(circle at 8% 10%, rgba(205, 224, 237, .35), transparent 24rem),
+        linear-gradient(135deg, #fbfcfd, #f3f8fb 55%, #faf8f4);
+}
+.story-section::after {
+    position: absolute;
+    top: 13%;
+    right: -8%;
+    z-index: -1;
+    width: min(30vw, 370px);
+    aspect-ratio: 1;
+    border: 1px solid rgba(107, 154, 196, .1);
+    border-radius: 50%;
+    box-shadow: 0 0 0 28px rgba(107, 154, 196, .025);
+    content: '';
+}
+.story-event-content {
+    border: 1px solid rgba(107, 154, 196, .1);
+    border-radius: 13px;
+    padding: 21px 23px;
+    background: rgba(255,255,255,.68);
+    box-shadow: 0 10px 25px rgba(44, 72, 92, .055);
+    transition: transform .4s var(--motif-ease), box-shadow .4s ease, border-color .4s ease;
+}
+.story-event:hover .story-event-content {
+    border-color: rgba(200, 169, 93, .32);
+    box-shadow: 0 18px 34px rgba(44, 72, 92, .1);
+    transform: translateY(-4px);
+}
+.story-event-year { color: var(--motif-gold); font-family: 'Montserrat', sans-serif; font-weight: 700; }
+.story-event-title { color: #345970; }
+.story-quote {
+    position: relative;
+    border: 1px solid rgba(200,169,93,.18);
+    border-radius: 14px;
+    padding: 30px 32px;
+    background: linear-gradient(135deg, rgba(255,255,255,.75), rgba(247,243,233,.72));
+    box-shadow: 0 12px 30px rgba(69, 84, 91, .06);
+}
+.story-quote::before { color: rgba(200,169,93,.26); }
+
+/* ===== Countdown — a calm midnight interlude ===== */
+.countdown-section {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 120%, rgba(128, 174, 207, .33), transparent 43%),
+        linear-gradient(135deg, #203b52, #2d526c 56%, #223f56);
+}
+.countdown-section::after {
+    position: absolute;
+    inset: 12px;
+    z-index: -1;
+    border: 1px solid rgba(224, 239, 249, .12);
+    content: '';
+    pointer-events: none;
+}
+.countdown-section .section-title { color: #f7fbfd; text-shadow: none; }
+.countdown-section .section-title::after { background: linear-gradient(90deg, transparent, #e1c476, transparent); }
+.countdown-section .section-subtitle { color: #bcd7ea; }
+.countdown { gap: clamp(19px, 4vw, 48px); }
+.countdown-item {
+    min-width: 100px;
+    border: 1px solid rgba(220, 238, 249, .15);
+    border-radius: 13px;
+    padding: 18px 14px 14px;
+    background: rgba(255,255,255,.055);
+    box-shadow: inset 0 1px rgba(255,255,255,.09);
+}
+.countdown-number { color: #e7f3fb; font-variant-numeric: tabular-nums; }
+.countdown-label { color: #b9d1e3; }
+
+/* ===== Wedding day — structured timeline ===== */
+.details-section { background: linear-gradient(180deg, #fbfcfc, #f2f7fa); }
+.timeline::before { background: linear-gradient(180deg, transparent, rgba(107,154,196,.7), rgba(200,169,93,.65), transparent); }
+.timeline-item .timeline-content {
+    border: 1px solid rgba(107,154,196,.13);
+    border-radius: 14px;
+    padding: 23px 24px;
+    background: rgba(255,255,255,.82);
+    box-shadow: 0 11px 26px rgba(40,72,95,.065);
+    transition: transform .35s var(--motif-ease), box-shadow .35s ease;
+}
+.timeline-item:hover .timeline-content { box-shadow: 0 19px 38px rgba(40,72,95,.12); transform: translateY(-5px); }
+.timeline-item h3, .timeline-item .time { color: #3d6784; }
+.venue-card { overflow: hidden; border-color: rgba(107,154,196,.16); border-radius: 12px; box-shadow: 0 9px 20px rgba(42,72,93,.08); }
+
+/* ===== Dress code — a fabric / palette gallery ===== */
+.dresscode-section {
+    background:
+        radial-gradient(circle at 7% 90%, rgba(245, 207, 190, .18), transparent 25rem),
+        linear-gradient(145deg, #fcfbf9, #f7fafb 52%, #f6f1eb);
+}
+.role-card, .dresscode-card-single {
+    border-color: rgba(107,154,196,.14);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(49,75,92,.075);
+}
+.role-card:hover { box-shadow: 0 20px 38px rgba(49,75,92,.14); }
+.role-info { background: rgba(255,255,255,.94); }
+.dresscode-palette-item { border-radius: 12px; box-shadow: 0 6px 15px rgba(49,75,92,.06); }
+.dresscode-note { color: #7995a9; }
+
+/* ===== Entourage — an ivory stationery page ===== */
+.entourage-section {
+    background:
+        radial-gradient(circle at 88% 8%, rgba(214, 229, 239, .38), transparent 26rem),
+        linear-gradient(135deg, #fffefa, #f9f5ed 60%, #fcfdfd);
+}
+.entourage-group {
+    position: relative;
+    border-radius: 14px;
+    padding: 18px 17px;
+    transition: transform .35s var(--motif-ease), background .35s ease, box-shadow .35s ease;
+}
+.entourage-group:hover { background: rgba(255,255,255,.68); box-shadow: 0 14px 28px rgba(69,86,95,.06); transform: translateY(-3px); }
+.entourage-group-title { color: #527b99; }
+.entourage-group-line { background: linear-gradient(90deg, transparent, var(--motif-gold), transparent); }
+.entourage-name-item { transition: color .25s ease, transform .25s ease; }
+.entourage-name-item:hover { transform: translateY(-2px); }
+.entourage-person { color: #35556b; }
+.entourage-role { color: #8da4b4; }
+
+/* ===== Prenup — cinematic strip ===== */
+.prenup-section {
+    background:
+        radial-gradient(circle at 50% -8%, rgba(255,255,255,.9), transparent 29rem),
+        linear-gradient(180deg, #e9f1f6, #dce8f0 58%, #edf3f6);
+}
+.prenup-intro { color: #68859b; }
+.prenup-gallery-wrapper::before, .prenup-gallery-wrapper::after { pointer-events: none; }
+.prenup-item { border: 4px solid rgba(255,255,255,.78); border-radius: 15px; box-shadow: 0 14px 32px rgba(38,69,91,.14); }
+.prenup-item:hover { box-shadow: 0 24px 46px rgba(38,69,91,.23); }
+
+/* ===== Snap & Share — night-sky celebration ===== */
+.snapshare-section {
+    background:
+        radial-gradient(circle at 50% 105%, rgba(131,181,215,.35), transparent 44%),
+        linear-gradient(135deg, #1f3a50, #315a77 57%, #223f55);
+}
+.snapshare-section::after {
+    position: absolute;
+    inset: 16px;
+    z-index: -1;
+    border: 1px solid rgba(218,235,246,.11);
+    content: '';
+    pointer-events: none;
+}
+.snapshare-section .section-title::after { background: linear-gradient(90deg, transparent, #e2c276, transparent); }
+.snapshare-content { border: 1px solid rgba(219,238,249,.14); border-radius: 20px; padding: clamp(25px, 5vw, 48px); background: rgba(255,255,255,.045); box-shadow: inset 0 1px rgba(255,255,255,.09), 0 18px 38px rgba(7,27,40,.18); }
+.hashtag-display { border-color: rgba(225, 242, 251, .56); background: rgba(255,255,255,.04); }
+.hashtag-display:hover { background: rgba(255,255,255,.11); }
+.livewall-preview-btn { box-shadow: 0 10px 22px rgba(2,18,30,.25); }
+
+/* ===== Gift — refined paper cards ===== */
+.gift-section { background: linear-gradient(145deg, #fcfbf8, #f1f6f8 60%, #f8f3ec); }
+.gift-card {
+    border-color: rgba(107,154,196,.14);
+    border-radius: 17px;
+    box-shadow: 0 12px 28px rgba(48,74,91,.08);
+}
+.gift-card::before { background: linear-gradient(90deg, transparent, var(--motif-gold), transparent); }
+.gift-card:hover { box-shadow: 0 22px 42px rgba(48,74,91,.14); }
+.gift-thankyou { border-color: rgba(200,169,93,.2); border-radius: 15px; background: rgba(255,255,255,.55); }
+
+/* ===== FAQ — calm, readable accordions ===== */
+.faq-section { background: linear-gradient(180deg, #eef5f8, #f9faf9); }
+.faq-category { border-radius: 14px; padding: 5px 14px 14px; background: rgba(255,255,255,.45); }
+.faq-category-title { color: #456d89; border-bottom-color: rgba(107,154,196,.14); }
+.faq-item { border-color: rgba(107,154,196,.13); border-radius: 10px; background: rgba(255,255,255,.78); }
+.faq-item:hover { box-shadow: 0 7px 17px rgba(45,77,100,.06); }
+.faq-item.active { border-color: rgba(200,169,93,.32); }
+
+/* ===== RSVP — the final stationery card ===== */
+.rsvp-section {
+    background:
+        radial-gradient(circle at 50% 0, rgba(215,230,240,.45), transparent 27rem),
+        linear-gradient(180deg, #fbfcfc, #f3f7f9);
+}
+.rsvp-card, .rsvp-already-used-card {
+    border-color: rgba(107,154,196,.17);
+    border-radius: 18px;
+    box-shadow: 0 24px 55px rgba(46,76,96,.12);
+    background: linear-gradient(145deg, #fff, #fafcfb);
+}
+.rsvp-card::before { border-color: rgba(200,169,93,.2); border-radius: 11px; }
+.submit-btn, .rsvp-submit-btn { box-shadow: 0 9px 19px rgba(86,133,174,.27); }
+
+footer {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #203b52, #2d516c);
+}
+footer::before { position: absolute; inset: 12px; border: 1px solid rgba(218,237,248,.1); content: ''; pointer-events: none; }
+.footer-names, .footer-date, .footer-hashtag { position: relative; }
+
+/* ===== Section-specific reveal language =====
+   The shared observer in main.js adds .section-animate as each chapter enters.
+   Each chapter uses a different restrained movement: chapters drift, schedules
+   settle, palettes bloom, and the RSVP card is lifted like stationery. */
+.story-section.section-animate .story-event:nth-child(odd) .story-event-content { animation: chapterFromLeft .78s var(--motif-ease) both; }
+.story-section.section-animate .story-event:nth-child(even) .story-event-content { animation: chapterFromRight .78s var(--motif-ease) both; }
+.story-section.section-animate .story-quote { animation: quoteUnfold .9s var(--motif-ease) both; }
+.details-section.section-animate .timeline-item .timeline-content { animation: scheduleSettle .72s var(--motif-ease) both; }
+.details-section.section-animate .timeline-item:nth-child(2) .timeline-content { animation-delay: .12s; }
+.details-section.section-animate .timeline-item:nth-child(3) .timeline-content { animation-delay: .24s; }
+.details-section.section-animate .timeline-item:nth-child(4) .timeline-content { animation-delay: .36s; }
+.dresscode-section.section-animate .role-card { animation: paletteBloom .66s var(--motif-ease) both; }
+.dresscode-section.section-animate .role-card:nth-child(2) { animation-delay: .1s; }
+.dresscode-section.section-animate .role-card:nth-child(3) { animation-delay: .2s; }
+.dresscode-section.section-animate .role-card:nth-child(4) { animation-delay: .3s; }
+.dresscode-section.section-animate .role-card:nth-child(5) { animation-delay: .4s; }
+.entourage-section.section-animate .entourage-group { animation: nameCardRise .7s var(--motif-ease) both; }
+.prenup-section.section-animate .prenup-intro { animation: softFocus .85s var(--motif-ease) both; }
+.snapshare-section.section-animate .snapshare-content { animation: glowLift .9s var(--motif-ease) both; }
+.countdown-section.section-animate .countdown-item { animation: numberDrop .62s var(--motif-ease) both; }
+.countdown-section.section-animate .countdown-item:nth-child(2) { animation-delay: .1s; }
+.countdown-section.section-animate .countdown-item:nth-child(3) { animation-delay: .2s; }
+.countdown-section.section-animate .countdown-item:nth-child(4) { animation-delay: .3s; }
+.gift-section.section-animate .gift-card { animation: giftUnwrap .72s var(--motif-ease) both; }
+.gift-section.section-animate .gift-card:nth-child(2) { animation-delay: .12s; }
+.gift-section.section-animate .gift-card:nth-child(3) { animation-delay: .24s; }
+.faq-section.section-animate .faq-category { animation: faqSlide .65s var(--motif-ease) both; }
+.faq-section.section-animate .faq-category:nth-of-type(2) { animation-delay: .1s; }
+.faq-section.section-animate .faq-category:nth-of-type(3) { animation-delay: .2s; }
+.rsvp-section.section-animate .rsvp-card, .rsvp-section.section-animate .rsvp-already-used-card { animation: invitationLift .9s var(--motif-ease) both; }
+
+@keyframes chapterFromLeft { from { opacity: 0; transform: translate3d(-20px, 8px, 0) rotate(-.35deg); } to { opacity: 1; transform: none; } }
+@keyframes chapterFromRight { from { opacity: 0; transform: translate3d(20px, 8px, 0) rotate(.35deg); } to { opacity: 1; transform: none; } }
+@keyframes quoteUnfold { from { opacity: 0; transform: scale(.96) translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes scheduleSettle { from { opacity: 0; transform: translateY(15px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes paletteBloom { from { opacity: 0; transform: translateY(14px) scale(.94); filter: saturate(.55); } to { opacity: 1; transform: none; filter: saturate(1); } }
+@keyframes nameCardRise { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: none; } }
+@keyframes softFocus { from { opacity: 0; transform: translateY(12px); letter-spacing: .06em; } to { opacity: 1; transform: none; letter-spacing: normal; } }
+@keyframes glowLift { from { opacity: 0; transform: translateY(18px) scale(.98); box-shadow: none; } to { opacity: 1; transform: none; } }
+@keyframes numberDrop { from { opacity: 0; transform: translateY(17px) scale(.9); } 70% { transform: translateY(-3px) scale(1.02); } to { opacity: 1; transform: none; } }
+@keyframes giftUnwrap { from { opacity: 0; transform: translateY(18px) rotateX(6deg); } to { opacity: 1; transform: none; } }
+@keyframes faqSlide { from { opacity: 0; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+@keyframes invitationLift { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 768px) {
+    .section-title { font-size: 2rem; }
+    .story-event-content, .timeline-item .timeline-content { padding: 18px 17px; }
+    .countdown-item { min-width: 70px; padding: 14px 8px 11px; }
+    .snapshare-content { padding: 25px 17px; }
+    .entourage-group { padding: 13px 8px; }
+    .faq-category { padding-right: 8px; padding-left: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .story-section.section-animate .story-event .story-event-content,
+    .story-section.section-animate .story-quote,
+    .details-section.section-animate .timeline-item .timeline-content,
+    .dresscode-section.section-animate .role-card,
+    .entourage-section.section-animate .entourage-group,
+    .prenup-section.section-animate .prenup-intro,
+    .snapshare-section.section-animate .snapshare-content,
+    .countdown-section.section-animate .countdown-item,
+    .gift-section.section-animate .gift-card,
+    .faq-section.section-animate .faq-category,
+    .rsvp-section.section-animate .rsvp-card,
+    .rsvp-section.section-animate .rsvp-already-used-card { animation: none !important; }
+}
+
+/* Motif refresh correction: keep the decorative title rule centered during its reveal. */
+.section-animate .section-title::after { animation: motifHeadingRule .8s var(--motif-ease) .18s both; }
+@keyframes motifHeadingRule {
+    from { opacity: 0; transform: scaleX(0); }
+    to { opacity: 1; transform: scaleX(1); }
+}
+
+/* ==================================================================
+   LAYOUT REPAIRS — Wedding Day, seamless prenup loop, and gift polish
+   ================================================================== */
+/* Timeline spacers were removed from the markup. A real three-column grid
+   retains the alternating desktop composition without rendering empty cards. */
+.details-section .timeline-item {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 54px minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0;
+}
+.details-section .timeline-item .timeline-content:first-child {
+    min-width: 0;
+    grid-row: 1;
+    padding: 23px 24px;
+}
+.details-section .timeline-item:nth-child(odd) .timeline-content:first-child {
+    grid-column: 1;
+    text-align: right;
+}
+.details-section .timeline-item:nth-child(even) .timeline-content:first-child {
+    grid-column: 3;
+    text-align: left;
+}
+.details-section .timeline-item .timeline-icon {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: center;
+}
+.details-section .timeline-item .timeline-content:empty { display: none !important; }
+
+/* The church photo stays fully visible on small screens instead of using a
+   taller crop with object-fit: cover. */
+@media (max-width: 768px) {
+    .details-section .timeline { margin-left: 0; }
+    .details-section .timeline::before { left: 20px; transform: none; }
+    .details-section .timeline-item,
+    .details-section .timeline-item:nth-child(odd),
+    .details-section .timeline-item:nth-child(even) {
+        grid-template-columns: 40px minmax(0, 1fr) !important;
+        align-items: start;
+        margin-bottom: 38px;
+    }
+    .details-section .timeline-item .timeline-icon { grid-column: 1; grid-row: 1; }
+    .details-section .timeline-item:nth-child(odd) .timeline-content:first-child,
+    .details-section .timeline-item:nth-child(even) .timeline-content:first-child {
+        grid-column: 2;
+        grid-row: 1;
+        padding: 18px 17px;
+        text-align: left;
+    }
+    .details-section .venue-image {
+        aspect-ratio: 16 / 9;
+        background: #edf4f8;
+    }
+    .details-section .venue-image img {
+        object-fit: contain;
+        object-position: center;
+    }
+    .details-section .venue-image-fallback { min-height: 185px; }
+}
+@media (max-width: 480px) {
+    .details-section .timeline::before { left: 17px; }
+    .details-section .timeline-item,
+    .details-section .timeline-item:nth-child(odd),
+    .details-section .timeline-item:nth-child(even) { grid-template-columns: 34px minmax(0, 1fr) !important; }
+    .details-section .timeline-item .timeline-content:first-child { padding: 16px 14px; }
+    .details-section .venue-info { padding: 15px 15px 18px; }
+    .details-section .venue-actions { gap: 13px; }
+}
+
+/* Two identical loop sets make the -50% animation land on an exact matching
+   frame. There is no unequal final set, padding mismatch, or visible reset. */
+.prenup-gallery {
+    --prenup-gap: 25px;
+    display: flex;
+    width: max-content;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    animation-name: prenupSeamlessScroll;
+}
+.prenup-loop-set {
+    display: flex;
+    flex: 0 0 auto;
+    gap: var(--prenup-gap);
+    padding: 0 12px;
+}
+@keyframes prenupSeamlessScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+@media (max-width: 768px) {
+    .prenup-gallery { --prenup-gap: 18px; }
+}
+@media (max-width: 480px) {
+    .prenup-gallery { --prenup-gap: 15px; }
+}
+
+/* No artificial inner shadow behind the wishing-well illustration. */
+.wishing-well-icon-wrap {
+    box-shadow: none;
+    border: 1px solid rgba(107, 154, 196, .12);
+    background: transparent;
+}
