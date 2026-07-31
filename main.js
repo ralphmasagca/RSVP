@@ -43,7 +43,22 @@ function createParticles() {
 
 function toggleMobileNav() { const h = document.getElementById('hamburger'), mn = document.getElementById('mobileNav'), o = document.getElementById('mobileNavOverlay'); if (mn.classList.contains('active')) { closeMobileNav(); } else { h.classList.add('active'); mn.classList.add('active'); o.classList.add('active'); document.body.classList.add('nav-open'); } }
 function closeMobileNav() { document.getElementById('hamburger').classList.remove('active'); document.getElementById('mobileNav').classList.remove('active'); document.getElementById('mobileNavOverlay').classList.remove('active'); document.body.classList.remove('nav-open'); }
-document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMobileNav(); });
+document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    closeMobileNav();
+    closeGiftQR();
+});
+
+// A keyboard can cover lower RSVP fields on short mobile viewports. Center the
+// field after the browser has resized its visual viewport, without affecting
+// desktop layout or normal scrolling.
+document.addEventListener('focusin', function(event) {
+    if (!window.matchMedia('(max-width: 768px)').matches) return;
+    if (!event.target.matches('#rsvpForm input, #rsvpForm textarea, #guestEntriesContainer input')) return;
+    window.setTimeout(function() {
+        event.target.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+    }, 220);
+});
 
 let petalTimer = null;
 function createPetals() {
@@ -905,6 +920,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('envelope-active');
     createParticles();
     setupPrenupLoop();
+    initGiftQRZoom();
 
     const wrapper = document.getElementById('envelopeWrapper');
     if (wrapper) {
@@ -975,6 +991,48 @@ function fallbackCopy(text) {
         console.error('Copy failed:', err);
     }
     document.body.removeChild(ta);
+}
+
+// ===== GIFT QR LIGHTBOX =====
+function openGiftQR(container) {
+    var image = container && container.querySelector('img.gift-qr-image');
+    if (!image || !image.getAttribute('src') || image.style.display === 'none') return;
+    var modal = document.getElementById('giftQrLightbox');
+    var largeImage = document.getElementById('giftQrLargeImage');
+    var description = document.getElementById('giftQrDescription');
+    if (!modal || !largeImage) return;
+
+    largeImage.src = image.currentSrc || image.src;
+    largeImage.alt = image.alt || 'Enlarged gift QR code';
+    if (description) description.textContent = image.alt ? image.alt.replace(' QR Code', '') + ' — scan with your payment app.' : 'Use your preferred payment app to scan this QR code.';
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeGiftQR() {
+    var modal = document.getElementById('giftQrLightbox');
+    if (!modal) return;
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = 'auto';
+}
+
+function initGiftQRZoom() {
+    document.querySelectorAll('.gift-qr-container').forEach(function(container) {
+        container.setAttribute('role', 'button');
+        container.setAttribute('tabindex', '0');
+        container.setAttribute('aria-label', 'Enlarge QR code');
+        container.addEventListener('click', function() { openGiftQR(container); });
+        container.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openGiftQR(container);
+            }
+        });
+    });
+    var modal = document.getElementById('giftQrLightbox');
+    if (modal) modal.addEventListener('click', function(event) { if (event.target === modal) closeGiftQR(); });
 }
 
 function showCopiedMessage() {

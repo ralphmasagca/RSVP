@@ -309,6 +309,317 @@
             *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
             .memory-stack:hover .memory-card, .button:hover, .photo-card:hover img { transform: none; }
         }
+
+
+        /* ===== MOBILE KEYBOARD / FORM VISIBILITY ===== */
+        @media (max-width: 600px) {
+            .modal.is-open {
+                top: var(--upload-viewport-top, 0px);
+                bottom: auto;
+                height: var(--upload-viewport-height, 100dvh);
+                min-height: 0;
+                align-items: flex-start;
+                overflow-y: auto;
+                overscroll-behavior: contain;
+                padding: max(12px, env(safe-area-inset-top)) 12px max(18px, env(safe-area-inset-bottom));
+            }
+            .upload-panel {
+                width: 100%;
+                max-height: calc(var(--upload-viewport-height, 100dvh) - 24px);
+                margin: auto 0;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .field input,
+            .field textarea {
+                font-size: 16px;
+                line-height: 1.35;
+                color: #274b65;
+                -webkit-text-fill-color: #274b65;
+                caret-color: #4d82ab;
+            }
+            .field textarea { min-height: 100px; }
+            .field input::placeholder,
+            .field textarea::placeholder { color: #90a7b8; -webkit-text-fill-color: #90a7b8; opacity: 1; }
+        }
+
+
+        /* ===== FULL-SCREEN PHOTO SHOWCASE ===== */
+        .topbar__actions { display: inline-flex; align-items: center; gap: 9px; }
+        .showcase-button {
+            display: inline-flex;
+            min-height: 38px;
+            align-items: center;
+            gap: 7px;
+            border: 1px solid rgba(107,154,196,.24);
+            border-radius: 999px;
+            padding: 0 13px;
+            background: rgba(255,255,255,.72);
+            color: #6287a7;
+            cursor: pointer;
+            font-family: Montserrat, sans-serif;
+            font-size: .53rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            transition: transform .2s ease, background .2s ease;
+        }
+        .showcase-button:hover { background: #fff; transform: translateY(-2px); }
+        .showcase {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+            align-items: center;
+            justify-content: center;
+            background: #07131c;
+            color: #fff;
+            isolation: isolate;
+        }
+        .showcase.is-open { display: flex; animation: modalIn .25s ease; }
+        .showcase__backdrop {
+            position: absolute;
+            inset: -40px;
+            z-index: -2;
+            background-position: center;
+            background-size: cover;
+            filter: blur(28px) brightness(.32) saturate(.8);
+            transform: scale(1.13);
+            transition: background-image .45s ease;
+        }
+        .showcase::after { position: absolute; inset: 0; z-index: -1; background: radial-gradient(circle at center, transparent 12%, rgba(2,12,18,.58) 100%); content: ''; }
+        .showcase__topline {
+            position: absolute;
+            top: max(21px, env(safe-area-inset-top));
+            right: 25px;
+            left: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(232,244,251,.76);
+            font-family: Montserrat, sans-serif;
+            font-size: .58rem;
+            font-weight: 600;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+        .showcase__live { display: inline-flex; align-items: center; gap: 8px; }
+        .showcase__live i { width: 8px; height: 8px; border-radius: 50%; background: #9ddfb3; box-shadow: 0 0 0 0 rgba(157,223,179,.45); animation: showcasePulse 2s infinite; }
+        .showcase__close {
+            position: absolute;
+            top: max(55px, calc(env(safe-area-inset-top) + 38px));
+            right: 24px;
+            z-index: 2;
+            display: grid;
+            width: 40px;
+            height: 40px;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,.28);
+            border-radius: 50%;
+            background: rgba(255,255,255,.1);
+            color: #fff;
+            cursor: pointer;
+            font-size: 1.35rem;
+            line-height: 1;
+        }
+        .showcase__stage { display: grid; width: min(1200px, 100%); grid-template-columns: 74px minmax(0, 1fr) 74px; align-items: center; gap: 16px; padding: 78px 28px 74px; }
+        .showcase__frame { position: relative; display: grid; max-height: calc(100vh - 152px); margin: 0; place-items: center; }
+        .showcase__image { display: block; max-width: 100%; max-height: calc(100vh - 168px); border: 1px solid rgba(255,255,255,.22); border-radius: 7px; box-shadow: 0 26px 70px rgba(0,0,0,.48); object-fit: contain; }
+        .showcase__image.is-changing { animation: showcaseImageIn .5s var(--ease, cubic-bezier(.22,1,.36,1)) both; }
+        .showcase__caption { position: absolute; right: 24px; bottom: 17px; left: 24px; padding: 28px 18px 0; background: linear-gradient(180deg, transparent, rgba(4,15,23,.78)); text-align: center; text-shadow: 0 2px 8px rgba(0,0,0,.36); }
+        .showcase__caption p { max-width: 720px; margin: 0 auto 5px; font-family: 'Playfair Display', serif; font-size: clamp(1rem, 2vw, 1.42rem); font-style: italic; }
+        .showcase__caption span { color: rgba(224,241,250,.75); font-family: Montserrat, sans-serif; font-size: .53rem; font-weight: 600; letter-spacing: .13em; text-transform: uppercase; }
+        .showcase__nav { display: grid; width: 50px; height: 50px; place-items: center; border: 1px solid rgba(255,255,255,.28); border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; cursor: pointer; font-size: 2.2rem; line-height: 1; transition: transform .2s ease, background .2s ease; }
+        .showcase__nav:hover { background: rgba(255,255,255,.2); transform: scale(1.08); }
+        .showcase__progress { position: absolute; right: 25%; bottom: 27px; left: 25%; height: 2px; overflow: hidden; border-radius: 999px; background: rgba(235,246,252,.22); }
+        .showcase__progress span { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, #9fc5df, #e3c87e); transform: translateX(-100%); }
+        .showcase__hint { position: absolute; bottom: 42px; margin: 0; color: rgba(225,241,251,.54); font-family: Montserrat, sans-serif; font-size: .48rem; letter-spacing: .1em; text-transform: uppercase; }
+        @keyframes showcaseProgress { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes showcaseImageIn { from { opacity: 0; transform: scale(.975); } to { opacity: 1; transform: none; } }
+        @keyframes showcasePulse { 70% { box-shadow: 0 0 0 8px rgba(157,223,179,0); } 100% { box-shadow: 0 0 0 0 rgba(157,223,179,0); } }
+        @media (max-width: 700px) {
+            .topbar__actions { gap: 6px; }
+            .showcase-button { min-height: 36px; padding: 0 10px; font-size: .48rem; }
+            .showcase__stage { grid-template-columns: 42px minmax(0, 1fr) 42px; gap: 7px; padding: 96px 12px 86px; }
+            .showcase__nav { width: 37px; height: 37px; font-size: 1.75rem; }
+            .showcase__image { max-height: calc(100vh - 205px); }
+            .showcase__caption { right: 4px; bottom: 10px; left: 4px; padding-top: 35px; }
+            .showcase__caption p { font-size: 1rem; }
+            .showcase__close { top: max(54px, calc(env(safe-area-inset-top) + 36px)); right: 16px; width: 36px; height: 36px; }
+            .showcase__topline { right: 16px; left: 16px; font-size: .48rem; }
+            .showcase__progress { right: 19%; bottom: 22px; left: 19%; }
+            .showcase__hint { bottom: 35px; font-size: .42rem; }
+        }
+        @media (max-width: 440px) { .showcase-button { font-size: 0; width: 36px; justify-content: center; padding: 0; } .showcase-button svg { width: 16px; height: 16px; } }
+
+
+        /* ===== EDITORIAL CARD CAROUSEL SHOWCASE ===== */
+        .showcase {
+            background: linear-gradient(145deg, #eaf0f3, #f8fafb 58%, #e5edf2);
+            color: #27465d;
+        }
+        .showcase__backdrop {
+            z-index: -2;
+            opacity: .12;
+            filter: blur(36px) brightness(1.12) saturate(.7);
+        }
+        .showcase::after { z-index: -1; background: radial-gradient(circle at center, rgba(255,255,255,.65), rgba(240,246,249,.62) 65%, rgba(218,230,238,.78)); }
+        .showcase__topline { color: #66879e; }
+        .showcase__live { color: #507995; }
+        .showcase__live i { background: #77ba90; }
+        .showcase__close {
+            border-color: rgba(91, 130, 158, .2);
+            background: rgba(255,255,255,.8);
+            box-shadow: 0 7px 18px rgba(46,75,96,.1);
+            color: #527896;
+        }
+        .showcase__stage {
+            grid-template-columns: 68px minmax(0, 1fr) 68px;
+            width: min(1320px, 100%);
+            min-height: 100dvh;
+            padding: 80px 20px 76px;
+        }
+        .showcase__rail {
+            position: relative;
+            height: min(76vh, 690px);
+            min-height: 430px;
+            overflow: visible;
+        }
+        .showcase-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: clamp(265px, 36vw, 455px);
+            height: min(74vh, 650px);
+            overflow: hidden;
+            border: 8px solid rgba(255,255,255,.78);
+            border-radius: 25px;
+            background: #d8e5ec;
+            box-shadow: 0 23px 42px rgba(44,73,94,.2);
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(.72);
+            transition: left .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1), opacity .45s ease, filter .45s ease;
+        }
+        .showcase-card img { display: block; width: 100%; height: 100%; object-fit: cover; }
+        .showcase-card__info {
+            position: absolute;
+            right: 13px;
+            bottom: 13px;
+            left: 13px;
+            padding: 15px 17px 13px;
+            border: 1px solid rgba(255,255,255,.58);
+            border-radius: 17px;
+            background: rgba(251,253,254,.87);
+            box-shadow: 0 8px 19px rgba(35,58,75,.11);
+            color: #29455a;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .showcase-card__info p { display: -webkit-box; margin: 0 0 7px; overflow: hidden; font-family: 'Cormorant Garamond', serif; font-size: clamp(.95rem, 1.7vw, 1.18rem); font-style: italic; line-height: 1.25; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+        .showcase-card__info span { color: #718ea3; font-family: Montserrat, sans-serif; font-size: .49rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+        .showcase-card[data-offset="0"] { left: 50%; z-index: 5; opacity: 1; filter: none; transform: translate(-50%, -50%) scale(1); }
+        .showcase-card[data-offset="-1"] { left: 18%; z-index: 4; opacity: .76; filter: saturate(.74) brightness(.92); transform: translate(-50%, -48%) scale(.83) rotate(-4deg); }
+        .showcase-card[data-offset="1"] { left: 82%; z-index: 4; opacity: .76; filter: saturate(.74) brightness(.92); transform: translate(-50%, -48%) scale(.83) rotate(4deg); }
+        .showcase-card[data-offset="-2"] { left: -3%; z-index: 3; opacity: .32; filter: saturate(.45) brightness(.88); transform: translate(-50%, -46%) scale(.69) rotate(-7deg); }
+        .showcase-card[data-offset="2"] { left: 103%; z-index: 3; opacity: .32; filter: saturate(.45) brightness(.88); transform: translate(-50%, -46%) scale(.69) rotate(7deg); }
+        .showcase-card:not([data-offset="0"]) .showcase-card__info { opacity: .7; }
+        .showcase__nav { z-index: 8; border-color: rgba(86,124,150,.25); background: rgba(255,255,255,.82); box-shadow: 0 9px 20px rgba(46,75,96,.12); color: #547a98; }
+        .showcase__nav:hover { background: #fff; }
+        .showcase__progress { background: rgba(80,121,149,.2); }
+        .showcase__hint { color: #7896aa; }
+        @media (max-width: 760px) {
+            .showcase__stage { grid-template-columns: 38px minmax(0, 1fr) 38px; gap: 4px; padding: 82px 8px 72px; }
+            .showcase__rail { height: min(70vh, 590px); min-height: 370px; }
+            .showcase-card { width: clamp(235px, 66vw, 340px); height: min(67vh, 530px); border-width: 6px; border-radius: 20px; }
+            .showcase-card[data-offset="-1"] { left: 8%; opacity: .45; transform: translate(-50%, -48%) scale(.75) rotate(-4deg); }
+            .showcase-card[data-offset="1"] { left: 92%; opacity: .45; transform: translate(-50%, -48%) scale(.75) rotate(4deg); }
+            .showcase-card[data-offset="-2"], .showcase-card[data-offset="2"] { opacity: 0; }
+            .showcase-card__info { right: 8px; bottom: 8px; left: 8px; padding: 12px 13px 10px; border-radius: 14px; }
+            .showcase-card__info p { font-size: .95rem; }
+            .showcase__nav { width: 34px; height: 34px; font-size: 1.5rem; }
+        }
+
+
+        /* Smooth card movement between showcase photos. */
+        .showcase-card {
+            --showcase-left: 50%;
+            --showcase-y: -50%;
+            --showcase-scale: .72;
+            --showcase-rotate: 0deg;
+            --showcase-opacity: 0;
+            left: var(--showcase-left);
+            opacity: var(--showcase-opacity);
+            transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate));
+        }
+        .showcase-card[data-offset="0"] { --showcase-left: 50%; --showcase-y: -50%; --showcase-scale: 1; --showcase-rotate: 0deg; --showcase-opacity: 1; transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+        .showcase-card[data-offset="-1"] { --showcase-left: 18%; --showcase-y: -48%; --showcase-scale: .83; --showcase-rotate: -4deg; --showcase-opacity: .76; transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+        .showcase-card[data-offset="1"] { --showcase-left: 82%; --showcase-y: -48%; --showcase-scale: .83; --showcase-rotate: 4deg; --showcase-opacity: .76; transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+        .showcase-card[data-offset="-2"] { --showcase-left: -3%; --showcase-y: -46%; --showcase-scale: .69; --showcase-rotate: -7deg; --showcase-opacity: .32; transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+        .showcase-card[data-offset="2"] { --showcase-left: 103%; --showcase-y: -46%; --showcase-scale: .69; --showcase-rotate: 7deg; --showcase-opacity: .32; transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+        .showcase-rail.is-transitioning[data-direction="1"] .showcase-card { animation: showcaseSlideFromRight .64s cubic-bezier(.22,1,.36,1) both; }
+        .showcase-rail.is-transitioning[data-direction="-1"] .showcase-card { animation: showcaseSlideFromLeft .64s cubic-bezier(.22,1,.36,1) both; }
+        .showcase-rail.is-transitioning[data-direction="0"] .showcase-card { animation: showcaseSoftRefresh .38s ease both; }
+        @keyframes showcaseSlideFromRight {
+            from { opacity: 0; transform: translate(calc(-50% + 84px), var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+            to { opacity: var(--showcase-opacity); transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+        }
+        @keyframes showcaseSlideFromLeft {
+            from { opacity: 0; transform: translate(calc(-50% - 84px), var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+            to { opacity: var(--showcase-opacity); transform: translate(-50%, var(--showcase-y)) scale(var(--showcase-scale)) rotate(var(--showcase-rotate)); }
+        }
+        @keyframes showcaseSoftRefresh { from { opacity: 0; } to { opacity: var(--showcase-opacity); } }
+        @media (max-width: 760px) {
+            .showcase-card[data-offset="-1"] { --showcase-left: 8%; --showcase-y: -48%; --showcase-scale: .75; --showcase-rotate: -4deg; --showcase-opacity: .45; }
+            .showcase-card[data-offset="1"] { --showcase-left: 92%; --showcase-y: -48%; --showcase-scale: .75; --showcase-rotate: 4deg; --showcase-opacity: .45; }
+            .showcase-card[data-offset="-2"], .showcase-card[data-offset="2"] { --showcase-opacity: 0; }
+        }
+
+        /* Directions text and pin stay on one centered, non-overlapping line. */
+        .venue-map-btn {
+            min-width: 178px;
+            min-height: 44px;
+            justify-content: center;
+            line-height: 1;
+            white-space: nowrap;
+        }
+        .venue-map-btn svg,
+        .venue-map-btn span { position: relative; z-index: 2; flex: 0 0 auto; }
+        .venue-map-btn::before { display: none; }
+        @media (max-width: 480px) { .venue-map-btn { min-width: 0; } }
+
+
+        /* The complete card rail moves as one unit as well as the cards easing
+           into their new positions. This makes a directional switch visible
+           even on browsers that optimize freshly-created card elements. */
+        .showcase-rail.is-transitioning[data-direction="1"] {
+            animation: showcaseRailNext .72s cubic-bezier(.22,1,.36,1) both;
+        }
+        .showcase-rail.is-transitioning[data-direction="-1"] {
+            animation: showcaseRailPrevious .72s cubic-bezier(.22,1,.36,1) both;
+        }
+        .showcase-rail.is-transitioning[data-direction="0"] {
+            animation: showcaseRailRefresh .42s ease both;
+        }
+        @keyframes showcaseRailNext {
+            from { opacity: .08; transform: translate3d(150px, 0, 0); }
+            65% { opacity: 1; transform: translate3d(-8px, 0, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        @keyframes showcaseRailPrevious {
+            from { opacity: .08; transform: translate3d(-150px, 0, 0); }
+            65% { opacity: 1; transform: translate3d(8px, 0, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
+        }
+        @keyframes showcaseRailRefresh {
+            from { opacity: .35; transform: scale(.992); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @media (max-width: 760px) {
+            @keyframes showcaseRailNext { from { opacity: .08; transform: translate3d(70px, 0, 0); } 65% { opacity: 1; transform: translate3d(-4px, 0, 0); } to { opacity: 1; transform: none; } }
+            @keyframes showcaseRailPrevious { from { opacity: .08; transform: translate3d(-70px, 0, 0); } 65% { opacity: 1; transform: translate3d(4px, 0, 0); } to { opacity: 1; transform: none; } }
+        }
     </style>
 </head>
 <body>
@@ -322,10 +633,16 @@
                 </span>
             </a>
             <span class="topbar__status"><i class="status-dot"></i> Live memories</span>
-            <button class="button button--blue upload-compact" id="openUploadTop" type="button">
+            <div class="topbar__actions">
+                <button class="showcase-button" id="openShowcase" type="button">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                    Showcase
+                </button>
+                <button class="button button--blue upload-compact" id="openUploadTop" type="button">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Share photo
-            </button>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -362,8 +679,8 @@
             <div class="gallery-controls">
                 <label class="sr-only" for="sortPhotos">Sort photos</label>
                 <select class="sort-select" id="sortPhotos">
-                    <option value="newest">Newest</option>
-                    <option value="loved">Most loved</option>
+                    <option value="loved" selected>Most loved</option>
+                    <option value="newest">Oldest first</option>
                 </select>
                 <button class="refresh-button" id="refreshButton" type="button" aria-label="Refresh live wall" title="Refresh live wall">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
@@ -401,6 +718,19 @@
         <div class="lightbox__info"><p class="lightbox__caption" id="lightboxCaption"></p><p class="lightbox__meta" id="lightboxMeta"></p></div>
     </div>
 
+    <section class="showcase" id="showcase" role="dialog" aria-modal="true" aria-label="Wedding photo showcase" aria-hidden="true">
+        <div class="showcase__backdrop" id="showcaseBackdrop"></div>
+        <button class="showcase__close" id="closeShowcase" type="button" aria-label="Close showcase">×</button>
+        <div class="showcase__topline"><span class="showcase__live"><i></i> Ralph &amp; Shaira · Live Gallery</span><span id="showcaseCounter">0 / 0</span></div>
+        <div class="showcase__stage">
+            <button class="showcase__nav showcase__nav--previous" id="showcasePrevious" type="button" aria-label="Previous photo">‹</button>
+            <div class="showcase__rail" id="showcaseRail" aria-live="polite"></div>
+            <button class="showcase__nav showcase__nav--next" id="showcaseNext" type="button" aria-label="Next photo">›</button>
+        </div>
+        <div class="showcase__progress"><span id="showcaseProgress"></span></div>
+        <p class="showcase__hint">Photos advance automatically · Use ← → to browse</p>
+    </section>
+
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script>
@@ -409,11 +739,30 @@
         const REFRESH_INTERVAL = 60000;
         const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
-        const state = { photos: [], selectedPhoto: null, selectedFile: null, initialLoad: true, toastTimer: null };
+        const state = { photos: [], selectedPhoto: null, selectedFile: null, initialLoad: true, toastTimer: null, showcaseIndex: 0, showcasePhotoId: null, showcaseTimer: null, showcaseDirection: 1, showcaseTransitioning: false };
         const $ = (selector) => document.querySelector(selector);
         const gallery = $('#gallery');
         const uploadModal = $('#uploadModal');
         const lightbox = $('#lightbox');
+        const showcase = $('#showcase');
+
+        // On mobile browsers the virtual keyboard changes the visual viewport,
+        // not always the fixed modal's layout viewport. Keep the active form
+        // inside the visible area and center the focused field above the keyboard.
+        function syncUploadViewport() {
+            if (!uploadModal.classList.contains('is-open')) return;
+            const viewport = window.visualViewport;
+            const height = viewport ? viewport.height : window.innerHeight;
+            const top = viewport ? viewport.offsetTop : 0;
+            uploadModal.style.setProperty('--upload-viewport-height', Math.max(260, height) + 'px');
+            uploadModal.style.setProperty('--upload-viewport-top', top + 'px');
+        }
+        function revealUploadField(event) {
+            if (!uploadModal.classList.contains('is-open')) return;
+            window.setTimeout(function() {
+                event.target.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+            }, 180);
+        }
 
         function getReactorId() {
             let id = localStorage.getItem('livewall_reactor_id');
@@ -464,9 +813,11 @@
 
         function sortedPhotos() {
             const photos = state.photos.slice();
-            return $('#sortPhotos').value === 'loved'
-                ? photos.sort((a, b) => (b.reactions - a.reactions) || (b.timestamp - a.timestamp))
-                : photos.sort((a, b) => b.timestamp - a.timestamp);
+            // Most-loved is the primary wall order. With equal reactions, older
+            // photos stay ahead so a newly uploaded memory naturally joins the back.
+            return $('#sortPhotos').value === 'newest'
+                ? photos.sort((a, b) => a.timestamp - b.timestamp)
+                : photos.sort((a, b) => (Number(b.reactions || 0) - Number(a.reactions || 0)) || (a.timestamp - b.timestamp));
         }
 
         function renderGallery() {
@@ -541,7 +892,7 @@
 
         function updateMemoryStack() {
             const cards = $('#memoryStack').querySelectorAll('.memory-card');
-            state.photos.slice(0, 3).forEach((photo, index) => {
+            getShowcasePhotos().slice(0, 3).forEach((photo, index) => {
                 const image = document.createElement('img');
                 image.src = photo.url;
                 image.alt = '';
@@ -569,7 +920,8 @@
                 renderGallery();
                 updateSummary();
                 updateMemoryStack();
-                if (hasNewPhoto) showToast('A new memory just appeared on the wall.');
+                if (showcase.classList.contains('is-open')) { state.showcaseDirection = 0; renderShowcase(false); }
+                if (hasNewPhoto) showToast('A new memory just appeared at the end of the wall.');
                 state.initialLoad = false;
             } catch (error) {
                 console.error('Live wall loading error:', error);
@@ -582,16 +934,139 @@
             }
         }
 
+        // ===== FULL-SCREEN PHOTO SHOWCASE =====
+        function getShowcasePhotos() {
+            return sortedPhotos();
+        }
+        function stopShowcaseTimer() {
+            if (state.showcaseTimer) window.clearTimeout(state.showcaseTimer);
+            state.showcaseTimer = null;
+        }
+        function scheduleShowcaseAdvance() {
+            stopShowcaseTimer();
+            if (!showcase.classList.contains('is-open') || getShowcasePhotos().length < 2) return;
+            state.showcaseTimer = window.setTimeout(function() { changeShowcasePhoto(1); }, 6000);
+        }
+        function renderShowcase(restartTimer) {
+            const photos = getShowcasePhotos();
+            if (!photos.length) { closeShowcase(); return; }
+            if (state.showcasePhotoId) {
+                const matchingIndex = photos.findIndex(photo => photo.id === state.showcasePhotoId);
+                if (matchingIndex >= 0) state.showcaseIndex = matchingIndex;
+            }
+            state.showcaseIndex = (state.showcaseIndex + photos.length) % photos.length;
+            const centerPhoto = photos[state.showcaseIndex];
+            state.showcasePhotoId = centerPhoto.id;
+
+            const rail = $('#showcaseRail');
+            rail.classList.remove('is-transitioning');
+            rail.dataset.direction = String(state.showcaseDirection || 0);
+            rail.replaceChildren();
+            const offsets = photos.length === 1 ? [0] : photos.length === 2 ? [-1, 0, 1] : photos.length === 3 ? [-1, 0, 1] : [-2, -1, 0, 1, 2];
+            offsets.forEach(function(offset) {
+                const photoIndex = (state.showcaseIndex + offset + photos.length) % photos.length;
+                const photo = photos[photoIndex];
+                const card = document.createElement('article');
+                card.className = 'showcase-card';
+                card.dataset.offset = String(offset);
+                card.setAttribute('aria-hidden', offset === 0 ? 'false' : 'true');
+
+                const image = document.createElement('img');
+                image.src = photo.fullUrl || photo.url;
+                image.alt = offset === 0 ? (photo.caption || ('Photo shared by ' + (photo.guestName || 'a guest'))) : '';
+                image.decoding = 'async';
+                const info = document.createElement('div');
+                info.className = 'showcase-card__info';
+                const caption = document.createElement('p');
+                caption.textContent = photo.caption || 'A beautiful moment from our celebration';
+                const meta = document.createElement('span');
+                meta.textContent = (photo.guestName || 'Wedding Guest') + ' · ' + Number(photo.reactions || 0) + ' ' + (Number(photo.reactions || 0) === 1 ? 'heart' : 'hearts');
+                info.append(caption, meta);
+                card.append(image, info);
+                rail.append(card);
+            });
+            void rail.offsetWidth;
+            rail.classList.add('is-transitioning');
+
+            $('#showcaseBackdrop').style.backgroundImage = 'url("' + (centerPhoto.fullUrl || centerPhoto.url).replace(/"/g, '%22') + '")';
+            $('#showcaseCounter').textContent = (state.showcaseIndex + 1) + ' / ' + photos.length;
+            $('#showcaseProgress').style.animation = 'none';
+            void $('#showcaseProgress').offsetWidth;
+            $('#showcaseProgress').style.animation = 'showcaseProgress 6s linear forwards';
+            if (restartTimer !== false) scheduleShowcaseAdvance();
+        }
+
+        function openShowcase() {
+            if (!getShowcasePhotos().length) { showToast('There are no photos on the wall yet.', 'error'); return; }
+            showcase.classList.add('is-open');
+            showcase.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            state.showcaseIndex = 0;
+            state.showcasePhotoId = null;
+            state.showcaseDirection = 1;
+            renderShowcase(true);
+            $('#closeShowcase').focus();
+        }
+        function closeShowcase() {
+            showcase.classList.remove('is-open');
+            showcase.setAttribute('aria-hidden', 'true');
+            stopShowcaseTimer();
+            if (!lightbox.classList.contains('is-open') && !uploadModal.classList.contains('is-open')) document.body.style.overflow = '';
+        }
+        function changeShowcasePhoto(direction) {
+            const photos = getShowcasePhotos();
+            if (!photos.length || state.showcaseTransitioning) return;
+            state.showcaseTransitioning = true;
+            stopShowcaseTimer();
+
+            const rail = $('#showcaseRail');
+            const exitX = direction > 0 ? -180 : 180;
+            const entryX = direction > 0 ? 180 : -180;
+            const finishChange = function() {
+                state.showcaseIndex = (state.showcaseIndex + direction + photos.length) % photos.length;
+                state.showcasePhotoId = null;
+                // Build the incoming card set off to the side, then animate it
+                // into place. Web Animations keeps this visible across browsers.
+                state.showcaseDirection = 0;
+                renderShowcase(false);
+                const incomingRail = $('#showcaseRail');
+                const incoming = incomingRail.animate([
+                    { opacity: 0, transform: 'translate3d(' + entryX + 'px, 0, 0)' },
+                    { opacity: 1, transform: 'translate3d(0, 0, 0)' }
+                ], { duration: 520, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'both' });
+                incoming.finished.catch(function() {}).then(function() {
+                    incomingRail.style.transform = '';
+                    incomingRail.style.opacity = '';
+                    state.showcaseTransitioning = false;
+                    scheduleShowcaseAdvance();
+                });
+            };
+
+            // Slide the currently visible cards out before inserting the next set.
+            if (rail && rail.animate) {
+                const outgoing = rail.animate([
+                    { opacity: 1, transform: 'translate3d(0, 0, 0)' },
+                    { opacity: 0, transform: 'translate3d(' + exitX + 'px, 0, 0)' }
+                ], { duration: 300, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'both' });
+                outgoing.finished.catch(function() {}).then(finishChange);
+            } else {
+                finishChange();
+            }
+        }
+
         function openUpload() {
             uploadModal.classList.add('is-open');
             uploadModal.setAttribute('aria-hidden', 'false');
             document.body.style.overflow = 'hidden';
+            syncUploadViewport();
             $('#guestName').value = sessionStorage.getItem('livewall_guest_name') || '';
             setTimeout(() => (state.selectedFile ? $('#guestName') : $('#fileInput')).focus(), 50);
         }
         function closeUpload() {
             uploadModal.classList.remove('is-open');
             uploadModal.setAttribute('aria-hidden', 'true');
+            uploadModal.style.removeProperty('--upload-viewport-height');
+            uploadModal.style.removeProperty('--upload-viewport-top');
             document.body.style.overflow = '';
         }
         function clearFile() {
@@ -674,6 +1149,7 @@
             if (state.selectedPhoto && state.selectedPhoto.id === photo.id) state.selectedPhoto = photo;
             renderGallery();
             updateLightboxLike();
+            if (showcase.classList.contains('is-open')) { state.showcaseDirection = 0; renderShowcase(false); }
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify({ action: 'react', photoId: photo.id, reactorId: REACTOR_ID, reactionAction: previous ? 'remove' : 'add' })
@@ -697,12 +1173,23 @@
             link.remove();
         }
 
+        $('#openShowcase').addEventListener('click', openShowcase);
+        $('#closeShowcase').addEventListener('click', closeShowcase);
+        $('#showcasePrevious').addEventListener('click', () => changeShowcasePhoto(-1));
+        $('#showcaseNext').addEventListener('click', () => changeShowcasePhoto(1));
+        showcase.addEventListener('click', event => { if (event.target === showcase || event.target === $('#showcaseBackdrop')) closeShowcase(); });
         $('#openUploadTop').addEventListener('click', openUpload);
         $('#openUploadHero').addEventListener('click', openUpload);
         $('#closeUpload').addEventListener('click', closeUpload);
         $('#cancelUpload').addEventListener('click', closeUpload);
         $('#changePhoto').addEventListener('click', clearFile);
         $('#fileInput').addEventListener('change', event => chooseFile(event.target.files[0]));
+        $('#guestName').addEventListener('focus', revealUploadField);
+        $('#caption').addEventListener('focus', revealUploadField);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', syncUploadViewport);
+            window.visualViewport.addEventListener('scroll', syncUploadViewport);
+        }
         $('#submitUpload').addEventListener('click', postUpload);
         $('#sortPhotos').addEventListener('change', renderGallery);
         $('#refreshButton').addEventListener('click', () => loadPhotos(true));
@@ -711,7 +1198,18 @@
         $('#lightboxDownload').addEventListener('click', () => downloadPhoto(state.selectedPhoto));
         uploadModal.addEventListener('click', event => { if (event.target === uploadModal) closeUpload(); });
         lightbox.addEventListener('click', event => { if (event.target === lightbox) closeLightbox(); });
-        document.addEventListener('keydown', event => { if (event.key === 'Escape') { if (lightbox.classList.contains('is-open')) closeLightbox(); else if (uploadModal.classList.contains('is-open')) closeUpload(); } });
+        document.addEventListener('keydown', event => {
+            if (showcase.classList.contains('is-open')) {
+                if (event.key === 'Escape') closeShowcase();
+                if (event.key === 'ArrowLeft') changeShowcasePhoto(-1);
+                if (event.key === 'ArrowRight') changeShowcasePhoto(1);
+                return;
+            }
+            if (event.key === 'Escape') {
+                if (lightbox.classList.contains('is-open')) closeLightbox();
+                else if (uploadModal.classList.contains('is-open')) closeUpload();
+            }
+        });
         ['dragenter', 'dragover'].forEach(type => $('#dropzone').addEventListener(type, event => { event.preventDefault(); $('#dropzone').classList.add('is-dragging'); }));
         ['dragleave', 'drop'].forEach(type => $('#dropzone').addEventListener(type, event => { event.preventDefault(); $('#dropzone').classList.remove('is-dragging'); }));
         $('#dropzone').addEventListener('drop', event => chooseFile(event.dataTransfer.files[0]));

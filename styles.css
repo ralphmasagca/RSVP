@@ -8967,3 +8967,204 @@ footer::before { position: absolute; inset: 12px; border: 1px solid rgba(218,237
     border: 1px solid rgba(107, 154, 196, .12);
     background: transparent;
 }
+
+/* ==================================================================
+   MOBILE FORM LEGIBILITY — RSVP fields stay visible above keyboards
+   ================================================================== */
+@media (max-width: 768px) {
+    .rsvp-section .form-group input,
+    .rsvp-section .form-group textarea,
+    .rsvp-section .guest-entry-fields .guest-field input {
+        font-size: 16px;
+        line-height: 1.4;
+        color: #274a62;
+        -webkit-text-fill-color: #274a62;
+        caret-color: #4e83ad;
+    }
+    .rsvp-section .form-group input::placeholder,
+    .rsvp-section .form-group textarea::placeholder,
+    .rsvp-section .guest-entry-fields .guest-field input::placeholder {
+        color: #8ca3b3;
+        -webkit-text-fill-color: #8ca3b3;
+        opacity: 1;
+    }
+    .rsvp-section .form-group textarea { min-height: 112px; }
+    .rsvp-section .rsvp-card { overflow: visible; }
+}
+
+/* ==================================================================
+   FINAL PRESENTATION CLEANUP — no decorative section boxes
+   ================================================================== */
+/* Remove the inset outline layers that read as empty border boxes. */
+.section-scroll-accent,
+.countdown-section::after,
+.snapshare-section::after,
+footer::before { display: none; }
+
+/* Keep content editorial and open instead of framing every chapter in a card. */
+.story-event-content,
+.timeline-item .timeline-content,
+.entourage-group,
+.snapshare-content,
+.gift-card,
+.faq-category,
+.faq-item,
+.rsvp-card,
+.rsvp-already-used-card {
+    border-color: transparent;
+}
+.story-event-content,
+.timeline-item .timeline-content,
+.entourage-group,
+.faq-category,
+.faq-item { background: transparent; box-shadow: none; }
+.story-event:hover .story-event-content,
+.timeline-item:hover .timeline-content,
+.entourage-group:hover,
+.faq-item:hover { box-shadow: none; transform: none; }
+.countdown-item { border-color: transparent; background: transparent; box-shadow: none; }
+.snapshare-content { border-color: transparent; box-shadow: none; background: transparent; }
+.prenup-item { border-color: transparent; }
+
+/* Ensure the map link is always above decorative timeline layers on desktop. */
+.timeline::before { z-index: 0; pointer-events: none; }
+.timeline-item { position: relative; z-index: 1; }
+.timeline-item .timeline-content,
+.venue-card,
+.venue-info { position: relative; z-index: 2; }
+.venue-map-btn { position: relative; z-index: 4; cursor: pointer; pointer-events: auto; }
+.venue-map-btn::before { pointer-events: none; }
+
+/* QR images in the gift section are interactive visual elements. */
+.gift-qr-container {
+    cursor: zoom-in;
+    transition: transform .25s var(--motif-ease), box-shadow .25s ease;
+}
+.gift-qr-container:hover { transform: translateY(-3px) scale(1.025); box-shadow: 0 12px 24px rgba(42, 71, 92, .15); }
+.gift-qr-container:focus-visible { outline: 3px solid rgba(200,169,93,.6); outline-offset: 4px; }
+.gift-qr-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 4200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(20, 38, 51, .78);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.gift-qr-lightbox.is-open { display: flex; animation: qrLightboxIn .25s ease; }
+.gift-qr-dialog {
+    position: relative;
+    width: min(92vw, 420px);
+    border-radius: 18px;
+    padding: 28px;
+    background: #fff;
+    box-shadow: 0 24px 60px rgba(2, 16, 27, .35);
+    text-align: center;
+}
+.gift-qr-dialog img { display: block; width: min(100%, 340px); height: auto; margin: 0 auto; border-radius: 10px; }
+.gift-qr-dialog h3 { margin: 0 0 8px; color: #3e6682; font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 500; }
+.gift-qr-dialog p { margin: 0 0 20px; color: #7e9bb5; font-size: 1rem; font-style: italic; }
+.gift-qr-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    width: 34px;
+    height: 34px;
+    place-items: center;
+    border: 1px solid rgba(107,154,196,.2);
+    border-radius: 50%;
+    background: #fff;
+    color: #557a98;
+    cursor: pointer;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+@keyframes qrLightboxIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* The invitation paper is fully hidden before the wax seal releases. During
+   opening it rises above the title, which fades behind it instead of colliding. */
+.envelope-card { opacity: 0; }
+.envelope-page.is-opening .envelope-stage { z-index: 5; }
+.envelope-page.is-opening .envelope-title {
+    z-index: 0;
+    animation: envelopeTitleRetreat .34s ease .18s both;
+}
+.envelope-page.is-opening .click-hint { animation: hintExit .24s ease forwards; }
+@keyframes envelopeTitleRetreat {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+@media (max-width: 768px) {
+    .gift-qr-dialog { padding: 24px 18px 20px; }
+    .gift-qr-dialog img { max-width: 285px; }
+}
+
+/* Keep the Get Directions control on one clear, clickable line in Wedding Day. */
+.venue-map-btn {
+    min-width: 178px;
+    min-height: 44px;
+    justify-content: center;
+    line-height: 1;
+    white-space: nowrap;
+}
+.venue-map-btn svg,
+.venue-map-btn span { position: relative; z-index: 2; flex: 0 0 auto; }
+.venue-map-btn::before { display: none; }
+@media (max-width: 480px) { .venue-map-btn { min-width: 0; } }
+
+/* Desktop ceremony venue needs room for the QR and the directions control. */
+@media (min-width: 769px) {
+    .details-section .timeline { max-width: 1000px; }
+    .timeline-item-with-details .venue-actions {
+        flex-wrap: wrap;
+        row-gap: 16px;
+    }
+    .timeline-item-with-details .venue-map-btn {
+        flex: 0 1 auto;
+        max-width: 100%;
+    }
+}
+
+/* ==================================================================
+   OUR STORY MOBILE TIMELINE — mirror Wedding Day's left-line layout
+   ================================================================== */
+@media (max-width: 768px) {
+    .story-timeline::before {
+        left: 20px;
+        transform: none;
+    }
+    .story-event,
+    .story-event:nth-child(odd),
+    .story-event:nth-child(even) {
+        display: grid !important;
+        grid-template-columns: 40px minmax(0, 1fr);
+        align-items: start;
+        column-gap: 0;
+    }
+    .story-event-icon {
+        grid-column: 1;
+        grid-row: 1;
+        justify-self: center;
+        margin: 0;
+    }
+    .story-event-content {
+        grid-column: 2;
+        grid-row: 1;
+        min-width: 0;
+        margin: 0 0 0 18px !important;
+        text-align: left !important;
+    }
+    .story-event > div:last-child { display: none !important; }
+}
+@media (max-width: 480px) {
+    .story-timeline::before { left: 17px; }
+    .story-event,
+    .story-event:nth-child(odd),
+    .story-event:nth-child(even) { grid-template-columns: 34px minmax(0, 1fr); }
+    .story-event-content { margin-left: 14px !important; }
+}

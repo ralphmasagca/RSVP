@@ -845,6 +845,105 @@
             .link-result { align-items: stretch; grid-template-columns: 1fr; }
             .copy-link-btn { min-height: 38px; }
         }
+
+
+        /* ===== MOBILE DASHBOARD / KEYBOARD EXPERIENCE ===== */
+        @media (max-width: 640px) {
+            body { padding-bottom: max(22px, env(safe-area-inset-bottom)); }
+            input, textarea, select {
+                font-size: 16px !important;
+                color: #29495f !important;
+                -webkit-text-fill-color: #29495f;
+                caret-color: #4c80aa;
+            }
+            input::placeholder, textarea::placeholder { color: #93a8b7; -webkit-text-fill-color: #93a8b7; opacity: 1; }
+            .login-screen {
+                height: 100dvh;
+                min-height: 0;
+                align-items: flex-start;
+                overflow-y: auto;
+                padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+            }
+            .login-card { margin: auto 0; padding: 34px 23px; }
+            .login-card input { min-height: 50px; }
+            .header { position: sticky; top: 0; z-index: 50; padding: 15px; }
+            .header-title { width: 100%; justify-content: center; text-align: center; }
+            .header-title h1 { font-size: 1.8rem; }
+            .header-actions { display: grid; width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+            .header-actions .btn { min-width: 0; min-height: 40px; justify-content: center; padding: 7px 5px; font-size: .48rem; letter-spacing: .05em; }
+            .header-actions .btn svg { width: 13px; height: 13px; flex: 0 0 auto; }
+            .container { padding: 17px 12px 32px; }
+            .link-studio { margin-bottom: 18px; }
+            .link-field input, .link-field select { min-height: 47px; }
+            .link-result-value { white-space: normal; overflow-wrap: anywhere; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 9px; margin-bottom: 18px; }
+            .stat-card { min-height: 108px; padding: 16px 13px; border-left-width: 3px; }
+            .stat-value { font-size: 1.8rem; }
+            .stat-label { font-size: .52rem; letter-spacing: .09em; }
+            .stat-sub { font-size: .6rem; }
+            .toolbar { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; padding: 13px; }
+            .search-box { grid-column: 1 / -1; min-width: 0; }
+            .search-box input, .filter-select { min-height: 45px; }
+            .filter-select { width: 100%; padding-right: 7px; }
+            .table-container { overflow: visible; border-radius: 0; background: transparent; box-shadow: none; }
+            .table-container table { display: block; min-width: 0; width: 100%; }
+            .table-container thead { display: none; }
+            .table-container tbody { display: grid; gap: 11px; }
+            .table-container tbody tr {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 0;
+                overflow: hidden;
+                border: 1px solid rgba(107, 154, 196, .17);
+                border-radius: 12px;
+                background: #fff;
+                box-shadow: 0 6px 17px rgba(46, 75, 98, .07);
+            }
+            .table-container tbody tr:hover { background: #fff; }
+            .table-container tbody td {
+                display: flex;
+                min-width: 0;
+                flex-direction: column;
+                gap: 5px;
+                padding: 11px 12px;
+                border: 0;
+                border-bottom: 1px solid rgba(107, 154, 196, .09);
+                color: #34526a;
+                font-size: .78rem;
+                overflow-wrap: anywhere;
+            }
+            .table-container tbody td::before {
+                color: #89a0b0;
+                content: attr(data-label);
+                font-size: .48rem;
+                font-weight: 700;
+                letter-spacing: .11em;
+                text-transform: uppercase;
+            }
+            .table-container tbody td[data-label="#"] { display: none; }
+            .table-container tbody td[data-label="Name"],
+            .table-container tbody td[data-label="Attendance"],
+            .table-container tbody td[data-label="Message"],
+            .table-container tbody td[data-label="Actions"] { grid-column: 1 / -1; }
+            .table-container tbody td[data-label="Name"] { padding-top: 14px; color: #2d4b62; font-size: .95rem; }
+            .table-container tbody td[data-label="Name"]::before { display: none; }
+            .table-container tbody td[data-label="Actions"] { align-items: flex-start; border-bottom: 0; }
+            .table-container tbody td[data-label="Actions"]::before { display: none; }
+            .table-container .action-btn { min-height: 36px; padding: 8px 12px; }
+            .badge { align-self: flex-start; }
+            .modal { height: 100dvh; align-items: flex-start; overflow-y: auto; padding: 15px 12px; }
+            .modal-content { max-height: calc(100dvh - 30px); margin: auto 0; overflow-y: auto; padding: 26px 20px; }
+            .modal-actions { flex-direction: column-reverse; }
+            .modal-actions .btn { width: 100%; min-height: 42px; justify-content: center; }
+            .toast { max-width: calc(100% - 28px); padding: 11px 16px; font-size: .69rem; text-align: center; }
+        }
+        @media (max-width: 360px) {
+            .header-actions .btn { font-size: 0; }
+            .header-actions .btn svg { width: 16px; height: 16px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .toolbar { grid-template-columns: 1fr; }
+            .search-box { grid-column: auto; }
+        }
     </style>
 </head>
 <body>
@@ -1355,23 +1454,24 @@
                 var isAccepted = row.attendance === 'Joyfully Accept';
                 var isPrimary = row.type === 'Primary Guest';
                 var messageStr = String(row.message || '');
+                var originalIndex = allRsvpData.indexOf(row);
 
                 html += '<tr>';
-                html += '<td class="cell-secondary">' + (row.rowIndex || (index + 2)) + '</td>';
-                html += '<td class="cell-secondary">' + escapeHTML(row.timestamp || '') + '</td>';
-                html += '<td class="cell-name">' + escapeHTML(row.name || '') + '</td>';
-                html += '<td class="cell-secondary">' + escapeHTML(row.contact || '—') + '</td>';
-                html += '<td><span class="badge ' + (isAccepted ? 'badge-accept' : 'badge-decline') + '">' +
+                html += '<td data-label="#" class="cell-secondary">' + (row.rowIndex || (index + 2)) + '</td>';
+                html += '<td data-label="Timestamp" class="cell-secondary">' + escapeHTML(row.timestamp || '') + '</td>';
+                html += '<td data-label="Name" class="cell-name">' + escapeHTML(row.name || '') + '</td>';
+                html += '<td data-label="Contact" class="cell-secondary">' + escapeHTML(row.contact || '—') + '</td>';
+                html += '<td data-label="Attendance"><span class="badge ' + (isAccepted ? 'badge-accept' : 'badge-decline') + '">' +
                         (isAccepted ? '✓ Accept' : '✕ Decline') + '</span></td>';
-                html += '<td>' + escapeHTML(row.totalGuests || '—') + '</td>';
-                html += '<td><span class="badge ' + (isPrimary ? 'badge-primary' : 'badge-guest') + '">' +
+                html += '<td data-label="Guests">' + escapeHTML(row.totalGuests || '—') + '</td>';
+                html += '<td data-label="Type"><span class="badge ' + (isPrimary ? 'badge-primary' : 'badge-guest') + '">' +
                         escapeHTML(row.type || '') + '</span></td>';
-                html += '<td class="cell-secondary">' + escapeHTML(row.inviteCode || '—') + '</td>';
-                html += '<td class="cell-secondary" style="max-width:200px;">' +
+                html += '<td data-label="Invite Code" class="cell-secondary">' + escapeHTML(row.inviteCode || '—') + '</td>';
+                html += '<td data-label="Message" class="cell-secondary" style="max-width:200px;">' +
                         escapeHTML(messageStr.substring(0, 60)) +
                         (messageStr.length > 60 ? '...' : '') + '</td>';
-                html += '<td>' +
-                        '<button class="action-btn delete" onclick="openDeleteModal(' + index + ')">' +
+                html += '<td data-label="Actions">' +
+                        '<button class="action-btn delete" onclick="openDeleteModal(' + originalIndex + ')">' +
                             '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
                                 '<polyline points="3 6 5 6 21 6"/>' +
                                 '<path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>' +
